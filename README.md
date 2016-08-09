@@ -1,129 +1,55 @@
-# Zipper
-C++ wrapper around minizip compression library using the latest C++11.
+# LibCombine
 
-Zipper's goal is to bring the power and simplicity of minizip to a more object oriented/c++ user friendly library.
-It was born out of the necessity of a compression library that would be reliable, simple and flexible. By flexibility I mean supporting all kinds of inputs and outputs but specifically been able to compress into memory instead of been restricted to file compression only, and using data from memory instead of just files as well.
+## Dependencies
+This library requires libSBML to be present, as its XML parsing layer will be used. for that either expat, xerces-c or libXML2 needs to be available. Additionally you will need zlib as well as the zipper library that can be obtained from: 
 
-#### Features:
-- [x] Create zip in memory
-- [x] Allow files, vector and generic streams as input to zip
-- [x] File mappings for replacing strategies (overwrite if exists or use alternative name from mapping)
-- [ ] Password protected zip
+* https://github.com/sebastiandev/zipper
+
+## Building 
+This library uses [CMake](http://cmake.org) to build the library, so from an initial checkout all you would need todo is to run: 
 
 
-#### Configuration
-Zipper depends on minizip and zlib. Minizip is used as a submodule, thus it is compiled with the solution. Zlib is expected to be found at ZLIBROOT. 
-```
-ZLIBROOT = c:\Projects\zlib-1.2.8\
+    mkdir build  
+    cd build
+    cmake -DLIBSBML_LIBRARY=< path to libsbml lib> -DLIBSBML_INCLUDE_DIR=< path to includes > ... -DEXTRA_LIBS= < comma separated list of xml libraries> 
+    make  
+    make install
+    
+Should libSBML be installed in a default location it will be found automatically. Note that you do need to list the xml libraries that libSBML was linked against. In most cases libSBML is compiled against libXML and have compression enabled, so your `EXTRA_LIBS` would be:
 
-Ex: c:\Projects\zlib-1.2.8\
-                      |_ include\
-                      |_ lib\
-```
-Compilation produces zipper.lib
+	EXTRA_LIBS=xml2;bz2;z;iconv
 
-So far its been tested and focused on Windows using Visual Studio 2013
+note the semicolon denoting the listing of several libraries. Of course you could also enter the full path to each individual file, just to give an example, on windows I use: 
+
+	EXTRA_LIBS=D:/dependencies/lib/expat.lib
+
+for linking against `expat` and indicating, that libSBML was compiled without compression.
+
+To make it easier all dependencies can be installed into a directory with a `bin`, `include` and `lib` folder. If that is passed to cmake using the variable `-DCOMBINE_DEPENDENCY_DIR=<directory>` all dependencies are easily found. 
+
+## License 
+This project is open source and freely available under the [Simplified BSD](http://opensource.org/licenses/BSD-2-Clause) license. Should that license not meet your needs, please contact me. 
 
 
-#### Usage:
-
-There are two classes available Zipper and Unzipper. They behave in the same manner regarding constructors and storage parameters. (for a complete example take a look at the [tests](https://github.com/sebastiandev/zipper/blob/develop/test/file_zip_test.cpp ) using the awesome BDD's from Catch library )
-
-##### Zipping
-
-- Creating a zip file with 2 files:
-```c++
-using namespace zipper;
-
-std::ifstream input1("some file");
-std::ifstream input2("some file");
-
-Zipper zipper("ziptest.zip");
-zipper.add(input1, "Test1");
-zipper.add(input2, "Test1");
-
-zipper.close();
-```
-
-- Adding a file by name and an entire folder to a zip:
-```c++
-
-Zipper zipper("ziptest.zip");
-zipper.add("somefile.txt");
-zipper.add("myFolder");
-zipper.close();
-```
-- Creating a zip file using the awesome streams from boost that lets us use a vector as a stream:
-
-```c++
-#include <boost\interprocess\streams\vectorstream.hpp>
-...
-
-boost::interprocess::basic_vectorstream<std::vector<char>> input_data(some_vector);
-
-Zipper zipper("ziptest.zip");
-zipper.add(input_data, "Test1");
-zipper.close();
-```
-
-- Creating a zip in memory stream with files:
-```c++
-#include <boost\interprocess\streams\vectorstream.hpp>
-...
-
-boost::interprocess::basic_vectorstream<std::vector<char>> zip_in_memory;
-std::ifstream input1("some file");
-
-Zipper zipper(zip_in_memory);
-zipper.add(input1, "Test1");
-zipper.close();
-```
-
-- Creating a zip in a vector with files:
-```c++
-
-std::vector<char> zip_vect;
-std::ifstream input1("some file");
-
-Zipper zipper(zip_vect);
-zipper.add(input1, "Test1");
-zipper.close();
-```
-
-##### Unzipping
-- Getting all entries in zip
-```c++
-Unzipper unzipper("zipfile.zip");
-std::vector<ZipEntry> entries = unzipper.entries();
-unzipper.close();
-```
-
-- Extracting all entries from zip
-```c++
-Unzipper unzipper("zipfile.zip");
-unzipper.extract();
-unzipper.close();
-```
-
-- Extracting all entries from zip using alternative names for existing files on disk
-```c++
-std::map<std::string, std::string> alternativeNames = { {"Test1", "alternative_name_test1"} };
-Unzipper unzipper("zipfile.zip");
-unzipper.extract(".", alternativeNames);
-unzipper.close();
-```
-
-- Extracting a single entry from zip
-```c++
-Unzipper unzipper("zipfile.zip");
-unzipper.extractEntry("entry name");
-unzipper.close();
-```
-
-- Extracting a single entry from zip to memory
-```c++
-std::vector<unsigned char> unzipped_entry;
-Unzipper unzipper("zipfile.zip");
-unzipper.extractEntryToMemory("entry name", unzipped_entry);
-unzipper.close();
-```
+  Copyright (c) 2016, SBML Team  
+  All rights reserved.
+  
+  Redistribution and use in source and binary forms, with or without
+  modification, are permitted provided that the following conditions are met: 
+  
+  1. Redistributions of source code must retain the above copyright notice, this
+     list of conditions and the following disclaimer. 
+  2. Redistributions in binary form must reproduce the above copyright notice,
+     this list of conditions and the following disclaimer in the documentation
+     and/or other materials provided with the distribution. 
+  
+  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+  ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+  WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+  DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR
+  ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+  (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+  LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+  ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
