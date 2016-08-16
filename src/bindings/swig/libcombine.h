@@ -62,4 +62,9 @@
 #include <sbml/xml/XMLError.h>
 #include <sbml/xml/XMLErrorLog.h>
 
+#include <combine/combinearchive.h>
+#include <combine/knownformats.h>
+#include <combine/omexdescription.h>
+#include <combine/util.h>
+#include <combine/vcard.h>
 

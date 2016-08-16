@@ -322,6 +322,25 @@ if (NOT LIBZ_INCLUDE_DIR)
           )
 endif()
 
+if(WITH_CSHARP)
+    find_program(CSHARP_COMPILER
+        NAMES gmcs csc
+        PATHS C:/Windows/Microsoft.NET/Framework/v2.0.50727/ /usr/bin /usr/local/bin
+        DOC "The file name of the C# compiler."
+        )
+    if(UNIX)
+    else()
+        if(CMAKE_SIZEOF_VOID_P EQUAL 4)
+            # mark libcombine library as x86
+            set(CSHARP_EXTRA_ARGS -platform:x86 )
+        elseif(CMAKE_SIZEOF_VOID_P EQUAL 8)
+            # mark libcombine library as x64
+            set(CSHARP_EXTRA_ARGS -platform:x64 )
+        endif()
+    endif()
+
+endif(WITH_CSHARP)
+
 # allow the user to define additional compilation symbols
 if (EXTRA_DEFS)
   foreach(var ${EXTRA_DEFS})
@@ -578,6 +597,10 @@ if (BUILD_TEST)
   if (WITH_QT_FILESYSTEM)
     target_link_libraries(${COMBINE_LIBRARY}-test ${QT_CORE_LIBRARY})
   endif()
+
+  add_test(test_${COMBINE_LIBRARY}_run ${CMAKE_CURRENT_BINARY_DIR}/${COMBINE_LIBRARY}-test )
+set_tests_properties(test_${COMBINE_LIBRARY}_run PROPERTIES ENVIRONMENT 
+  "srcdir=${CMAKE_CURRENT_SOURCE_DIR}/src/test")
 
 endif()
 

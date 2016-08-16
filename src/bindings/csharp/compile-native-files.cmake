@@ -91,9 +91,14 @@ execute_process(
          -doc:libcombinecsP.xml
          ${CSHARP_EXTRA_ARGS}
          ${NATIVE_FILES}
-    
+    ERROR_VARIABLE COMPILE_ERROR
+    OUTPUT_VARIABLE COMPILE_OUT
     WORKING_DIRECTORY "${BIN_DIRECTORY}"
 )
+
+if (NOT EXISTS ${BIN_DIRECTORY}/libcombinecsP.dll)
+  message(FATAL_ERROR "Compiling the library failed with ${COMPILE_OUT} ${COMPILE_ERROR}")
+endif()
 
 # # print variables for debug purposes
 # message("BIN_DIRECTORY     : ${BIN_DIRECTORY}")
@@ -101,41 +106,3 @@ execute_process(
 # message("CSHARP_COMPILER   : ${CSHARP_COMPILER}")
 # message("CSHARP_EXTRA_ARGS : ${CSHARP_EXTRA_ARGS}")
 # 
-
-# delete testrunner if it exists
-if (EXISTS ${BIN_DIRECTORY}/TestRunner.exe)
-    file(REMOVE ${BIN_DIRECTORY}/TestRunner.exe)
-endif()
-
-# find all test files
-file(GLOB_RECURSE TEST_FILES RELATIVE ${SRC_DIRECTORY}/test ${SRC_DIRECTORY}/test/*.cs)
-
-set(TEST_FILES ${TEST_FILES} ${SRC_DIRECTORY}/TestRunner.cs
-                             ${SRC_DIRECTORY}/Compiler.cs)
-
-# convert paths
-set(NATIVE_TEST_FILES)
-foreach(csFile ${TEST_FILES})
-    file(TO_NATIVE_PATH ${csFile} temp)
-    set(NATIVE_TEST_FILES ${NATIVE_TEST_FILES} ${temp})
-endforeach()
-
-file(TO_NATIVE_PATH ${BIN_DIRECTORY}/TestRunner.exe TEST_RUNNER)
-file(TO_NATIVE_PATH ${BIN_DIRECTORY}/libcombinecsP.dll MANAGED_LIB)
-
-message("Creating: TestRunner.exe")
-                             
-# compile tests
-execute_process(
-    COMMAND "${CSHARP_COMPILER}"
-         -target:exe
-         -nowarn:108,109,114,1570,1572,1573,1574,1591
-         -r:${MANAGED_LIB}
-         -out:${TEST_RUNNER}
-         ${CSHARP_EXTRA_ARGS}
-         ${NATIVE_TEST_FILES}
-    OUTPUT_QUIET    
-    ERROR_QUIET    
-    WORKING_DIRECTORY "${SRC_DIRECTORY}/test"
-)
-

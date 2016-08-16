@@ -70,6 +70,7 @@ LIBCOMBINE_CPP_NAMESPACE_USE
 %import  sbml/common/extern.h
 %import  sbml/xml/XMLExtern.h
 
+
 /**
  * Wraps List class by ListWrapper<TYPENAME> template class.
  * TYPENAME is replaced with a corresponding data type which is
@@ -319,6 +320,7 @@ typedef std::vector<CaError> CaErrorStdVector;
 %include omex/common/libcombine-version.h
 %include omex/common/CaOperationReturnValues.h
 %include sbml/common/libsbml-version.h
+%include sbml/annotation/Date.h
 %include sbml/common/operationReturnValues.h
 
 %include sbml/SyntaxChecker.h
@@ -356,3 +358,13 @@ typedef std::vector<CaError> CaErrorStdVector;
 %include <omex/CaListOfContents.h>
 %include <omex/CaOmexManifest.h>
 
+%template(StringVector) std::vector<std::string>;
+%template(VCardVector) std::vector<VCard>;
+%template(MetadataVector) std::vector<OmexDescription>;
+%template(DateVector) std::vector<Date>;
+
+%include  combine/combinearchive.h
+%include  combine/knownformats.h
+%include  combine/omexdescription.h
+%include  combine/util.h
+%include  combine/vcard.h
