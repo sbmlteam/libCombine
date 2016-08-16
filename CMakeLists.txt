@@ -527,9 +527,14 @@ source_group(combine FILES ${COMBINE_SOURCES})
 set(LIBCOMBINE_SOURCES ${COMBINE_SOURCES})
 set(LIBCOMBINE_LIBRARY ${COMBINE_LIBRARY})
 set (CMAKE_INSTALL_LIBDIR lib)
+
 add_subdirectory(src)
 
+if (WITH_EXAMPLES)
 
+  add_subdirectory(examples)
+
+endif(WITH_EXAMPLES)
 
 
 #option(BUILD_SHARED_VERSION "Build the shared version of the library." OFF)
