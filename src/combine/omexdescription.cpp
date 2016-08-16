@@ -43,14 +43,16 @@ OmexDescription::isEmpty() const
 std::vector<OmexDescription>
 OmexDescription::parseFile(const std::string &fileName)
 {
-  return readFrom(XMLInputStream(fileName.c_str(), true ));
+  XMLInputStream stream(fileName.c_str(), true );
+  return readFrom(stream);
 
 }
 
 std::vector<OmexDescription>
 OmexDescription::parseString(const std::string& xml)
 {
-  return readFrom(XMLInputStream(xml.c_str(), false ));
+  XMLInputStream stream(xml.c_str(), false );
+  return readFrom(stream);
 }
 
 std::vector<OmexDescription>
