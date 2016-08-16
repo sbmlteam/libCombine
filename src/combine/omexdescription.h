@@ -158,7 +158,7 @@ public:
   /**
    * @return the current date and time as Date object (in UTC)
    */
-  static LIBSBML_CPP_NAMESPACE_QUALIFIER Date getCurrentDataAndTime();
+  static LIBSBML_CPP_NAMESPACE_QUALIFIER Date getCurrentDateAndTime();
 
   /**
    * @return the vector of all modification dates

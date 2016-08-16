@@ -284,7 +284,7 @@ OmexDescription::setCreated(const Date &created)
 }
 
 Date
-OmexDescription::getCurrentDataAndTime()
+OmexDescription::getCurrentDateAndTime()
 {
   std::time_t t = std::time(nullptr);
   std::stringstream str;
