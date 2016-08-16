@@ -14,19 +14,33 @@ std::string VCard::toXML() const
 
 
   std::stringstream str;
-  str << "    <dcterms:creator rdf:parseType='Resource'>" << std::endl
-      << "      <vCard:hasName rdf:parseType='Resource'>" << std::endl
-      << "        <vCard:family-name>" << mFamilyName << "</vCard:family-name>" << std::endl
-      << "        <vCard:given-name>" << mGivenName << "</vCard:given-name>" << std::endl
-      << "      </vCard:hasName>" << std::endl
-      << "      <vCard:hasEmail rdf:resource='"<< mEmail << "' />" << std::endl
-      << "      <vCard:organization-name>" << mOrganization << "</vCard:organization-name>" << std::endl
-      << "    </dcterms:creator>";
+  str << "    <dcterms:creator rdf:parseType='Resource'>" << std::endl;
+
+  if (!mFamilyName.empty() || !mGivenName.empty())
+  {
+    str << "      <vCard:hasName rdf:parseType='Resource'>" << std::endl;
+
+    if (!mFamilyName.empty())
+      str << "        <vCard:family-name>" << mFamilyName << "</vCard:family-name>" << std::endl;
+    if (!mGivenName.empty())
+      str << "        <vCard:given-name>" << mGivenName << "</vCard:given-name>" << std::endl;
+
+    str << "      </vCard:hasName>" << std::endl;
+  }
+
+  if (!mEmail.empty())
+    str << "      <vCard:hasEmail rdf:resource='"<< mEmail << "' />" << std::endl;
+
+  if (!mOrganization.empty())
+    str << "      <vCard:organization-name>" << mOrganization << "</vCard:organization-name>" << std::endl;
+
+  str << "    </dcterms:creator>";
 
   // <vCard:hasURL rdf:resource='http://orcid.org/0000-0002-6309-7327'/>
 
   return str.str();
 }
+
 std::string VCard::getFamilyName() const
 {
   return mFamilyName;
@@ -66,10 +80,10 @@ void VCard::setOrganization(const std::string &organization)
 
 
 VCard::VCard()
- : mFamilyName()
- , mGivenName()
- , mEmail()
- , mOrganization()
+  : mFamilyName()
+  , mGivenName()
+  , mEmail()
+  , mOrganization()
 {
 }
 
@@ -95,7 +109,7 @@ VCard::VCard(XMLInputStream &stream)
 
     if (!next.isStart()) continue;
 
-    if (next.getName() == "family-name") 
+    if (next.getName() == "family-name")
     {
       mFamilyName = stream.next().getCharacters();
     }

@@ -34,6 +34,7 @@
 #include <omex/CaListOfContents.h>
 #include <sbml/xml/XMLInputStream.h>
 
+#include <combine/knownformats.h>
 
 using namespace std;
 
@@ -141,6 +142,12 @@ const std::string&
 CaContent::getFormat() const
 {
   return mFormat;
+}
+
+bool
+CaContent::isFormat(const string &formatKey) const
+{
+  return KnownFormats::isFormat(formatKey, mFormat);
 }
 
 

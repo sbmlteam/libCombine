@@ -138,6 +138,14 @@ public:
    */
   const std::string& getFormat() const;
 
+  /**
+   * tests whether this element is of a specific format
+   *
+   * @param formatKey a format key
+   *
+   * @return true if the format is of the type formatKey, false otherwise.
+   */
+  bool isFormat(const std::string& formatKey) const;
 
   /**
    * Returns the value of the "master" attribute of this CaContent.

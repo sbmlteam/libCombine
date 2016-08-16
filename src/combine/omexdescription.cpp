@@ -14,21 +14,24 @@
 
 LIBSBML_CPP_NAMESPACE_USE
 
-const std::string &OmexDescription::getRdfNS()
+const std::string &
+OmexDescription::getRdfNS()
 {
   static std::string ns = "http://www.w3.org/1999/02/22-rdf-syntax-ns#";
   return ns;
 }
 
-const std::string &OmexDescription::getDcNS()
+const std::string &
+OmexDescription::getDcNS()
 {
   static std::string ns = "http://purl.org/dc/terms/";
   return ns;
 }
 
-bool OmexDescription::isEmpty() const
+bool
+OmexDescription::isEmpty() const
 {
-  bool haveDescription = mDescription.empty();
+  bool haveDescription = !mDescription.empty();
   if (!haveDescription) return true;
   bool haveCreator = !mCreators.empty();
   if (!haveCreator) return true;
@@ -37,20 +40,21 @@ bool OmexDescription::isEmpty() const
   return false;
 }
 
-std::vector<OmexDescription> OmexDescription::parseFile(const std::string &fileName)
+std::vector<OmexDescription>
+OmexDescription::parseFile(const std::string &fileName)
 {
   return readFrom(XMLInputStream(fileName.c_str(), true ));
 
 }
 
-std::vector<OmexDescription> OmexDescription::parseString(const std::string& xml)
+std::vector<OmexDescription>
+OmexDescription::parseString(const std::string& xml)
 {
   return readFrom(XMLInputStream(xml.c_str(), false ));
 }
 
-#include <iostream>
-
-std::vector<OmexDescription> OmexDescription::readFrom(XMLInputStream &stream)
+std::vector<OmexDescription>
+OmexDescription::readFrom(XMLInputStream &stream)
 {
   std::vector<OmexDescription> result;
   const XMLToken& start = stream.peek();
@@ -81,7 +85,8 @@ OmexDescription::OmexDescription()
 {
 }
 
-void OmexDescription::readDescription(XMLInputStream &stream, const XMLToken& token)
+std::string
+OmexDescription::readString(XMLInputStream &stream)
 {
   std::stringstream str;
   while (stream.peek().isText())
@@ -90,10 +95,11 @@ void OmexDescription::readDescription(XMLInputStream &stream, const XMLToken& to
     str << current.getCharacters();
   }
 
-  mDescription = str.str();
+  return str.str();
 }
 
-Date OmexDescription::readDate(XMLInputStream &stream)
+Date
+OmexDescription::readDate(XMLInputStream &stream)
 {
   stream.skipText();
   XMLToken next = stream.next();
@@ -128,7 +134,7 @@ OmexDescription::OmexDescription(XMLInputStream &stream)
 
     if (next.getName() == "description")
     {
-      readDescription(stream, next);
+      mDescription = readString(stream);
       stream.skipPastEnd(next);
     }
     else if (next.getName() == "modified")
@@ -153,14 +159,12 @@ OmexDescription::OmexDescription(XMLInputStream &stream)
   
 }
 
-std::string OmexDescription::toXML(bool omitDeclaration)
+std::string
+OmexDescription::toXML(bool omitDeclaration)
 {
   if (mModified.empty())
   {
-    std::time_t t = std::time(nullptr);
-    std::stringstream str;
-    str <<     std::put_time(std::gmtime(&t), "%F %T %z");
-    mModified.push_back(str.str());
+    mModified.push_back(getCurrentDataAndTime());
   }
 
   std::stringstream modifications;
@@ -198,76 +202,128 @@ std::string OmexDescription::toXML(bool omitDeclaration)
   return result.str();
 }
 
-std::string OmexDescription::getDescription() const
+std::string
+OmexDescription::getDescription() const
 {
   return mDescription;
 }
 
-void OmexDescription::setDescription(const std::string &description)
+void
+OmexDescription::setDescription(const std::string &description)
 {
   mDescription = description;
 }
-std::string OmexDescription::getAbout() const
+
+std::string
+OmexDescription::getAbout() const
 {
   return mAbout;
 }
 
-void OmexDescription::setAbout(const std::string &about)
+void
+OmexDescription::setAbout(const std::string &about)
 {
   mAbout = about;
 }
 
-std::vector<VCard> OmexDescription::getCreators() const
+const std::vector<VCard>&
+OmexDescription::getCreators() const
 {
   return mCreators;
 }
 
-size_t OmexDescription::getNumCreators() const
+std::vector<VCard>&
+OmexDescription::getCreators()
+{
+  return mCreators;
+}
+
+size_t
+OmexDescription::getNumCreators() const
 {
   return mCreators.size();
 }
 
-void OmexDescription::setCreators(const std::vector<VCard> &creators)
+void
+OmexDescription::setCreators(const std::vector<VCard> &creators)
 {
   mCreators = creators;
 }
 
-void OmexDescription::addCreator(const VCard &creator)
+void
+OmexDescription::addCreator(const VCard &creator)
 {
   mCreators.push_back(creator);
 }
 
-Date OmexDescription::getCreated() const
+const Date &
+OmexDescription::getCreated() const
 {
   return mCreated;
 }
 
-void OmexDescription::setCreated(const Date &created)
+Date &
+OmexDescription::getCreated()
+{
+  return mCreated;
+}
+
+VCard
+OmexDescription::getCreator(unsigned int index) const
+{
+  if (index >= mCreators.size())
+    return VCard();
+
+  return mCreators[index];
+}
+
+void
+OmexDescription::setCreated(const Date &created)
 {
   mCreated = created;
 }
 
-std::vector<Date> OmexDescription::getModified() const
+Date
+OmexDescription::getCurrentDataAndTime()
+{
+  std::time_t t = std::time(nullptr);
+  std::stringstream str;
+  str <<     std::put_time(std::gmtime(&t), "%F %T %z");
+  return str.str();
+}
+
+const std::vector<Date>&
+OmexDescription::getModified() const
 {
   return mModified;
 }
 
-size_t OmexDescription::getNumModified() const
+std::vector<Date>&
+OmexDescription::getModified()
+{
+  return mModified;
+}
+
+size_t
+OmexDescription::getNumModified() const
 {
   return mModified.size();
 }
 
-void OmexDescription::setModified(const std::vector<Date> &modified)
+void
+OmexDescription::setModified(const std::vector<Date> &modified)
 {
   mModified = modified;
 }
 
-void OmexDescription::addModification(const Date &date)
+void
+OmexDescription::addModification(const Date &date)
 {
   mModified.push_back(date);
 }
 
-void OmexDescription::writeToFile(const std::string &fileName)
+void
+OmexDescription::writeToFile(const std::string &fileName)
 {
   std::ofstream stream(fileName.c_str());
   stream << toXML();
