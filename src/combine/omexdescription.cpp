@@ -164,7 +164,7 @@ OmexDescription::toXML(bool omitDeclaration)
 {
   if (mModified.empty())
   {
-    mModified.push_back(getCurrentDataAndTime());
+    mModified.push_back(getCurrentDateAndTime());
   }
 
   std::stringstream modifications;

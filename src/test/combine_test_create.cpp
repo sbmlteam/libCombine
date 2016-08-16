@@ -82,7 +82,7 @@ SCENARIO("creating a new combine archive", "[combine]")
           creator.setGivenName("Frank");
           creator.setOrganization("Caltech");
 
-          Date current = OmexDescription::getCurrentDataAndTime();
+          Date current = OmexDescription::getCurrentDateAndTime();
 
           OmexDescription desc;
           desc.setAbout(".");
