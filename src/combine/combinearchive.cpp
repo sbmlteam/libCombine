@@ -53,7 +53,8 @@ CombineArchive::initializeFromArchive(
 
   // now build the map of all files in the archive
   std::vector<zipper::ZipEntry> entries = mpUnzipper->entries();
-  for (auto it = entries.begin(); it != entries.end(); ++it)
+  for (std::vector<zipper::ZipEntry>::iterator it = entries.begin(); 
+       it != entries.end(); ++it)
   {
     mMap[(*it).name] = "unzipper://" + (*it).name;
   }
@@ -143,7 +144,8 @@ bool CombineArchive::cleanUp()
     mpManifest = NULL;
   }
 
-  for(auto it = mTempFiles.begin(); it != mTempFiles.end(); ++it)
+  for(std::vector<std::string>::iterator it = mTempFiles.begin(); 
+      it != mTempFiles.end(); ++it)
   {
     std::remove((*it).c_str());
   }
@@ -214,7 +216,7 @@ bool CombineArchive::writeToFile(const std::string &fileName)
     if (targetName.find("/") == 0)
       targetName = targetName.substr(1);
 
-    std::ifstream in(sourceFile, std::ios::in | std::ios::binary);
+    std::ifstream in(sourceFile.c_str(), std::ios::binary);
     zipper.add(in, targetName);
     in.close();
   }
@@ -230,7 +232,7 @@ bool CombineArchive::writeToFile(const std::string &fileName)
   // add metadata elements
 
   // add the main metadata information first if existing.
-  auto it = mMetadataMap.find(".");
+  std::map<std::string, OmexDescription>::iterator it = mMetadataMap.find(".");
   if (it != mMetadataMap.end())
   {
     addMetadataToArchive(it->second, &zipper);
@@ -257,7 +259,7 @@ bool
 CombineArchive::getStream(const std::string &name,
                           std::ifstream &stream)
 {
-  auto it = mMap.find(name);
+  std::map<std::string, std::string>::iterator it = mMap.find(name);
   if (it == mMap.end()) 
   {
     if (name.find("./") == 0)
@@ -289,8 +291,9 @@ CombineArchive::getStream(const std::string &name,
     mTempFiles.push_back(tempFile);
     filename = tempFile;
   }
-   std::ifstream tempStream(filename, std::ios::in | std::ios::binary);
-   std::swap(stream, tempStream);
+  
+  stream.open(filename.c_str(), std::ios::binary);
+   
   return true;
 }
 
@@ -387,7 +390,7 @@ CombineArchive::getAllLocations() const
 OmexDescription
 CombineArchive::getMetadataForLocation(const std::string &location) const
 {
-  auto it = mMetadataMap.find(location);
+  std::map<std::string, OmexDescription>::const_iterator it = mMetadataMap.find(location);
   if (it != mMetadataMap.end())
     return it->second;
 

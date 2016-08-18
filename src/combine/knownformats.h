@@ -53,7 +53,13 @@ public:
    */
   static std::vector< std::string > getFormatKeys();
 
+  /**
+   * @return the map of known format 
+   */
+  static std::map<std::string, std::vector<std::string> >& getKnownFormats();
+
 protected:
+  static std::map<std::string, std::vector<std::string> > initializeMap();
   static std::map<std::string, std::vector<std::string> > mKnownFormats;
 };
 

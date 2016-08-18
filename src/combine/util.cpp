@@ -5,8 +5,9 @@
 
 #include <fstream>
 #include <sstream>
-#include <chrono>
 
+#include <ctime>
+#include <cstdlib>
 #include <cstring>
 
 std::string
@@ -66,7 +67,11 @@ size_t Util::getExtensionIndex(const char* fileName)
 unsigned long
 Util::getCurrentMilliseconds()
 {
-  unsigned long result = static_cast<unsigned long>(
-        std::chrono::system_clock::now().time_since_epoch().count());
+  time_t rawtime;
+  struct tm * timeinfo;
+
+  time ( &rawtime );
+  timeinfo = gmtime ( &rawtime );
+  unsigned long result = (unsigned long)mktime(timeinfo);
   return result;
 }

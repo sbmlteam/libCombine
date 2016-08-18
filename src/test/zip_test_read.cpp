@@ -42,7 +42,7 @@ SCENARIO("archive read", "[zipper]")
 
       THEN("the zip file has one entry named 'test1.txt'")
       {
-        auto entries = unzipper.entries();
+        std::vector<zipper::ZipEntry> entries = unzipper.entries();
         REQUIRE(entries.size() == 1);
         REQUIRE(entries.front().name == "test1.txt");
 

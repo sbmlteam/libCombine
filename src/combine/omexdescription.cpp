@@ -7,8 +7,8 @@
 
 #include <fstream>
 #include <iomanip>
-#include <chrono>
 #include <ctime>
+#include <cstdlib>
 #include <sstream>
 
 
@@ -170,7 +170,8 @@ OmexDescription::toXML(bool omitDeclaration)
   }
 
   std::stringstream modifications;
-  for (auto it = mModified.begin(); it != mModified.end(); ++it)
+  for (std::vector<Date>::iterator it = mModified.begin(); 
+       it != mModified.end(); ++it)
   {
     modifications << "    <dcterms:modified rdf:parseType='Resource'>\n"
                   <<  "      <dcterms:W3CDTF>"
@@ -180,7 +181,8 @@ OmexDescription::toXML(bool omitDeclaration)
   }
 
   std::stringstream creators;
-  for(auto it = mCreators.begin(); it != mCreators.end(); ++it)
+  for(std::vector<VCard>::iterator it = mCreators.begin(); 
+      it != mCreators.end(); ++it)
     creators << (*it).toXML() <<  "\n";
 
   std::stringstream result;
@@ -288,9 +290,17 @@ OmexDescription::setCreated(const Date &created)
 Date
 OmexDescription::getCurrentDateAndTime()
 {
-  std::time_t t = std::time(nullptr);
+  time_t rawtime;
+  struct tm * timeinfo;
+
+  time ( &rawtime );
+  timeinfo = gmtime ( &rawtime );
+  char buffer[25];
+  size_t length = strftime(buffer, 25, "%Y-%m-%dT%TZ",
+    timeinfo);
+  
   std::stringstream str;
-  str <<     std::put_time(std::gmtime(&t), "%F %T %z");
+  str <<     buffer;
   return str.str();
 }
 
