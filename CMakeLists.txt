@@ -398,7 +398,7 @@ if (WITH_QT_FILESYSTEM)
     NAMES libQtCore QtCore QtCore4
     PATHS /usr/lib /usr/local/lib
           ${CMAKE_OSX_SYSROOT}/usr/lib
-          ${ZIPPER_DEPENDENCY_DIR}/lib
+          ${COMBINE_DEPENDENCY_DIR}/lib
           ${ADDITIONAL_LIB_DIRS}
           $ENV{QTDIR}/lib
     DOC "The qt core library."
@@ -407,7 +407,7 @@ find_path(QT_INCLUDE_DIR
     NAMES QtCore/QDir
     PATHS ${CMAKE_OSX_SYSROOT}/usr/include
           /usr/include/qt4 /usr/local/include/qt4
-          ${ZIPPER_DEPENDENCY_DIR}/include
+          ${COMBINE_DEPENDENCY_DIR}/include
           $ENV{QTDIR}/include
     DOC "The directory containing the boost header files."
           )
@@ -587,12 +587,17 @@ include_directories(${CMAKE_CURRENT_BINARY_DIR}/src/)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src/)
 include_directories(${LIBSBML_INCLUDE_DIR})
 
-file(GLOB COMBINE_SOURCES
-  ${CMAKE_CURRENT_SOURCE_DIR}/src/combine/*.cpp
+file(GLOB COMBINE_HEADERS
   ${CMAKE_CURRENT_SOURCE_DIR}/src/combine/*.h
 )
-source_group(combine FILES ${COMBINE_SOURCES})
-set(LIBCOMBINE_SOURCES ${COMBINE_SOURCES})
+
+install(FILES ${COMBINE_HEADERS} DESTINATION include/combine)
+
+file(GLOB COMBINE_SOURCES
+  ${CMAKE_CURRENT_SOURCE_DIR}/src/combine/*.cpp
+)
+source_group(combine FILES ${COMBINE_SOURCES} ${COMBINE_HEADERS})
+set(LIBCOMBINE_SOURCES ${COMBINE_SOURCES} ${COMBINE_HEADERS})
 set(LIBCOMBINE_LIBRARY ${COMBINE_LIBRARY})
 set (CMAKE_INSTALL_LIBDIR lib)
 
@@ -603,37 +608,6 @@ if (WITH_EXAMPLES)
   add_subdirectory(examples)
 
 endif(WITH_EXAMPLES)
-
-
-#option(BUILD_SHARED_VERSION "Build the shared version of the library." OFF)
-#if (BUILD_SHARED_VERSION)
-#  add_library (${COMBINE_LIBRARY} SHARED ${COMBINE_SOURCES} ${MINIZIP_SOURCES} )
-#  
-#  if (UNIX)
-#    SET_TARGET_PROPERTIES(${COMBINE_LIBRARY} PROPERTIES
-#                          SOVERSION ${COMBINE_VERSION_MAJOR}
-#                          VERSION ${COMBINE_VERSION_MAJOR}.${COMBINE_VERSION_MINOR}.${COMBINE_VERSION_PATCH})
-#  endif()
-#  
-#  target_link_libraries(${COMBINE_LIBRARY} ${LIBZ_LIBRARY} ${EXTRA_LIBS})
-#  
-#  if (WITH_BOOST_FILESYSTEM)
-#    target_link_libraries(${COMBINE_LIBRARY} ${BOOST_SYSTEM_LIBRARY} ${BOOST_FILESYSTEM_LIBRARY})
-#  endif()
-#  
-#  if (WITH_QT_FILESYSTEM)
-#    target_link_libraries(${COMBINE_LIBRARY} ${QT_CORE_LIBRARY})
-#  endif()
-#
-#  INSTALL(TARGETS ${COMBINE_LIBRARY}
-#          RUNTIME DESTINATION bin
-#          LIBRARY DESTINATION lib
-#          ARCHIVE DESTINATION lib
-#  )
-#endif()
-#
-#
-#
 
 option(BUILD_TEST "Build the test program." ON)
 if (BUILD_TEST)
