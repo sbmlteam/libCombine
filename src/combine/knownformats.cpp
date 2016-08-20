@@ -54,7 +54,7 @@ std::string KnownFormats::guessFormat(const std::string &fileName)
   if (ext == "xml")
   {
     std::ifstream file(fileName.c_str(), std::ios::binary);
-    std::vector<char> buffer(128);
+    std::vector<char> buffer(256);
     file.read( &buffer[0], buffer.size() );
     std::string snippet( buffer.begin(), buffer.end() );
 
@@ -64,6 +64,8 @@ std::string KnownFormats::guessFormat(const std::string &fileName)
       return lookupFormat("sedml");
     if (snippet.find("<cell")!= std::string::npos)
       return lookupFormat("cellml");
+    if (snippet.find("<COPASI") != std::string::npos)
+      return lookupFormat("copasi");
   }
 
   return lookupFormat(ext);
@@ -142,6 +144,7 @@ KnownFormats::initializeMap()
       "http://identifiers.org/combine.specifications/omex-manifest",
       "http://identifiers.org/combine.specifications/omex.version-1",
     } },
+    { "copasi",{ "application/x-copasi" } },
     { "sedx",{ "application/x-sed-ml-archive" } },
     { "png",{ "image/png" } },
     { "csv",{ "text/csv" } },
@@ -494,6 +497,13 @@ KnownFormats::initializeMap()
       "application/octet-stream",
     };
     result["class"] = std::vector<std::string>(temp, temp + 1);
+  }
+
+  {
+    std::string temp[] = {
+      "application/x-copasi",
+    };
+    result["copasi"] = std::vector<std::string>(temp, temp + 1);
   }
 
   {

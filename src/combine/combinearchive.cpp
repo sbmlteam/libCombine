@@ -34,6 +34,11 @@ CombineArchive::~CombineArchive()
 bool
 CombineArchive::extractTo(const std::string &directory)
 {
+  if (mpUnzipper != NULL)
+  {
+    return mpUnzipper->extract(directory);
+  }
+
   return true;
 }
 
