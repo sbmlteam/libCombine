@@ -126,16 +126,16 @@ install(FILES ${additional_common} DESTINATION include/omex/common)
 # specify include directories
 #
 
-include_directories(BEFORE ${LIBCOMBINE_ROOT_SOURCE_DIR}/src/omex)
-include_directories(BEFORE ${LIBCOMBINE_ROOT_SOURCE_DIR}/src)
-include_directories(BEFORE ${CMAKE_CURRENT_BINARY_DIR})
-include_directories(BEFORE ${CMAKE_CURRENT_BINARY_DIR}/src)
-include_directories(BEFORE ${CMAKE_CURRENT_BINARY_DIR}/src/omex)
 include_directories(BEFORE ${LIBZ_INCLUDE_DIR})
 include_directories(BEFORE ${ZIPPER_INCLUDE_DIR})
 if (EXTRA_INCLUDE_DIRS) 
  include_directories(${EXTRA_INCLUDE_DIRS})
 endif(EXTRA_INCLUDE_DIRS)
+include_directories(BEFORE ${LIBCOMBINE_ROOT_SOURCE_DIR}/src/omex)
+include_directories(BEFORE ${LIBCOMBINE_ROOT_SOURCE_DIR}/src)
+include_directories(BEFORE ${CMAKE_CURRENT_BINARY_DIR})
+include_directories(BEFORE ${CMAKE_CURRENT_BINARY_DIR}/src)
+include_directories(BEFORE ${CMAKE_CURRENT_BINARY_DIR}/src/omex)
 
 
 ###############################################################################

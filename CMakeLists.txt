@@ -567,6 +567,9 @@ add_definitions(-D__APPLE__)
 endif()
 
 
+include_directories(BEFORE ${CMAKE_CURRENT_BINARY_DIR}/src/)
+include_directories(BEFORE ${CMAKE_CURRENT_SOURCE_DIR}/src/)
+
 include_directories(BEFORE ${LIBZ_INCLUDE_DIR})
 include_directories(BEFORE ${ZIPPER_INCLUDE_DIR})
 
@@ -583,8 +586,6 @@ if (EXTRA_INCLUDE_DIRS)
 include_directories(${EXTRA_INCLUDE_DIRS})
 endif()
 
-include_directories(${CMAKE_CURRENT_BINARY_DIR}/src/)
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src/)
 include_directories(${LIBSBML_INCLUDE_DIR})
 
 file(GLOB COMBINE_HEADERS
