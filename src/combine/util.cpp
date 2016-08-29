@@ -26,7 +26,8 @@ Util::getTempFilename(const std::string& prefix,
 {
   std::stringstream str;
   str << getTempPath() << "/" << prefix
-      << getCurrentMilliseconds() << ext;
+      << getCurrentMilliseconds() << rand() << rand() 
+      << ext;
   return str.str();
 }
 
