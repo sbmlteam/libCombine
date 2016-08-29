@@ -93,6 +93,24 @@ KnownFormats::getKnownFormats()
   return mKnownFormats;
 }
 
+void 
+KnownFormats::addKnownFormat(const std::string& formatKey, const std::string& format)
+{
+  std::map<std::string, std::vector<std::string> >::iterator it =
+    mKnownFormats.find(formatKey);
+
+  if (it == mKnownFormats.end())
+  {
+    std::vector<std::string> temp; 
+    temp.push_back(format);
+    mKnownFormats[formatKey] = temp;
+  }
+  else
+  {
+    mKnownFormats[formatKey].push_back(format);
+  }
+}
+
 
 std::map<std::string, std::vector<std::string> >
 KnownFormats::initializeMap()

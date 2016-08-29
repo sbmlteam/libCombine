@@ -48,6 +48,16 @@ public:
    */
   static std::string guessFormat(const std::string& fileName);
 
+
+  /**
+   * adds a new entry to the list of known formats
+   *
+   * @param formatKey the key for the new known format
+   * @param format the format string (mime type or identifiers.org reference)
+   *
+   */
+  static void addKnownFormat(const std::string& formatKey, const std::string& format);
+  
   /**
    * @return a vector of all known format keys
    */
@@ -57,6 +67,7 @@ public:
    * @return the map of known format 
    */
   static std::map<std::string, std::vector<std::string> >& getKnownFormats();
+
 
 protected:
   static std::map<std::string, std::vector<std::string> > initializeMap();
