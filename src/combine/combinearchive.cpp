@@ -322,7 +322,7 @@ CombineArchive::getMasterFile() const
   for (unsigned int i = 0;i < mpManifest->getNumContents(); ++i)
   {
     const CaContent* current = mpManifest->getContent(i);
-    if (current->isSetMaster())
+    if (current->isSetMaster() && current->getMaster())
       return current;
   }
 
@@ -337,7 +337,7 @@ CombineArchive::getMasterFile(const std::string &formatKey) const
   for (unsigned int i = 0;i < mpManifest->getNumContents(); ++i)
   {
     const CaContent* current = mpManifest->getContent(i);
-    if (current->isSetMaster() &&
+    if (current->isSetMaster() && current->getMaster() &&
         KnownFormats::isFormat(formatKey, current->getFormat()))
       return current;
   }
