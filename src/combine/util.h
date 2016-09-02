@@ -64,10 +64,17 @@ public:
    */
   static std::string getExtension(const std::string& fileName);
 
+  /**
+   * Removes the specified file or folder. If it is a folder
+   * its contents will be removed recursively. 
+   */
+  static bool removeFileOrFolder(const std::string& path);
+
+
 private:
 
   /**
-   * goes thrugh the string and returns the index where the
+   * goes through the string and returns the index where the
    * extension begins
    *
    * @param fileName the filename to look through
@@ -75,6 +82,7 @@ private:
    * @return the position where the extension begins.
    */
   static size_t getExtensionIndex(const char *fileName);
+
 
 };
 

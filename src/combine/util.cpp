@@ -1,4 +1,5 @@
 #include <combine/util.h>
+#include <zipper/tools.h>
 
 #include <cstdio>
 #include <cstdlib>
@@ -32,7 +33,8 @@ Util::getTempFilename(const std::string& prefix,
 }
 
 
-void Util::copyFile(const std::string &source, const std::string &destination)
+void 
+Util::copyFile(const std::string &source, const std::string &destination)
 {
   std::ifstream in(source.c_str(), std::ios::in | std::ios::binary);
   std::ofstream out(destination.c_str(), std::ios::out | std::ios::binary);
@@ -46,9 +48,26 @@ void Util::copyStream(std::istream &in, std::ostream &out)
   out << in.rdbuf();
 }
 
-std::string Util::getExtension(const std::string &fileName)
+std::string 
+Util::getExtension(const std::string &fileName)
 {
   return fileName.substr(getExtensionIndex(fileName.c_str()));
+}
+
+bool 
+Util::removeFileOrFolder(const std::string & path)
+{
+  if (isDirectory(path))
+  {
+    removeFolder(path);
+    return true;
+  }
+  else if (checkFileExists(path))
+  {
+    std::remove(path.c_str());
+    return true;
+  }
+  return false;
 }
 
 size_t Util::getExtensionIndex(const char* fileName)
