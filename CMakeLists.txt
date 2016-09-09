@@ -167,11 +167,23 @@ mark_as_advanced(WITH_DOXYGEN)
 option(WITH_SWIG     "Regenerate SWIG-based language bindings."  ON )
 
 
-if (UNIX)
-  set(COMBINE_LIBRARY Combine)
+set( MISC_PREFIX )
+if(UNIX OR CYGWIN)
+    set(PATH_SEP "/")
+    set(FILE_SEP ":")
+    set( MISC_PREFIX "share/libsbml/" )
+    set(COMBINE_LIBRARY Combine)
 else()
-  set(COMBINE_LIBRARY libCombine)
+    set( MISC_PREFIX "" )
+    set(PATH_SEP "\\")
+    set(FILE_SEP ";")
+    if(MINGW)
+        set(COMBINE_LIBRARY Combine)
+    else()
+        set(COMBINE_LIBRARY libCombine)
+    endif()
 endif()
+
 # Set build type default.
 set(CMAKE_BUILD_TYPE "Release" CACHE STRING
   "Choose the type of build to perform. The options are: None (CMAKE_CXX_FLAGS
@@ -567,8 +579,6 @@ add_definitions(-D__APPLE__)
 endif()
 
 
-include_directories(BEFORE ${CMAKE_CURRENT_BINARY_DIR}/src/)
-include_directories(BEFORE ${CMAKE_CURRENT_SOURCE_DIR}/src/)
 
 include_directories(BEFORE ${LIBZ_INCLUDE_DIR})
 include_directories(BEFORE ${ZIPPER_INCLUDE_DIR})
@@ -587,6 +597,8 @@ include_directories(${EXTRA_INCLUDE_DIRS})
 endif()
 
 include_directories(${LIBSBML_INCLUDE_DIR})
+include_directories(BEFORE ${CMAKE_CURRENT_SOURCE_DIR}/src/)
+include_directories(BEFORE ${CMAKE_CURRENT_BINARY_DIR}/src/)
 
 file(GLOB COMBINE_HEADERS
   ${CMAKE_CURRENT_SOURCE_DIR}/src/combine/*.h

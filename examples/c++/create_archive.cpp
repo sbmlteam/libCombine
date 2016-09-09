@@ -13,11 +13,17 @@ LIBCOMBINE_CPP_NAMESPACE_USE
 
 int main(int argc, const char* argv[])
 {
+  if (argc < 2)
+  {
+    cout << "usage: create_archive sbml-file" << endl;
+    return 1;
+  }
+  
   CombineArchive archive;
 
   archive.addFile(
-        "e:/users/fbergmann/documents/sbml models/borisejb.xml", // existing filename
-        "./models/boris.xml", // filename in the archive
+        argv[1], // existing filename
+        "./models/model.xml", // filename in the archive
         KnownFormats::lookupFormat("sbml"), // look up the format for sbml files
         true // mark this file as the default to be opened
         );
