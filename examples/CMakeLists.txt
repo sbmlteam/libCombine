@@ -23,8 +23,6 @@ endif(WITH_EXAMPLES)
 # the remaining language bindings do not need to be compiled in order to run. 
 
 # Now we just have to select files for installation# 
-install(FILES README.txt DESTINATION ${MISC_PREFIX}examples)
-
 # install c++ examples
 file(GLOB cpp_samples "${CMAKE_CURRENT_SOURCE_DIR}/c++/*.c"
                       "${CMAKE_CURRENT_SOURCE_DIR}/c++/*.cpp"
