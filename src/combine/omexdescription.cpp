@@ -316,6 +316,14 @@ OmexDescription::getModified()
   return mModified;
 }
 
+Date OmexDescription::getModified(int index) const
+{
+  if (index < 0 || index >= (int)mModified.size())
+    return Date();
+
+  return mModified[index];
+}
+
 size_t
 OmexDescription::getNumModified() const
 {

@@ -171,6 +171,11 @@ public:
   std::vector<LIBSBML_CPP_NAMESPACE_QUALIFIER Date>& getModified();
 
   /**
+  * @return the modification date with the given index
+  */
+  LIBSBML_CPP_NAMESPACE_QUALIFIER Date getModified(int index) const;
+
+  /**
    * @return number of modification dates
    */
   size_t getNumModified() const;

@@ -392,6 +392,20 @@ CombineArchive::getAllLocations() const
   return result;
 }
 
+int 
+CombineArchive::getNumEntries() const
+{
+  if (mpManifest == NULL) return 0;
+  return mpManifest->getNumContents();
+}
+
+const CaContent * 
+CombineArchive::getEntry(int index) const
+{
+  if (mpManifest == NULL) return NULL;
+  return mpManifest->getContent(index);
+}
+
 OmexDescription
 CombineArchive::getMetadataForLocation(const std::string &location) const
 {

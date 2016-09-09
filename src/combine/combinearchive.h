@@ -187,6 +187,21 @@ public:
   std::vector<std::string> getAllLocations() const;
 
   /**
+   * @return number of entries in the archive
+   */
+  int getNumEntries() const;
+
+  /**
+  * returns the entry at the given index
+  *
+  * @param index the element to get
+  *
+  * @return the entry with the given index, or NULL
+  */
+  const CaContent *getEntry(int index) const;
+
+
+  /**
    * returns the metadata for the given location if it does not exist
    * an empty description will be returned.
    *
