@@ -126,14 +126,14 @@ endif()
 #
 ADD_CUSTOM_COMMAND(	
   OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/libcombine_wrap.cpp 
-         ${CMAKE_CURRENT_BINARY_DIR}/java-files/org/sedml/libsedml/libsedmlJNI.java
+         ${CMAKE_CURRENT_BINARY_DIR}/java-files/org/sbml/libcombine/libcombineJNI.java
   COMMAND "${CMAKE_COMMAND}"
-  ARGS    -E make_directory  ${CMAKE_CURRENT_BINARY_DIR}/java-files/org/sedml/libsedml
+  ARGS    -E make_directory  ${CMAKE_CURRENT_BINARY_DIR}/java-files/org/sbml/libcombine
     COMMAND "${SWIG_EXECUTABLE}"
     ARGS -I${CMAKE_CURRENT_SOURCE_DIR}/../swig/
          -I${CMAKE_CURRENT_SOURCE_DIR}/../../
          -I${CMAKE_CURRENT_BINARY_DIR}/../../
-         -I${CMAKE_CURRENT_SOURCE_DIR}/../../sedml
+         -I${CMAKE_CURRENT_SOURCE_DIR}/../../omex
          -I${CMAKE_CURRENT_SOURCE_DIR}
          -I${LIBNUML_INCLUDE_DIR}/
          -I${LIBSBML_INCLUDE_DIR}/
@@ -208,7 +208,7 @@ ADD_CUSTOM_COMMAND(
 
 add_custom_target(binding_java_jar ALL DEPENDS 
   ${CMAKE_CURRENT_BINARY_DIR}/libcombine.jar
-  ${CMAKE_CURRENT_BINARY_DIR}/java-files/org/sedml/libsedml/libsedmlJNI.java
+  ${CMAKE_CURRENT_BINARY_DIR}/java-files/org/sbml/libcombine/libcombineJNI.java
   )
   
 add_dependencies(binding_java_jar binding_java_swig)
