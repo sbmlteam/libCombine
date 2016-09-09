@@ -12,10 +12,15 @@ namespace CreateArchiveExample
   {
     static void Main(string[] args)
     {
+      if (args.Length < 1)
+      {
+        Console.WriteLine("usage: CreateArchiveExample sbml-file");
+        return;
+      }
       var archive = new CombineArchive();
       archive.addFile(
-            @"e:\users\fbergmann\documents\sbml models\borisejb.xml", // filename
-            "./models/boris.xml", // target file name
+            args[0], // filename
+            "./models/model.xml", // target file name
             KnownFormats.lookupFormat("sbml"), // look up identifier for SBML models
             true // mark file as master
             );

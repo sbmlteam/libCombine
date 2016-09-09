@@ -2,22 +2,21 @@
 ## @brief   CMake build script for example .net programs
 ## @author  Frank T. Bergmann
 ##
+file(GLOB cs_files "${CMAKE_CURRENT_SOURCE_DIR}/*.cs")
 
-foreach( example
-	
-	CreateArchiveExample
-	
-)
-
+foreach(filename 
+		${cs_files}
+		)
+	get_filename_component(example ${filename} NAME_WE)
 	ADD_CUSTOM_COMMAND(	
 		OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/${example}.exe
-		COMMAND "${CSHARP_EXAMPLE_COMPILER}"
+		COMMAND "${CSHARP_COMPILER}"
 		ARGS -r:${CMAKE_CURRENT_BINARY_DIR}/../../src/bindings/csharp/libcombinecsP.dll
 			-target:exe
 			-out:${example}.exe
 			${CSHARP_EXTRA_ARGS}
-			${CMAKE_CURRENT_SOURCE_DIR}${PATH_SEP}${example}.cs
-		MAIN_DEPENDENCY ${CMAKE_CURRENT_SOURCE_DIR}/${example}.cs
+			${filename}
+		MAIN_DEPENDENCY ${filename}
 		COMMENT "Build C# example: ${example}") 
 	
 	add_custom_target(example_cs_${example} ALL DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/${example}.exe)
