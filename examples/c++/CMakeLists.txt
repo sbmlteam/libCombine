@@ -13,19 +13,20 @@ if (EXTRA_INCLUDE_DIRS)
 include_directories(${EXTRA_INCLUDE_DIRS})
 endif(EXTRA_INCLUDE_DIRS)
 
-foreach(example 
+file(GLOB cpp_files "${CMAKE_CURRENT_SOURCE_DIR}/*.cpp")
 
-	create_archive
-	
-)
-	add_executable(example_cpp_${example} ${example}.cpp)
+foreach(filename 
+		${cpp_files}
+		)
+	get_filename_component(example ${filename} NAME_WE)
+	add_executable(example_cpp_${example} ${filename})
 	set_target_properties(example_cpp_${example} PROPERTIES  OUTPUT_NAME ${example})
 	target_link_libraries(example_cpp_${example} ${LIBCOMBINE_LIBRARY}-static ${ZIPPER_LIBRARY} ${LIBZ_LIBRARY} ${LIBSBML_LIBRARY} ${EXTRA_LIBS})
   if (WITH_BOOST_FILESYSTEM)
     target_link_libraries(example_cpp_${example} ${BOOST_SYSTEM_LIBRARY} ${BOOST_FILESYSTEM_LIBRARY})
   endif()
   if (WITH_QT_FILESYSTEM)
-    target_link_libraries(example_cpp_${example} ${QT_CORE_LIBRARY})
+    target_link_libraries(example_cpp_${example} ${QT_QTCORE_LIBRARY})
   endif()
 
 endforeach()
