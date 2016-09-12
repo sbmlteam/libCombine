@@ -1,9 +1,22 @@
 # LibCombine
+LibCombine implements a C++ API library providing support for the Combine Archive. The library is written after the likeness of libSBML (and in fact some classes have been generated using DEVISER). Thus even thought he core is written in C++, the classes can be accessed via SWIG from .NET, Java and Python. 
 
 ## Dependencies
 This library requires libSBML to be present, as its XML parsing layer will be used. for that either expat, xerces-c or libXML2 needs to be available. Additionally you will need zlib as well as the zipper library that can be obtained from: 
 
-* https://github.com/sebastiandev/zipper
+* <https://github.com/fbergmann/zipper>
+
+The zipper library supports three backends for the filesystem API: 
+
+* the C++17 filesystem STL (afaik only supported by MSVC right now)
+* boost filesystem api (requiring both boost system and boost filesystem)
+* QtCore
+
+Whatever has been chosen for the compilation of the zipper library has to be chosen for libCOMBINE as well. Thus the same three options are available: 
+
+* C++17 API: (default, nothing to specify)
+* BOOST API: `-DWITH_BOOST_FILESYSTEM=ON`, the actual libraries can be specified with the variables: `BOOST_SYSTEM_LIBRARY`, `BOOST_FILESYSTEM_LIBRARY` and `BOOST_INCLUDE_DIR`. 
+* Qt API: `-DWITH_QT_FILESYSTEM=ON` the actual library is found using the CMake FindQt package. So just specify your QTDIR environment variable. 
 
 ## Building 
 This library uses [CMake](http://cmake.org) to build the library, so from an initial checkout all you would need todo is to run: 
@@ -26,6 +39,9 @@ note the semicolon denoting the listing of several libraries. Of course you coul
 for linking against `expat` and indicating, that libSBML was compiled without compression.
 
 To make it easier all dependencies can be installed into a directory with a `bin`, `include` and `lib` folder. If that is passed to cmake using the variable `-DCOMBINE_DEPENDENCY_DIR=<directory>` all dependencies are easily found. 
+
+## Examples
+We have some examples using the library in the [examples folder](./examples).  
 
 ## License 
 This project is open source and freely available under the [Simplified BSD](http://opensource.org/licenses/BSD-2-Clause) license. Should that license not meet your needs, please contact me. 
