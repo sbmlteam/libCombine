@@ -54,7 +54,7 @@ namespace PrintExample
         CaContent entry = archive.getEntry(i);
         
         Console.WriteLine(" {0}: location: {1} format: {2}", i, entry.getLocation(), entry.getFormat());
-        printMetaDataFor(archive, entry.getLocation());
+        PrintMetaDataFor(archive, entry.getLocation());
       
         // the entry could now be extracted via 
         // archive.extractEntry(entry.getLocation(), <filename or folder>)
