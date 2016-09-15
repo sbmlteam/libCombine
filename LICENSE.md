@@ -1,4 +1,4 @@
-  Copyright (c) 2016, SBML Team  
+  Copyright (c) 2016, Sarah M. Keating & Frank T. Bergmann
   All rights reserved.
   
   Redistribution and use in source and binary forms, with or without

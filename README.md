@@ -1,6 +1,15 @@
 # LibCombine
 LibCombine implements a C++ API library providing support for the [Combine Archive](http://co.mbine.org/documents/archive). The library is written after the likeness of libSBML (and in fact some classes have been generated using DEVISER). Thus even thought he core is written in C++, the classes can be accessed via SWIG from .NET, Java and Python. 
 
+[![License](http://img.shields.io/:license-BSD-blue.svg)](http://opensource.org/licenses/BSD-2-Clause)  [![Latest version](https://img.shields.io/badge/Latest_version-0.1.0-brightgreen.svg)](http://shields.io)
+
+----
+*Authors*:      [Sarah M. Keating](http://www.ebi.ac.uk/about/people/sarah-keating), and [Frank T. Bergmann](http://www.cos.uni-heidelberg.de/index.php/f.bergmann?l=_e).
+
+*License*:      This code is licensed under the 2 Clause BSD.  Please see the file [../LICENSE.md](https://raw.githubusercontent.com/sbmlteam/libCombine/master/LICENSE.md) for details.
+
+*Repository*:   [https://github.com/sbmlteam/libCombine](https://github.com/sbmlteam/libCombine)
+
 ## Dependencies
 This library requires libSBML to be present, as its XML parsing layer will be used. for that either expat, xerces-c or libXML2 needs to be available. Additionally you will need zlib as well as the zipper library that can be obtained from: 
 
@@ -51,7 +60,7 @@ We have some examples using the library in the [examples folder](./examples) tha
 This project is open source and freely available under the [Simplified BSD](http://opensource.org/licenses/BSD-2-Clause) license. Should that license not meet your needs, please contact me. 
 
 
-  Copyright (c) 2016, SBML Team  
+  Copyright (c) 2016, Sarah M. Keating & Frank T. Bergmann 
   All rights reserved.
   
   Redistribution and use in source and binary forms, with or without
