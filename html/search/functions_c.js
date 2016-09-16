@@ -1,0 +1,25 @@
+var searchData=
+[
+  ['setabout',['setAbout',['../class_omex_description.html#a59b75ff31c43d192058daa0dd11e3632',1,'OmexDescription']]],
+  ['setannotation',['setAnnotation',['../class_ca_base.html#a18ee0c30d0402fa91b8326e6c9fd42e0',1,'CaBase::setAnnotation(XMLNode *annotation)'],['../class_ca_base.html#a729235cabf29ab0e203215ddc21e1a34',1,'CaBase::setAnnotation(const std::string &amp;annotation)']]],
+  ['setcreated',['setCreated',['../class_omex_description.html#ac473940a1d7d68ef65cd31a313f4d7cb',1,'OmexDescription']]],
+  ['setcreators',['setCreators',['../class_omex_description.html#afc7c6b6276ae5c6c3eee43613b933afa',1,'OmexDescription']]],
+  ['setdescription',['setDescription',['../class_omex_description.html#a324c04362902073c62752cdc46da56c5',1,'OmexDescription']]],
+  ['setelementtext',['setElementText',['../class_ca_base.html#ae75aefec7e7d0a027beb87d49a1f58cd',1,'CaBase']]],
+  ['setemail',['setEmail',['../class_v_card.html#a5d74bc40f2ef8f0482ad41610666e0dc',1,'VCard']]],
+  ['setfamilyname',['setFamilyName',['../class_v_card.html#afe25171ed2e6c50d2fe1388a6051a2e8',1,'VCard']]],
+  ['setformat',['setFormat',['../class_ca_content.html#a95a2435ac8fe73ce1e3864989e612dc6',1,'CaContent']]],
+  ['setgivenname',['setGivenName',['../class_v_card.html#a641bb816a8ec705f20d853c62eb94d38',1,'VCard']]],
+  ['setlocation',['setLocation',['../class_ca_content.html#a3d794deb9cb3f229496652ba091b7cc5',1,'CaContent']]],
+  ['setmanifest',['setManifest',['../class_combine_archive.html#afa5373d330243dffda207a4604c91ded',1,'CombineArchive']]],
+  ['setmaster',['setMaster',['../class_ca_content.html#a52a5b4bbe344745aed1a0c61e49219f2',1,'CaContent']]],
+  ['setmetaid',['setMetaId',['../class_ca_base.html#a88a8ffa5c220413f3a3f118143471a6a',1,'CaBase']]],
+  ['setmodified',['setModified',['../class_omex_description.html#a9c94d118599045436f2bbc732cd9f2b6',1,'OmexDescription']]],
+  ['setnamespaces',['setNamespaces',['../class_ca_base.html#aca98b163ac7491866570fabc674d6956',1,'CaBase']]],
+  ['setnotes',['setNotes',['../class_ca_base.html#acc6d9f6e2003a8e0e7757f116b9ba887',1,'CaBase::setNotes(const XMLNode *notes)'],['../class_ca_base.html#a9ab84560444f3a86bd309fe3b3254224',1,'CaBase::setNotes(const std::string &amp;notes, bool addXHTMLMarkup=false)']]],
+  ['setorganization',['setOrganization',['../class_v_card.html#a136a0db02447976ae233e43047cd0779',1,'VCard']]],
+  ['setprogramname',['setProgramName',['../class_ca_writer.html#a91da6b1e0a990c9d2ce4e960666edaf5',1,'CaWriter']]],
+  ['setprogramversion',['setProgramVersion',['../class_ca_writer.html#a420c9778450effe66db92cb2a41fa440',1,'CaWriter']]],
+  ['setuserdata',['setUserData',['../class_ca_base.html#af1004ed4fc9be13ae92e4819cdda101d',1,'CaBase']]],
+  ['size',['size',['../class_ca_list_of.html#aa51066685c54e68b57c4fa3fde4496b5',1,'CaListOf']]]
+];
