@@ -10,6 +10,9 @@ LibCombine implements a C++ API library providing support for the [Combine Archi
 
 *Repository*:   [https://github.com/sbmlteam/libCombine](https://github.com/sbmlteam/libCombine)
 
+*Documentation*:   [API Documentation](https://sbmlteam.github.io/libCombine/html/class_combine_archive.html)
+
+
 ## Dependencies
 This library requires libSBML to be present, as its XML parsing layer will be used. for that either expat, xerces-c or libXML2 needs to be available. Additionally you will need zlib as well as the zipper library that can be obtained from: 
 
