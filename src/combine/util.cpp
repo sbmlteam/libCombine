@@ -57,12 +57,12 @@ Util::getExtension(const std::string &fileName)
 bool 
 Util::removeFileOrFolder(const std::string & path)
 {
-  if (isDirectory(path))
+  if (zipper::isDirectory(path))
   {
-    removeFolder(path);
+    zipper::removeFolder(path);
     return true;
   }
-  else if (checkFileExists(path))
+  else if (zipper::checkFileExists(path))
   {
     std::remove(path.c_str());
     return true;

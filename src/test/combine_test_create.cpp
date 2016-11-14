@@ -16,6 +16,8 @@
 #include <map>
 #include <cstdlib>
 
+using namespace zipper;
+
 /**
  * Tries to find the test file in the srcdir environment variable.
  *

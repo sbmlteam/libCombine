@@ -172,7 +172,7 @@ macro(ADD_FUNCTION directory)
 #              list(REMOVE_ITEM temp "${tempFile}")
             endif()
         endif()
-        if ("${tempFile}" MATCHES ".*.cxx")
+        if ("${tempFile}" MATCHES ".*.cxx$")
           set_source_files_properties(
               ${tempFile}
               PROPERTIES HEADER_FILE_ONLY true
@@ -190,8 +190,8 @@ endmacro(ADD_FUNCTION)
 
 foreach (directory common omex)
 
-	ADD_FUNCTION(${directory})
-				       
+  ADD_FUNCTION(${directory})
+               
 endforeach()
 
 ###############################################################################

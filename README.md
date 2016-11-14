@@ -18,17 +18,7 @@ This library requires libSBML to be present, as its XML parsing layer will be us
 
 * <https://github.com/fbergmann/zipper>
 
-The zipper library supports three backends for the filesystem API: 
-
-* the C++17 filesystem STL (afaik only supported by MSVC right now)
-* boost filesystem api (requiring both boost system and boost filesystem)
-* QtCore
-
-Whatever has been chosen for the compilation of the zipper library has to be chosen for libCOMBINE as well. Thus the same three options are available: 
-
-* C++17 API: (default, nothing to specify)
-* BOOST API: `-DWITH_BOOST_FILESYSTEM=ON`, the actual libraries can be specified with the variables: `BOOST_SYSTEM_LIBRARY`, `BOOST_FILESYSTEM_LIBRARY` and `BOOST_INCLUDE_DIR`. 
-* Qt API: `-DWITH_QT_FILESYSTEM=ON` the actual library is found using the CMake FindQt package. So just specify your QTDIR environment variable. 
+The zipper library no longer requires c++ 17, or qt or boost but instead uses file system functions developed by the [COPASI](http://copasi.org) project.
 
 ## Building 
 This library uses [CMake](http://cmake.org) to build the library, so from an initial checkout all you would need todo is to run: 

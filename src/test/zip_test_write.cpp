@@ -10,6 +10,8 @@
 #include <string>
 #include <map>
 
+using namespace zipper;
+
 SCENARIO("archive write", "[zipper]")
 {
   GIVEN("An archive outputed to a file")

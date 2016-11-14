@@ -22,11 +22,5 @@ foreach(filename
 	add_executable(example_cpp_${example} ${filename})
 	set_target_properties(example_cpp_${example} PROPERTIES  OUTPUT_NAME ${example})
 	target_link_libraries(example_cpp_${example} ${LIBCOMBINE_LIBRARY}-static ${ZIPPER_LIBRARY} ${LIBZ_LIBRARY} ${LIBSBML_LIBRARY} ${EXTRA_LIBS})
-  if (WITH_BOOST_FILESYSTEM)
-    target_link_libraries(example_cpp_${example} ${BOOST_SYSTEM_LIBRARY} ${BOOST_FILESYSTEM_LIBRARY})
-  endif()
-  if (WITH_QT_FILESYSTEM)
-    target_link_libraries(example_cpp_${example} ${QT_QTCORE_LIBRARY})
-  endif()
 
 endforeach()
