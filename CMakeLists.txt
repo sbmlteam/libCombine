@@ -94,6 +94,14 @@ endif()
 
 include(CPack)
 
+###############################################################################
+#
+# list of additional files to link against.
+#
+
+set(EXTRA_LIBS "" CACHE STRING "List of additional libraries to link against." )
+set(EXTRA_INCLUDE "" CACHE STRING "List of additional include directories to add." )
+set(EXTRA_DEFS "" CACHE STRING "List of additional flag to add." )
 
 ###############################################################################
 #
@@ -216,10 +224,22 @@ if(WITH_CPP_NAMESPACE)
     set (LIBCOMBINE_USE_CPP_NAMESPACE 1)
 endif()
 
+
+if (SWIG_EXECUTABLE AND NOT EXISTS "${SWIG_EXECUTABLE}")
+unset(SWIG_EXECUTABLE CACHE )
+unset(SWIG_DIR CACHE )
+unset(SWIG_VERSION CACHE )
+endif()
+
 if(WITH_SWIG)
     find_program(SWIG_EXECUTABLE
       NAMES swig
       PATHS
+        c:/swigwin-3.0.10
+        c:/swigwin-3.0.9
+        c:/swigwin-3.0.8
+        c:/swigwin-3.0.7
+        c:/swigwin-3.0.6
         c:/swigwin-3.0.5
         c:/swigwin-3.0.2
         c:/swigwin-3.0.0
@@ -279,6 +299,9 @@ file sbml/SBase.h, but it does not. Please specify the LIBSBML_INCLUDE_DIR varia
 endif()
 
 
+# detect zipper library if sources are not included
+if (NOT EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/src/zipper)
+
 find_library(ZIPPER_LIBRARY
     NAMES Zipper-static Zipper libZipper-static libZipper
     PATHS /usr/lib /usr/local/lib
@@ -299,6 +322,11 @@ find_path(ZIPPER_INCLUDE_DIR
             NO_DEFAULT_PATH
       DOC "The directory containing the ZIPPER include files."
             )
+else()
+  unset(ZIPPER_LIBRARY)
+  unset(ZIPPER_INCLUDE_DIR)
+endif()
+
 
 find_library(LIBZ_LIBRARY
     NAMES zdll.lib z zlib.lib
@@ -542,6 +570,46 @@ file(GLOB COMBINE_SOURCES
   ${CMAKE_CURRENT_SOURCE_DIR}/src/combine/*.cpp
 )
 source_group(combine FILES ${COMBINE_SOURCES} ${COMBINE_HEADERS})
+
+# if we have the zipper sources, include them directly
+if (EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/src/zipper)
+  include_directories(BEFORE ${CMAKE_CURRENT_SOURCE_DIR}/src/zipper)
+
+  file(GLOB ZIPPER_SOURCES
+    RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}/src
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/zipper/*.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/zipper/*.h
+  )
+  
+  set(COMBINE_SOURCES ${COMBINE_SOURCES} ${ZIPPER_SOURCES})
+  
+  source_group(zipper FILES ${ZIPPER_SOURCES})
+  
+endif()
+
+# include minizip sources if we have them and libSBML has been compiled 
+# without compression
+
+if (EXISTS ${LIBSBML_LIBRARY})
+  SET(CMAKE_REQUIRED_LIBRARIES ${LIBSBML_LIBRARY} ${EXTRA_LIBS})
+  CHECK_FUNCTION_EXISTS(zipOpen3 LIBSBML_HAS_MINIZIP)
+endif()
+
+if (EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/src/minizip AND NOT LIBSBML_HAS_MINIZIP)
+  include_directories(BEFORE ${CMAKE_CURRENT_SOURCE_DIR}/src/minizip)
+
+  file(GLOB MINIZIP_SOURCES
+    RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}/src
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/minizip/*.c
+  )
+  
+  set(COMBINE_SOURCES ${COMBINE_SOURCES} ${MINIZIP_SOURCES})
+  
+  source_group(minizip FILES ${MINIZIP_SOURCES})
+  
+endif()
+
+
 set(LIBCOMBINE_SOURCES ${COMBINE_SOURCES} ${COMBINE_HEADERS})
 set(LIBCOMBINE_LIBRARY ${COMBINE_LIBRARY})
 set (CMAKE_INSTALL_LIBDIR lib)
@@ -590,6 +658,9 @@ set_tests_properties(test_${COMBINE_LIBRARY}_run PROPERTIES ENVIRONMENT
 
 endif()
 
+if (NOT HOSTNAME)
+ site_name(HOSTNAME)
+endif()
 
 message(STATUS "
 ----------------------------------------------------------------------
