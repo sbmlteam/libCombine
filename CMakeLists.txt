@@ -580,7 +580,7 @@ if (EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/src/zipper)
     ${CMAKE_CURRENT_SOURCE_DIR}/src/zipper/*.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/zipper/*.h
   )
-  
+
   set(COMBINE_SOURCES ${COMBINE_SOURCES} ${ZIPPER_SOURCES})
   
   source_group(zipper FILES ${ZIPPER_SOURCES})
@@ -602,7 +602,13 @@ if (EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/src/minizip AND NOT LIBSBML_HAS_MINIZIP)
     RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}/src
     ${CMAKE_CURRENT_SOURCE_DIR}/src/minizip/*.c
   )
-  
+
+  if (UNIX AND NOT CYGWIN)
+   list(REMOVE_ITEM MINIZIP_SOURCES
+    minizip/iowin32.c
+  )
+  endif()
+
   set(COMBINE_SOURCES ${COMBINE_SOURCES} ${MINIZIP_SOURCES})
   
   source_group(minizip FILES ${MINIZIP_SOURCES})
