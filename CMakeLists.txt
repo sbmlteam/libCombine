@@ -111,6 +111,15 @@ set(EXTRA_LIBS "" CACHE STRING "List of additional libraries to link against." )
 set(EXTRA_INCLUDE "" CACHE STRING "List of additional include directories to add." )
 set(EXTRA_DEFS "" CACHE STRING "List of additional flag to add." )
 
+SET(ACTUAL_EXTRA_LIBS)
+if (EXTRA_LIBS AND NOT UNIX)
+foreach(current ${EXTRA_LIBS})
+  file(TO_CMAKE_PATH "${current}" CUR_PATH)
+  SET(ACTUAL_EXTRA_LIBS ${ACTUAL_EXTRA_LIBS} ${CUR_PATH})
+endforeach()
+set(EXTRA_LIBS ${ACTUAL_EXTRA_LIBS})
+endif()
+
 ###############################################################################
 #
 # Here we have the main configuration options for libcombine.
@@ -335,16 +344,30 @@ else()
   unset(ZIPPER_INCLUDE_DIR)
 endif()
 
-
+set(ZLIB_INITIAL_VALUE)
+if (NOT LIBZ_LIBRARY)
 find_library(LIBZ_LIBRARY
     NAMES zdll.lib z zlib.lib
     PATHS /usr/lib /usr/local/lib
           ${CMAKE_OSX_SYSROOT}/usr/lib
           ${COMBINE_DEPENDENCY_DIR}/lib
-          ${ADDITIONAL_LIB_DIRS}
-          $ENV{ZLIBROOT}/lib
+          NO_DEFAULT_PATH
+          NO_CMAKE_ENVIRONMENT_PATH
+          NO_CMAKE_PATH
+          NO_SYSTEM_ENVIRONMENT_PATH
+          NO_CMAKE_SYSTEM_PATH    
+          DOC "The file name of the zip compression library."
+    )
+endif()
+if (NOT LIBZ_LIBRARY)
+find_library(LIBZ_LIBRARY
+    NAMES zdll.lib z zlib.lib
+    PATHS /usr/lib /usr/local/lib
+          ${CMAKE_OSX_SYSROOT}/usr/lib
+          ${COMBINE_DEPENDENCY_DIR}/lib
     DOC "The file name of the zip compression library."
-)
+    )
+endif()
 
 
 if (NOT LIBZ_INCLUDE_DIR)
@@ -365,9 +388,9 @@ if (NOT LIBZ_INCLUDE_DIR)
     PATHS ${CMAKE_OSX_SYSROOT}/usr/include
           /usr/include /usr/local/include
           ${COMBINE_DEPENDENCY_DIR}/include
-          $ENV{ZLIBROOT}/include
     DOC "The directory containing the zlib include files."
           )
+
 endif()
 
 if(WITH_CSHARP)
