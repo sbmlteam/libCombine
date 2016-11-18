@@ -221,6 +221,17 @@ endif(MSVC)
 # Build library
 #
 
+# used to create CMake config files for projects using this library
+if (${CMAKE_VERSION} VERSION_GREATER 2.8.7)
+include(CMakePackageConfigHelpers)
+endif()
+
+SET (INCLUDE_DESTINATION)
+if (${CMAKE_VERSION} VERSION_GREATER "2.8.11")
+  set(INCLUDE_DESTINATION INCLUDES DESTINATION include)
+endif()
+
+
 if (NOT LIBCOMBINE_SKIP_SHARED_LIBRARY)
 
 add_library (${LIBCOMBINE_LIBRARY} SHARED ${LIBCOMBINE_SOURCES} )
@@ -234,10 +245,30 @@ endif()
 target_link_libraries(${LIBCOMBINE_LIBRARY} ${LIBCOMBINE_LIBS} ${EXTRA_LIBS})
 
 INSTALL(TARGETS ${LIBCOMBINE_LIBRARY}
+        EXPORT  ${LIBCOMBINE_LIBRARY}-config
         RUNTIME DESTINATION bin
         LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
         ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+        ${INCLUDE_DESTINATION}
 )
+
+# and install the exported target configuration
+INSTALL(EXPORT ${LIBCOMBINE_LIBRARY}-config
+        DESTINATION ${PACKAGE_CONFIG_DIR}
+)
+
+if (${CMAKE_VERSION} VERSION_GREATER 2.8.7)
+WRITE_BASIC_PACKAGE_VERSION_FILE(
+  ${CMAKE_CURRENT_BINARY_DIR}/${LIBCOMBINE_LIBRARY}-config-version.cmake 
+  VERSION ${PROJECT_VERSION}
+  COMPATIBILITY AnyNewerVersion
+)
+  
+INSTALL(
+  FILES ${CMAKE_CURRENT_BINARY_DIR}/${LIBCOMBINE_LIBRARY}-config-version.cmake
+  DESTINATION ${PACKAGE_CONFIG_DIR}
+)
+endif()
 
 endif()
 
@@ -251,11 +282,31 @@ endif(WIN32 AND NOT CYGWIN)
 target_link_libraries(${LIBCOMBINE_LIBRARY}-static ${LIBCOMBINE_LIBS} ${EXTRA_LIBS})
 
 INSTALL(TARGETS ${LIBCOMBINE_LIBRARY}-static
+        EXPORT  ${LIBCOMBINE_LIBRARY}-static-config
         RUNTIME DESTINATION bin
         LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
         ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+        ${INCLUDE_DESTINATION}
 )
 
+
+# and install the exported target configuration
+INSTALL(EXPORT ${LIBCOMBINE_LIBRARY}-static-config
+        DESTINATION ${PACKAGE_CONFIG_DIR}
+)
+
+if (${CMAKE_VERSION} VERSION_GREATER 2.8.7)
+WRITE_BASIC_PACKAGE_VERSION_FILE(
+  ${CMAKE_CURRENT_BINARY_DIR}/${LIBCOMBINE_LIBRARY}-static-config-version.cmake 
+  VERSION ${PROJECT_VERSION}
+  COMPATIBILITY AnyNewerVersion
+)
+  
+INSTALL(
+  FILES ${CMAKE_CURRENT_BINARY_DIR}/${LIBCOMBINE_LIBRARY}-static-config-version.cmake
+  DESTINATION ${PACKAGE_CONFIG_DIR}
+)
+endif()
 
 ##############################################################################
 #
