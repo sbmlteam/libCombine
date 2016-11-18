@@ -109,7 +109,7 @@ set(EXTRA_DEFS "" CACHE STRING "List of additional flag to add." )
 #
 
 # Build static / shared library
-# option(BUILD_SHARED_LIBS  "Build shared library. (Set to OFF to build static libraries.)" OFF)
+option(LIBCOMBINE_SKIP_SHARED_LIBRARY  "If set the shared library will not be built." OFF)
 
 # Whether to compile examples
 option(WITH_EXAMPLES "Compile the libCombine example programs."  OFF)
