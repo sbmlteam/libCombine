@@ -84,7 +84,7 @@ configure_file(
     ${CMAKE_CURRENT_BINARY_DIR}/omex/common/libcombine-config-common.h
 )
 
-# Replace: @PACKAGE_VERSION@ and @LIBCOMBINE_VERSION_NUMERIC@
+# Replace: @LIBCOMBINE_VERSION@ and @LIBCOMBINE_VERSION_NUMERIC@
 configure_file (
   "${CMAKE_CURRENT_SOURCE_DIR}/omex/common/libcombine-version.h.cmake"
   "${CMAKE_CURRENT_BINARY_DIR}/omex/common/libcombine-version.h"
