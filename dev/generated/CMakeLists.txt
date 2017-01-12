@@ -40,7 +40,7 @@ if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/VERSION.txt")
 endif()
 
 MATH(EXPR LIBCOMBINE_VERSION_NUMERIC "${LIBCOMBINE_VERSION_MAJOR} * 10000 + ${LIBCOMBINE_VERSION_MINOR} * 100 + ${LIBCOMBINE_VERSION_PATCH}" )
-set(PACKAGE_VERSION "${LIBCOMBINE_VERSION_MAJOR}.${LIBCOMBINE_VERSION_MINOR}.${LIBCOMBINE_VERSION_PATCH}${LIBCOMBINE_VERSION_RELEASE}")
+set(LIBCOMBINE_VERSION "${LIBCOMBINE_VERSION_MAJOR}.${LIBCOMBINE_VERSION_MINOR}.${LIBCOMBINE_VERSION_PATCH}${LIBCOMBINE_VERSION_RELEASE}")
 set(PACKAGE_NAME "libCombine")
 
 # add make dist and make check target as they are already familiar for
@@ -474,11 +474,11 @@ if(UNIX)
         set(BUILD_DEFINITIONS "${BUILD_DEFINITIONS} -DLINUX")
     endif(APPLE)
 
-    add_definitions( -DPACKAGE_VERSION=\"${PACKAGE_VERSION}\"  -DPACKAGE_NAME=\"${PROJECT_NAME}\")
-    set(BUILD_DEFINITIONS "${BUILD_DEFINITIONS} -DPACKAGE_VERSION=\"${PACKAGE_VERSION}\"  -DPACKAGE_NAME=\"${PROJECT_NAME}\"")
+    add_definitions( -DPACKAGE_VERSION=\"${LIBCOMBINE_VERSION}\"  -DPACKAGE_NAME=\"${PROJECT_NAME}\")
+    set(BUILD_DEFINITIONS "${BUILD_DEFINITIONS} -DPACKAGE_VERSION=\"${LIBCOMBINE_VERSION}\"  -DPACKAGE_NAME=\"${PROJECT_NAME}\"")
 
 else(UNIX)
-    add_definitions(-DPACKAGE_VERSION=\"${PACKAGE_VERSION}\"  -DPACKAGE_NAME=\"${PROJECT_NAME}\")
+    add_definitions(-DPACKAGE_VERSION=\"${LIBCOMBINE_VERSION}\"  -DPACKAGE_NAME=\"${PROJECT_NAME}\")
     
     add_definitions(-DWIN32)
     set(BUILD_DEFINITIONS "${BUILD_DEFINITIONS} -DWIN32")
@@ -708,7 +708,7 @@ endif()
 
 message(STATUS "
 ----------------------------------------------------------------------
-libCombine version ${PACKAGE_VERSION}
+libCombine version ${LIBCOMBINE_VERSION}
 ----------------------------------------------------------------------
 
    More information and the latest version are available online at
