@@ -88,6 +88,12 @@ ADD_CUSTOM_COMMAND(
       ${SWIG_EXTRA_ARGS}     
       -o ${CMAKE_CURRENT_BINARY_DIR}/libcombine_wrap.cpp 
       ${CMAKE_CURRENT_SOURCE_DIR}/libcombine.i
+
+  COMMAND "${CMAKE_COMMAND}"
+  ARGS  -DCUR_BIN_DIRECTORY=\"${CMAKE_CURRENT_BINARY_DIR}\"
+        -DVERSION=\"${LIBCOMBINE_VERSION}\"
+        -P "${CMAKE_CURRENT_SOURCE_DIR}/add_version.cmake"
+
   DEPENDS local.i local.cpp local-contrib.i
     COMMENT "Swig Python source") 
 
