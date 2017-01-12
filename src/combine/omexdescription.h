@@ -167,7 +167,7 @@ public:
   /**
    * @return the creation date
    */
-  LIBSBML_CPP_NAMESPACE_QUALIFIER const Date &getCreated() const;
+  const LIBSBML_CPP_NAMESPACE_QUALIFIER Date &getCreated() const;
 
   /**
    * @return the creation date
