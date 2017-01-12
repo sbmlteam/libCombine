@@ -28,7 +28,7 @@ CombineArchive::CombineArchive()
 CombineArchive::~CombineArchive()
 {
   cleanUp();
-  // TODO: delete files if we extrated things somewhere
+  // TODO: delete files if we extracted things somewhere
 }
 
 bool
@@ -54,7 +54,16 @@ CombineArchive::initializeFromArchive(
 {
   cleanUp();
 
-  mpUnzipper = new Unzipper(archiveFile);
+  try 
+  {
+    mpUnzipper = new Unzipper(archiveFile);
+  }
+  catch (const std::exception&)
+  {
+    // invalid COMBINE archive, it should always have a manifest
+    cleanUp();
+    return false;
+  }
 
   // now build the map of all files in the archive
   std::vector<zipper::ZipEntry> entries = mpUnzipper->entries();

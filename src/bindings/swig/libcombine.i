@@ -34,6 +34,19 @@
 
 %module(directors="1") libcombine
 
+
+%include exception.i       
+
+%exception {
+	try {
+		$function
+	} catch(const std::exception& ex) {
+		SWIG_exception(SWIG_RuntimeError, ex.what());
+	} catch(...) {
+		SWIG_exception(SWIG_RuntimeError,"Unknown exception");
+	}
+}
+
 %pragma(java) moduleclassmodifiers="
 /**
   * Wrapper class for global methods and constants defined by libCombine.
