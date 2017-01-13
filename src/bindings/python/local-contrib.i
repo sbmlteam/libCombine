@@ -157,7 +157,7 @@ class AutoProperty(type):
 
 %}
 
-%extend SedBase
+%extend CaBase
 {
     %pythoncode
     {

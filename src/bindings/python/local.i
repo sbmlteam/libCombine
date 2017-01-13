@@ -52,7 +52,7 @@
  *
  * 2. wraps std::cerr
  *
- *    d = libsedml.readSedML("foo.xml")
+ *    d = libsedml.readOMEX("foo.xml")
  *    if d.getNumErrors() > 0 :
  *       d.printErrors(libsedml.cerr)
  *    
@@ -81,7 +81,10 @@
 %include <std_string.i>
 
 #pragma SWIG nowarn=509
-%warnfilter(401) basic_ios<char>;
+%warnfilter(401) std::basic_ios;
+%warnfilter(401) basic_ios;
+%warnfilter(401) basic_ostream;
+%warnfilter(401) basic_ostringstream;
 
 namespace std
 {
@@ -174,31 +177,13 @@ namespace std
 }
 
 
-/**
- * Convert an SedBase object to a string.
- *
-%extend SedBase
-{
-  %pythoncode
-  {
-    def __str__(self):
-      """
-      Return a string representation of this object.
-
-      Note that the string will not be a complete SEDML document.
-      """
-
-      return self.toSEDML()
-  }
-}*/
-
 
 /**
  * Allows ListOf objects:
  *
  *   - To be indexed and sliced, e.g. lst[0].
  */
-%extend SedListOf
+%extend CaListOf
 {
   int __len__()
   {
@@ -308,7 +293,7 @@ XMLOutputStream::writeAttribute
 #endif
 
 /**
- * Add an equality operator to SedBase.  All subclasses of SedBase
+ * Add an equality operator to CaBase.  All subclasses of CaBase
  * will inherit this method.
  *
  * The %extend rewrites __cmp__ such that two objects of
@@ -344,12 +329,12 @@ XMLOutputStream::writeAttribute
 }
 %enddef
 
-SWIGPYTHON__CMP__(SedBase)
-SWIGPYTHON__CMP__(SedWriter)
-SWIGPYTHON__CMP__(SedReader)
+SWIGPYTHON__CMP__(CaBase)
+SWIGPYTHON__CMP__(CaWriter)
+SWIGPYTHON__CMP__(CaReader)
 SWIGPYTHON__CMP__(ASTNode)
 SWIGPYTHON__CMP__(XMLNamespaces)
-SWIGPYTHON__CMP__(SedNamespaces)
+SWIGPYTHON__CMP__(CaNamespaces)
 SWIGPYTHON__CMP__(XMLAttributes)
 SWIGPYTHON__CMP__(XMLToken)
 SWIGPYTHON__CMP__(XMLTriple)
@@ -363,7 +348,7 @@ SWIGPYTHON__CMP__(XMLOutputStream)
  * passed-in object.  The containing object will takeover ownership
  * and delete the object as appropriate.  This avoids a deadly
  * double-delete which can result in a segmentation fault.  For
- * example, each SedBase that is appended to a ListOf is subsequently
+ * example, each CaBase that is appended to a ListOf is subsequently
  * owned by that ListOf.
  */
 
@@ -380,9 +365,9 @@ METHOD_NAME
 // ----------------------------------------------------------------------
 
 #if SWIG_VERSION > 0x010336
-TAKEOVER_OWNERSHIP(ListOf::appendAndOwn(SedBase*),0)
+TAKEOVER_OWNERSHIP(ListOf::appendAndOwn(CaBase*),0)
 #else
-TAKEOVER_OWNERSHIP(ListOf::appendAndOwn(SedBase*),1)
+TAKEOVER_OWNERSHIP(ListOf::appendAndOwn(CaBase*),1)
 #endif
 
 // ----------------------------------------------------------------------
@@ -405,7 +390,7 @@ TAKEOVER_OWNERSHIP(ASTNode::addSemanticsAnnotation(XMLNode*),1)
 
 /**
  *
- * Wraps the SedConstructorException class (C++ exception defined by libSEDML) 
+ * Wraps the CaConstructorException class (C++ exception defined by libSEDML) 
  * as the ValueError class (Python built-in exception).
  *
  * For example, the exception can be catched in Python code as follows:
@@ -418,14 +403,14 @@ TAKEOVER_OWNERSHIP(ASTNode::addSemanticsAnnotation(XMLNode*),1)
  * --------------------------------------
  */
 
-%ignore SedConstructorException;
+%ignore CaConstructorException;
 
 %define SEDMLCONSTRUCTOR_EXCEPTION(SBASE_CLASS_NAME)
 %exception SBASE_CLASS_NAME {
   try {
     $action
   }
-  catch (SedConstructorException &e) {
+  catch (CaConstructorException &e) {
     PyErr_SetString(PyExc_ValueError, const_cast<char*>(e.what()));
     return NULL;
   }
@@ -457,8 +442,8 @@ SEDMLCONSTRUCTOR_EXCEPTION(StoichiometryMath)
 SEDMLCONSTRUCTOR_EXCEPTION(Trigger)
 SEDMLCONSTRUCTOR_EXCEPTION(Unit)
 SEDMLCONSTRUCTOR_EXCEPTION(UnitDefinition)
-SEDMLCONSTRUCTOR_EXCEPTION(SedDocument)
-SEDMLCONSTRUCTOR_EXCEPTION(SedNamespaces)
+SEDMLCONSTRUCTOR_EXCEPTION(CaOmexManifest)
+SEDMLCONSTRUCTOR_EXCEPTION(CaNamespaces)
 SEDMLCONSTRUCTOR_EXCEPTION(SEDMLExtensionNamespaces)
 
 SEDMLCONSTRUCTOR_EXCEPTION(ListOf)
@@ -518,7 +503,7 @@ XMLCONSTRUCTOR_EXCEPTION(XMLTripple)
 
 
 // ----------------------------------------------------------------------
-// SedReader
+// CaReader
 // ----------------------------------------------------------------------
 
 
@@ -535,8 +520,8 @@ def conditional_abspath (filename):
   Returns filename with an absolute path prepended, if necessary.
   Some combinations of platforms and underlying XML parsers *require*
   an absolute path to a filename while others do not.  This function
-  encapsulates the appropriate logic.  It is used by readSedML() and
-  SedReader.readSedML().
+  encapsulates the appropriate logic.  It is used by readCaML() and
+  CaReader.readCaML().
   """
   if sys.platform.find('cygwin') != -1:
     return filename
@@ -553,30 +538,30 @@ def conditional_abspath (filename):
  * after here won't do it, and neither will moving the pydoc.i
  * file inclusion from the top of this file to the end of this
  * file.  I'm giving up and just copy-pasting the doc string
- * from SedReader.h.  Definitely non-ideal, but I'm at the end
+ * from CaReader.h.  Definitely non-ideal, but I'm at the end
  * of ideas.
  */
 %feature("shadow")
-SedReader::readSedML(const std::string&)
+CaReader::readOMEX(const std::string&)
 %{
-  def readSedML(*args):
+  def readOMEX(*args):
     """
-    readSedML(self, string filename) -> SedDocument
+    readOMEX(self, string filename) -> CaOmexManifest
 
     Reads an SEDML document from a file.
 
-    This method is identical to readSedMLFromFile().
+    This method is identical to readOMEXFromFile().
 
     If the file named 'filename' does not exist or its content is not
-    valid SEDML, one or more errors will be logged with the SedDocument
+    valid SEDML, one or more errors will be logged with the CaOmexManifest
     object returned by this method.  Callers can use the methods on
-    SedDocument such as SedDocument.getNumErrors() and
-    SedDocument.getError() to get the errors.  The object returned by
-    SedDocument.getError() is an SedError object, and it has methods to
+    CaOmexManifest such as CaOmexManifest.getNumErrors() and
+    CaOmexManifest.getError() to get the errors.  The object returned by
+    CaOmexManifest.getError() is an CaError object, and it has methods to
     get the error code, category, and severity level of the problem, as
     well as a textual description of the problem.  The possible severity
     levels range from informational messages to fatal errors; see the
-    documentation for SedError for more information.
+    documentation for CaError for more information.
 
     If the file 'filename' could not be read, the file-reading error will
     appear first.  The error code can provide a clue about what happened.
@@ -586,8 +571,8 @@ SedReader::readSedML(const std::string&)
     been reported by the underlying operating system.  Callers can check
     for these situations using a program fragment such as the following:
 
-     reader = SedReader()
-     doc    = reader.readSedML(filename)
+     reader = CaReader()
+     doc    = reader.readOMEX(filename)
 
      if doc.getNumErrors() > 0:
        if doc.getError(0).getErrorId() == libsedml.XMLFileUnreadable:
@@ -616,9 +601,9 @@ SedReader::readSedML(const std::string&)
     Parameter 'filename is the name or full pathname of the file to be
     read.
 
-    Returns a pointer to the SedDocument created from the SEDML content.
+    Returns a pointer to the CaOmexManifest created from the SEDML content.
 
-    See also SedError.
+    See also CaError.
 
     Note:
 
@@ -640,30 +625,30 @@ SedReader::readSedML(const std::string&)
     """
     args_copy    = list(args)
     args_copy[1] = conditional_abspath(args[1])
-    return _libsedml.SedReader_readSedML(*args_copy)
+    return _libsedml.CaReader_readOMEX(*args_copy)
 %}
 
 %feature("shadow")
-SedReader::readSedMLFromFile(const std::string&)
+CaReader::readOMEXFromFile(const std::string&)
 %{
-  def readSedMLFromFile(*args):
+  def readOMEXFromFile(*args):
     """
-    readSedMLFromFile(self, string filename) -> SedDocument
+    readOMEXFromFile(self, string filename) -> CaOmexManifest
 
     Reads an SEDML document from a file.
 
-    This method is identical to readSedMLFromFile().
+    This method is identical to readOMEXFromFile().
 
     If the file named 'filename' does not exist or its content is not
-    valid SEDML, one or more errors will be logged with the SedDocument
+    valid SEDML, one or more errors will be logged with the CaOmexManifest
     object returned by this method.  Callers can use the methods on
-    SedDocument such as SedDocument.getNumErrors() and
-    SedDocument.getError() to get the errors.  The object returned by
-    SedDocument.getError() is an SedError object, and it has methods to
+    CaOmexManifest such as CaOmexManifest.getNumErrors() and
+    CaOmexManifest.getError() to get the errors.  The object returned by
+    CaOmexManifest.getError() is an CaError object, and it has methods to
     get the error code, category, and severity level of the problem, as
     well as a textual description of the problem.  The possible severity
     levels range from informational messages to fatal errors; see the
-    documentation for SedError for more information.
+    documentation for CaError for more information.
 
     If the file 'filename' could not be read, the file-reading error will
     appear first.  The error code can provide a clue about what happened.
@@ -673,8 +658,8 @@ SedReader::readSedMLFromFile(const std::string&)
     been reported by the underlying operating system.  Callers can check
     for these situations using a program fragment such as the following:
 
-     reader = SedReader()
-     doc    = reader.readSedML(filename)
+     reader = CaReader()
+     doc    = reader.readOMEX(filename)
 
      if doc.getNumErrors() > 0:
        if doc.getError(0).getErrorId() == libsedml.XMLFileUnreadable:
@@ -703,9 +688,9 @@ SedReader::readSedMLFromFile(const std::string&)
     Parameter 'filename is the name or full pathname of the file to be
     read.
 
-    Returns a pointer to the SedDocument created from the SEDML content.
+    Returns a pointer to the CaOmexManifest created from the SEDML content.
 
-    See also SedError.
+    See also CaError.
 
     Note:
 
@@ -727,41 +712,41 @@ SedReader::readSedMLFromFile(const std::string&)
     """
     args_copy    = list(args)
     args_copy[1] = conditional_abspath(args[1])
-    return _libsedml.SedReader_readSedML(*args_copy)
+    return _libsedml.CaReader_readOMEX(*args_copy)
 %}
 
 
 /**
- * Since we cannot seem to "shadow" readSedML() (maybe because it's
+ * Since we cannot seem to "shadow" readOMEX() (maybe because it's
  * not a method of some object, but rather a top-level function, we
- * employ the following HACK: Tell SWIG to ignore readSedML and just
- * define it in terms of SedReader.readSedML().  This is less than
+ * employ the following HACK: Tell SWIG to ignore readOMEX and just
+ * define it in terms of CaReader.readOMEX().  This is less than
  * ideal, because the libSEDML C/C++ core does essentially the same
  * thing, so now we're repeating ourselves.
  */
 
-%ignore readSedML(const char*);
+%ignore readOMEX(const char*);
 
 %pythoncode
 %{
-def readSedML(*args):
+def readOMEX(*args):
   """
-  readSedML(self, string filename) -> SedDocument
+  readOMEX(self, string filename) -> CaOmexManifest
 
   Reads an SEDML document from a file.
 
-  This method is identical to readSedMLFromFile().
+  This method is identical to readOMEXFromFile().
 
   If the file named 'filename' does not exist or its content is not
-  valid SEDML, one or more errors will be logged with the SedDocument
+  valid SEDML, one or more errors will be logged with the CaOmexManifest
   object returned by this method.  Callers can use the methods on
-  SedDocument such as SedDocument.getNumErrors() and
-  SedDocument.getError() to get the errors.  The object returned by
-  SedDocument.getError() is an SedError object, and it has methods to
+  CaOmexManifest such as CaOmexManifest.getNumErrors() and
+  CaOmexManifest.getError() to get the errors.  The object returned by
+  CaOmexManifest.getError() is an CaError object, and it has methods to
   get the error code, category, and severity level of the problem, as
   well as a textual description of the problem.  The possible severity
   levels range from informational messages to fatal errors; see the
-  documentation for SedError for more information.
+  documentation for CaError for more information.
 
   If the file 'filename' could not be read, the file-reading error will
   appear first.  The error code can provide a clue about what happened.
@@ -771,8 +756,8 @@ def readSedML(*args):
   been reported by the underlying operating system.  Callers can check
   for these situations using a program fragment such as the following:
 
-   reader = SedReader()
-   doc    = reader.readSedML(filename)
+   reader = CaReader()
+   doc    = reader.readOMEX(filename)
 
    if doc.getNumErrors() > 0:
      if doc.getError(0).getErrorId() == libsedml.XMLFileUnreadable:
@@ -801,9 +786,9 @@ def readSedML(*args):
   Parameter 'filename is the name or full pathname of the file to be
   read.
 
-  Returns a pointer to the SedDocument created from the SEDML content.
+  Returns a pointer to the CaOmexManifest created from the SEDML content.
 
-  See also SedError.
+  See also CaError.
 
   Note:
 
@@ -823,8 +808,8 @@ def readSedML(*args):
   reporting, and sometimes libSEDML has to resort to the lowest common
   denominator.
   """
-  reader = SedReader()
-  return reader.readSedML(args[0])
+  reader = CaReader()
+  return reader.readOMEX(args[0])
 %}
 
 
@@ -834,44 +819,41 @@ def readSedML(*args):
  *
  *  - List* ModelHistory::getListCreators()
  *  - List* ModelHistory::getListModifiedDates()
- *  - List* SedBase::getCVTerms()
- *  - List* SedNamespaces::getSupportedNamespaces()
+ *  - List* CaNamespaces::getSupportedNamespaces()
  *
  *  ListWrapper<TYPENAME> class is wrapped as TYPENAMEList class.
  *  So, the above functions are wrapped as follows:
  *
  *  - ModelCreatorList ModelHistory.getListCreators()
  *  - DateList         ModelHistory.getListModifiedDates()
- *  - CVTermList       SedBase.getCVTerms()
- *  - SedNamespacesList SedNamespaces::getSupportedNamespaces()
  *
  */
 
 %feature("shadow")
-SedNamespaces::getSupportedNamespaces
+CaNamespaces::getSupportedNamespaces
 %{
   def getSupportedNamespaces(self):
     """
     getSupportedNamespaces(self) -> SEDMLNamespaceList
 
-    Get the List of supported SedNamespaces for this 
+    Get the List of supported CaNamespaces for this 
     version of LibSEDML.
 
-    Returns the supported list of SedNamespaces.
+    Returns the supported list of CaNamespaces.
           
 
     """
-    return _libsedml.SedNamespaces_getSupportedNamespaces(self)
+    return _libcombine.CaNamespaces_getSupportedNamespaces(self)
 %}
 
-%typemap(out) List* SedNamespaces::getSupportedNamespaces
+%typemap(out) List* CaNamespaces::getSupportedNamespaces
 {
-  ListWrapper<SedNamespaces> *listw = ($1 != 0) ? new ListWrapper<SedNamespaces>($1) : 0;
+  ListWrapper<CaNamespaces> *listw = ($1 != 0) ? new ListWrapper<CaNamespaces>($1) : 0;
   $result = SWIG_NewPointerObj(SWIG_as_voidptr(listw), 
 #if SWIG_VERSION > 0x010333
-                               SWIGTYPE_p_ListWrapperT_SedNamespaces_t, 
+                               SWIGTYPE_p_ListWrapperT_CaNamespaces_t, 
 #else
-                               SWIGTYPE_p_ListWrapperTSedNamespaces_t, 
+                               SWIGTYPE_p_ListWrapperTCaNamespaces_t, 
 #endif
                                SWIG_POINTER_OWN |  0 );
 }
