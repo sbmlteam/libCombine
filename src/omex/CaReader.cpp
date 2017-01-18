@@ -151,7 +151,7 @@ CaReader::readOMEXFromString (const std::string& xml)
 bool 
 CaReader::hasZlib() 
 {
-  return LIBCOMBINE_CPP_NAMESPACE ::hasZlib();
+  return LIBSBML_CPP_NAMESPACE ::hasZlib();
 }
 
 
@@ -164,7 +164,7 @@ CaReader::hasZlib()
 bool 
 CaReader::hasBzip2() 
 {
-  return LIBCOMBINE_CPP_NAMESPACE ::hasBzip2();
+  return LIBSBML_CPP_NAMESPACE ::hasBzip2();
 }
 
 

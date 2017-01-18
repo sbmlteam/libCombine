@@ -12,6 +12,8 @@
 #include <string>
 #include <map>
 
+LIBCOMBINE_CPP_NAMESPACE_USE
+
 SCENARIO("getting / setting metadata elements", "[combine][metadata]")
 {
   GIVEN("A new vcard and description is is created.")

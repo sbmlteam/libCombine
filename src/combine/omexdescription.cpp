@@ -13,6 +13,7 @@
 
 
 LIBSBML_CPP_NAMESPACE_USE
+LIBCOMBINE_CPP_NAMESPACE_USE
 
 const std::string &
 OmexDescription::getRdfNS()

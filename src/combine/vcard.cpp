@@ -3,6 +3,8 @@
 
 #include <sbml/xml/XMLInputStream.h>
 
+LIBCOMBINE_CPP_NAMESPACE_USE
+
 bool VCard::isEmpty() const
 {
   return mFamilyName.empty() || mGivenName.empty();

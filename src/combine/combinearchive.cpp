@@ -15,6 +15,7 @@
 #include <cstdio>
 
 using namespace zipper;
+LIBCOMBINE_CPP_NAMESPACE_USE
 
 CombineArchive::CombineArchive()
   : mpManifest(NULL)

@@ -605,6 +605,7 @@ source_group(combine FILES ${COMBINE_SOURCES} ${COMBINE_HEADERS})
 # if we have the zipper sources, include them directly
 if (EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/src/zipper)
   include_directories(BEFORE ${CMAKE_CURRENT_SOURCE_DIR}/src/zipper)
+  include_directories(BEFORE ${CMAKE_CURRENT_SOURCE_DIR}/src)
 
   file(GLOB ZIPPER_SOURCES
     RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}/src

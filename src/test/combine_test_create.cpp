@@ -16,6 +16,7 @@
 #include <map>
 #include <cstdlib>
 
+LIBCOMBINE_CPP_NAMESPACE_USE
 using namespace zipper;
 
 /**

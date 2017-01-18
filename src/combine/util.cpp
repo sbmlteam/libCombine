@@ -11,6 +11,8 @@
 #include <cstdlib>
 #include <cstring>
 
+LIBCOMBINE_CPP_NAMESPACE_USE
+
 std::string
 Util::getTempPath()
 {

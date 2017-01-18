@@ -3,6 +3,8 @@
 #include <combine/util.h>
 #include <combine/knownformats.h>
 
+LIBCOMBINE_CPP_NAMESPACE_USE
+
 extern std::string getTestFile(const std::string& fileName);
 
 SCENARIO("utility methods", "[combine][util]")

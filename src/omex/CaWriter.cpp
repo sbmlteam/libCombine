@@ -53,7 +53,7 @@
 using namespace std;
 
 /** @endcond */
-
+LIBSBML_CPP_NAMESPACE_USE
 LIBCOMBINE_CPP_NAMESPACE_BEGIN
 
 #ifdef __cplusplus
@@ -306,7 +306,7 @@ CaWriter::writeOMEXToFile (const CaOmexManifest* d, const std::string& filename)
 bool 
 CaWriter::hasZlib() 
 {
-  return LIBCOMBINE_CPP_NAMESPACE ::hasZlib();
+  return LIBSBML_CPP_NAMESPACE ::hasZlib();
 }
 
 
@@ -319,7 +319,7 @@ CaWriter::hasZlib()
 bool 
 CaWriter::hasBzip2() 
 {
-  return LIBCOMBINE_CPP_NAMESPACE ::hasBzip2();
+  return LIBSBML_CPP_NAMESPACE ::hasBzip2();
 }
 
 
