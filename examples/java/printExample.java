@@ -3,7 +3,7 @@ import org.sbml.libcombine.*;
 class printExample
 {
   
-  void printMetaDataFor(CombineArchive archive, String location)
+  static void printMetaDataFor(CombineArchive archive, String location)
   {
     OmexDescription desc = archive.getMetadataForLocation(location);
     if (desc.isEmpty())
