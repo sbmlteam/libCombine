@@ -278,42 +278,21 @@ if(WITH_SWIG)
     set(SWIG_EXTRA_ARGS)
 endif(WITH_SWIG)
 
+
+# Update cmake path variables
+if (COMBINE_DEPENDENCY_DIR AND EXISTS ${COMBINE_DEPENDENCY_DIR})
+  set(CMAKE_PREFIX_PATH "${COMBINE_DEPENDENCY_DIR}/lib/cmake;${CMAKE_PREFIX_PATH}")
+endif()
+
+set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/CMakeModules;${CMAKE_MODULE_PATH}")
+
+
+
 ###############################################################################
 #
 # Locate libsbml
 #
-find_library(LIBSBML_LIBRARY
-    NAMES libsbml-static.lib sbml-static libsbml.lib sbml
-    PATHS ${COMBINE_DEPENDENCY_DIR}/lib
-          /usr/local/lib          
-          /usr/lib 
-    DOC "The file name of the sbml library."
-)
-
-find_path(LIBSBML_INCLUDE_DIR
-    NAMES sbml/SBase.h
-    PATHS 
-          ${COMBINE_DEPENDENCY_DIR}/include
-          /usr/local/include
-          /usr/include 
-    DOC "The directory containing the sbml include files."
-)
-
-set(LIBSBML_STATIC OFF CACHE BOOL "is libsbml statically compiled")
-if (WIN32 AND NOT CYGWIN)
-  if (LIBSBML_LIBRARY AND LIBSBML_LIBRARY MATCHES ".*-static*$")
-    set(LIBSBML_STATIC ON CACHE BOOL "is libsbml statically compiled")
-  else()
-    option(LIBSBML_STATIC "The LibSBML library was statically compiled" ON)
-  endif()
-endif()
-
-if(NOT EXISTS "${LIBSBML_INCLUDE_DIR}/sbml/SBase.h")
-    message(FATAL_ERROR 
-"The include directory specified for sbml appears to be invalid.  It should contain the 
-file sbml/SBase.h, but it does not. Please specify the LIBSBML_INCLUDE_DIR variable."
-)
-endif()
+find_package(LIBSBML REQUIRED)
 
 
 # detect zipper library if sources are not included
@@ -342,7 +321,22 @@ find_path(ZIPPER_INCLUDE_DIR
 else()
   unset(ZIPPER_LIBRARY)
   unset(ZIPPER_INCLUDE_DIR)
+  find_path(ZIPPER_INCLUDE_DIR
+      NAMES zipper/zipper.h
+      PATHS ${CMAKE_CURRENT_SOURCE_DIR}/src
+            NO_DEFAULT_PATH
+      DOC "The directory containing the ZIPPER include files."
+            )
 endif()
+
+if (NOT ZIPPER_INCLUDE_DIR)
+ message(FATAL_ERROR "
+     Could not found zipper/zipper.h on system or in src/zipper. Please specify
+     the ZIPPER_INCLUDE_DIR variable or copy the zipper directory into the src
+     dir.
+")
+endif()
+
 
 set(ZLIB_INITIAL_VALUE)
 if (NOT LIBZ_LIBRARY)
@@ -426,7 +420,9 @@ if (LIBZ_LIBRARY)
   set(LIBCOMBINE_LIBS ${LIBCOMBINE_LIBS} ${LIBZ_LIBRARY})
 endif()
 
-if (LIBSBML_LIBRARY)
+if (LIBSBML_LIBRARY_NAME)
+  set(LIBCOMBINE_LIBS ${LIBCOMBINE_LIBS} ${LIBSBML_LIBRARY_NAME})
+elseif (LIBSBML_LIBRARY)
   set(LIBCOMBINE_LIBS ${LIBCOMBINE_LIBS} ${LIBSBML_LIBRARY})
 endif()
 
@@ -456,7 +452,7 @@ valid. It should contain the file zlib.h, but it does not. Please
 verify the LIBZ_INCLUDE_DIR variable.")
 endif()
 
-set(USING_INTEL)
+set(USING_INTEL FALSE)
 if (WIN32 AND CMAKE_C_COMPILER AND ${CMAKE_C_COMPILER} MATCHES ".*icl.*$")
   message(STATUS "Detected Intel Compiler")
   set(USING_INTEL TRUE)
@@ -578,9 +574,13 @@ add_definitions(-D__APPLE__)
 endif()
 
 
-
+if (LIBZ_INCLUDE_DIR AND EXISTS ${LIBZ_INCLUDE_DIR})
 include_directories(BEFORE ${LIBZ_INCLUDE_DIR})
+endif()
+
+if (ZIPPER_INCLUDE_DIR AND EXISTS ${ZIPPER_INCLUDE_DIR})
 include_directories(BEFORE ${ZIPPER_INCLUDE_DIR})
+endif()
 
 # allow definition of extra include dirs
 if (EXTRA_INCLUDE_DIRS)
@@ -622,8 +622,9 @@ endif()
 # include minizip sources if we have them and libSBML has been compiled 
 # without compression
 
+set (LIBSBML_HAS_MINIZIP)
 if (EXISTS ${LIBSBML_LIBRARY})
-  SET(CMAKE_REQUIRED_LIBRARIES ${LIBSBML_LIBRARY} ${EXTRA_LIBS})
+  SET(CMAKE_REQUIRED_LIBRARIES ${LIBSBML_LIBRARY} ${LIBZ_LIBRARY} ${EXTRA_LIBS})
   CHECK_FUNCTION_EXISTS(zipOpen3 LIBSBML_HAS_MINIZIP)
 endif()
 
@@ -644,6 +645,10 @@ if (EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/src/minizip AND NOT LIBSBML_HAS_MINIZIP)
   set(COMBINE_SOURCES ${COMBINE_SOURCES} ${MINIZIP_SOURCES})
   
   source_group(minizip FILES ${MINIZIP_SOURCES})
+
+elseif(LIBSBML_HAS_MINIZIP AND EXISTS ${LIBSBML_INCLUDE_DIR})
+
+  include_directories(${LIBSBML_INCLUDE_DIR}/sbml/compress)
   
 endif()
 
@@ -688,7 +693,7 @@ if (BUILD_TEST)
 
   
   add_executable(${COMBINE_LIBRARY}-test ${TEST_SOURCES})
-  target_link_libraries(${COMBINE_LIBRARY}-test  ${LIBCOMBINE_LIBRARY}-static ${ZIPPER_LIBRARY} ${LIBZ_LIBRARY} ${LIBSBML_LIBRARY} ${EXTRA_LIBS})
+  target_link_libraries(${COMBINE_LIBRARY}-test  ${LIBCOMBINE_LIBRARY}-static ${LIBCOMBINE_LIBS} ${EXTRA_LIBS})
 
   add_test(test_${COMBINE_LIBRARY}_run ${CMAKE_CURRENT_BINARY_DIR}/${COMBINE_LIBRARY}-test )
 set_tests_properties(test_${COMBINE_LIBRARY}_run PROPERTIES ENVIRONMENT 
@@ -721,6 +726,7 @@ libCombine version ${LIBCOMBINE_VERSION}
    SBML library configuration:
      SBML library                    = ${LIBSBML_LIBRARY}
      SBML include dir                = ${LIBSBML_INCLUDE_DIR}
+     libSBML compression support     = ${LIBSBML_HAS_MINIZIP}
 
    Zlib library configuration:
      Zlib library                    = ${LIBZ_LIBRARY}

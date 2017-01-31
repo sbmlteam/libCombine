@@ -163,3 +163,4 @@ add_custom_target(binding_csharp_managed_lib ALL DEPENDS libcombinecsP.dll)
 add_dependencies(binding_csharp_managed_lib binding_csharp_swig)
 
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/libcombinecsP.dll DESTINATION ${CSHAPR_PACKAGE_INSTALL_DIR})
+
