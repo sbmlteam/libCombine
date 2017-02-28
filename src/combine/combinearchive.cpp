@@ -12,6 +12,7 @@
 #include <zipper/unzipper.h>
 
 #include <fstream>
+#include <sstream>
 #include <cstdio>
 
 using namespace zipper;
@@ -453,6 +454,16 @@ CombineArchive::addFile(const std::string &fileName,
   mMap[targetName] = fileName;
 
   return true;
+}
+
+bool 
+CombineArchive::addFileFromString(const std::string& content,
+                                  const std::string& targetName,
+                                  const std::string& format,
+                                  bool isMaster)
+{
+   std::stringstream str; str << content;
+   return addFile(str, targetName, format, isMaster);
 }
 
 bool

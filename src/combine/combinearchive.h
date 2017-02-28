@@ -104,6 +104,21 @@ public:
                bool isMaster = false);
 
   /**
+   * Adds the given string to the archive.
+   *
+   * @param content the content of the file to be added to the archive.
+   * @param targetName the target name of the file in the archive
+   * @param format the format that this file has
+   * @param isMaster boolean indicating whether the file should be
+   *        opened first if there are multiple ones.
+   *
+   * @return boolean indicating success or failure
+   */
+  bool addFileFromString(const std::string& content,
+               const std::string& targetName,
+               const std::string& format,
+               bool isMaster = false);
+  /**
    * Adds the given metadata to the list.
    *
    * @param targetName the name of the entry that the metadata is about
