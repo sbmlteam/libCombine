@@ -191,7 +191,7 @@ void CombineArchive::addMetadataToArchive(OmexDescription& desc, Zipper *zipper)
   if (desc.isEmpty() || zipper == NULL || mpManifest == NULL)
     return;
 
-  std::string fileName = getNextFilename("./metadata");
+  std::string fileName = getNextFilename("metadata");
   std::stringstream content; content << desc.toXML();
   zipper->add(content, fileName);
 
