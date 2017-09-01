@@ -1,39 +1,58 @@
-﻿import sys
+﻿#!/usr/bin/env python
+"""
+Create example archive.
+"""
+from __future__ import print_function
+import sys
 
-from libcombine import *
+try:
+    from libcombine import *
+except ImportError:
+    # fix as long as there is no pip package: see https://github.com/sbmlteam/libCombine/issues/10
+    from tecombine import *
+
 
 def createArchiveExample(fileName):
-  
-  archive = CombineArchive();
-  archive.addFile(
-    fileName, # filename
-    "./models/model.xml", # target file name
-    KnownFormats.lookupFormat("sbml"), # look up identifier for SBML models
-    True # mark file as master
-    );
-  
-  description = OmexDescription();
-  description.setAbout("."); # about the archive itself
-  description.setDescription("Simple test archive including one SBML model");
-  description.setCreated(OmexDescription.getCurrentDateAndTime());
-  
-  creator = VCard();
-  creator.setFamilyName("Bergmann");
-  creator.setGivenName("Frank");
-  creator.setEmail("fbergman@caltech.edu");
-  creator.setOrganization("Caltech");
-  
-  description.addCreator(creator);
-  
-  archive.addMetadata(".", description);
-  
-  archive.writeToFile("out.omex");
+    """ Creates Combine Archive containing the given file.
+
+    :param fileName: file to include in the archive
+    :return: None
+    """
+    print('*' * 80)
+    print('Create archive')
+    print('*' * 80)
+
+    archive = CombineArchive()
+    archive.addFile(
+        fileName,  # filename
+        "./models/model.xml",  # target file name
+        KnownFormats.lookupFormat("sbml"),  # look up identifier for SBML models
+        True  # mark file as master
+    )
+
+    description = OmexDescription()
+    description.setAbout(".")  # about the archive itself
+    description.setDescription("Simple test archive including one SBML model")
+    description.setCreated(OmexDescription.getCurrentDateAndTime())
+
+    creator = VCard()
+    creator.setFamilyName("Bergmann")
+    creator.setGivenName("Frank")
+    creator.setEmail("fbergman@caltech.edu")
+    creator.setOrganization("Caltech")
+
+    description.addCreator(creator)
+
+    archive.addMetadata(".", description)
+
+    out_file = "testdata/out.omex"
+    archive.writeToFile(out_file)
+
+    print('Archive created:', out_file)
 
 
 if __name__ == "__main__":
-  if len(sys.argv) < 2:
-    print ("usage createArchiveExample sbml-file")
-    sys.exit(1)
-    
-  createArchiveExample(sys.argv[1])
-
+    if len(sys.argv) < 2:
+        print("usage: python createArchiveExample.py sbml-file")
+        sys.exit(1)
+    createArchiveExample(sys.argv[1])
