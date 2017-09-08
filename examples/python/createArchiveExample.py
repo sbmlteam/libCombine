@@ -5,11 +5,7 @@ Create example archive.
 from __future__ import print_function
 import sys
 
-try:
-    from libcombine import *
-except ImportError:
-    # fix as long as there is no pip package: see https://github.com/sbmlteam/libCombine/issues/10
-    from tecombine import *
+from libcombine import *
 
 
 def createArchiveExample(fileName):

@@ -1,5 +1,6 @@
-# no python package yet: see https://github.com/sbmlteam/libCombine/issues/10
-# python-libcombine
+# tecombine>=0.2.1
+python-libcombine>=0.2.0
 
-tecombine>=0.2.1
+
+
 
