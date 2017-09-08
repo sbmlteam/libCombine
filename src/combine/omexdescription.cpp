@@ -72,6 +72,7 @@ OmexDescription::readFrom(XMLInputStream &stream)
   while (next.isStart() && next.getName() == "Description")
   {
     result.push_back(OmexDescription(stream));
+    stream.skipText();
     next = stream.peek();
   }
 
@@ -80,8 +81,8 @@ OmexDescription::readFrom(XMLInputStream &stream)
 }
 
 OmexDescription::OmexDescription()
-  : mDescription()
-  , mAbout()
+  : mAbout()
+  , mDescription()
   , mCreators()
   , mCreated()
   , mModified()
@@ -115,8 +116,8 @@ OmexDescription::readDate(XMLInputStream &stream)
 }
 
 OmexDescription::OmexDescription(XMLInputStream &stream)
-  : mDescription()
-  , mAbout()
+  : mAbout()
+  , mDescription()
   , mCreators()
   , mCreated()
   , mModified()
@@ -133,7 +134,11 @@ OmexDescription::OmexDescription(XMLInputStream &stream)
     stream.skipText();
     XMLToken next = stream.next();
 
-    if (!next.isStart()) continue;
+    if (next.isEndFor(current))
+      return;
+
+    if (!next.isStart()) 
+      continue;
 
     if (next.getName() == "description")
     {
@@ -153,8 +158,7 @@ OmexDescription::OmexDescription(XMLInputStream &stream)
     }
     else if (next.getName() == "creator")
     {
-      mCreators.push_back(VCard(stream));
-      stream.skipPastEnd(next);
+      mCreators.push_back(VCard(stream, next));
     }
   }
 

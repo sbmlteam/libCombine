@@ -268,6 +268,10 @@ protected:
   static LIBSBML_CPP_NAMESPACE_QUALIFIER Date readDate(XMLInputStream &stream);
 
 
+  /**
+  * the about element indicating for which element this description is
+  */
+  std::string mAbout;
 
   /**
    * a text description element, that contains a description for the element
@@ -275,11 +279,6 @@ protected:
    * xhtml or plain text.
    */
   std::string mDescription;
-
-  /**
-   * the about element indicating for which element this description is
-   */
-  std::string mAbout;
 
   /**
    * a vector of creators

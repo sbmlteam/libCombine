@@ -7,7 +7,7 @@ LIBCOMBINE_CPP_NAMESPACE_USE
 
 bool VCard::isEmpty() const
 {
-  return mFamilyName.empty() || mGivenName.empty();
+  return mFamilyName.empty() && mGivenName.empty();
 }
 
 std::string VCard::toXML() const
@@ -98,18 +98,24 @@ VCard::VCard(const VCard &other)
 
 }
 
-VCard::VCard(XMLInputStream &stream)
+VCard::VCard(XMLInputStream &stream, const XMLNode& current)
   : mFamilyName()
   , mGivenName()
   , mEmail()
   , mOrganization()
 {
+ 
+
   while (stream.isGood())
   {
     stream.skipText();
     XMLToken next = stream.next();
 
-    if (!next.isStart()) continue;
+    if (next.isEndFor(current))
+      return;
+
+    if (!next.isStart()) 
+      continue;
 
     if (next.getName() == "family-name")
     {
@@ -122,6 +128,10 @@ VCard::VCard(XMLInputStream &stream)
     else if (next.getName() == "organization-name")
     {
       mOrganization = stream.next().getCharacters();
+    }
+    else if (next.getName() == "email")
+    {
+      mEmail = stream.next().getCharacters();
     }
     else if (next.getName() == "hasEmail")
     {
