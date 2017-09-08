@@ -65,7 +65,7 @@ public:
    * @brief VCard
    * @param stream
    */
-  VCard(XMLInputStream& stream, const XMLNode& current);
+  VCard(XMLInputStream& stream, const XMLToken& current);
 
   /**
    * @return true if empty(no names specified)

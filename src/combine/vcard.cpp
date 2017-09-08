@@ -98,7 +98,7 @@ VCard::VCard(const VCard &other)
 
 }
 
-VCard::VCard(XMLInputStream &stream, const XMLNode& current)
+VCard::VCard(XMLInputStream &stream, const XMLToken& current)
   : mFamilyName()
   , mGivenName()
   , mEmail()
