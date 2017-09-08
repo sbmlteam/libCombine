@@ -17,3 +17,4 @@ python printExample.py testdata/case_01.omex
 python createArchiveExample.py testdata/case_01.xml
 python printExample.py testdata/out.omex
 rm testdata/out.omex
+python printExample.py testdata/CombineArchiveShowCase.omex

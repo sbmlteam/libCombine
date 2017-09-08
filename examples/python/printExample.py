@@ -43,7 +43,7 @@ def printArchive(fileName):
         return None
 
     print('*'*80)
-    print('Print archive')
+    print('Print archive:', fileName)
     print('*' * 80)
     printMetaDataFor(archive, ".")
     print("Num Entries: {0}".format(archive.getNumEntries()))
