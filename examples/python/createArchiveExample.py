@@ -51,7 +51,7 @@ def createArchiveExample(fileName):
     archive.addMetadata(location, description)
 
     # write the archive
-    out_file = "testdata/out.omex"
+    out_file = "out.omex"
     archive.writeToFile(out_file)
 
     print('Archive created:', out_file)
