@@ -18,3 +18,5 @@ python createArchiveExample.py testdata/case_01.xml
 python printExample.py testdata/out.omex
 rm testdata/out.omex
 python printExample.py testdata/CombineArchiveShowCase.omex
+
+python printExample.py testdata/zhao2013_fig3a-user.sedx
