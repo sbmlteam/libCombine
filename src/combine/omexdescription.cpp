@@ -4,6 +4,7 @@
 #include <sbml/xml/XMLOutputStream.h>
 #include <sbml/xml/XMLNode.h>
 #include <sbml/xml/XMLToken.h>
+#include <sbml/xml/XMLErrorLog.h>
 
 #include <fstream>
 #include <iomanip>
@@ -33,7 +34,7 @@ bool
 OmexDescription::isEmpty() const
 {
   bool haveDescription = !mDescription.empty();
-  if (!haveDescription) return true;
+  if (haveDescription) return false;
   bool haveCreator = !mCreators.empty();
   if (!haveCreator) return true;
   bool firstCreatorEmpty = mCreators[0].isEmpty();
@@ -52,7 +53,15 @@ OmexDescription::parseFile(const std::string &fileName)
 std::vector<OmexDescription>
 OmexDescription::parseString(const std::string& xml)
 {
+  const static std::string xml_declaration("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
+  if (xml.find(xml_declaration) == std::string::npos)
+  {
+    return parseString(xml_declaration + xml);
+  }
+
   XMLInputStream stream(xml.c_str(), false );
+  XMLErrorLog log;
+  stream.setErrorLog(&log);
   return readFrom(stream);
 }
 
