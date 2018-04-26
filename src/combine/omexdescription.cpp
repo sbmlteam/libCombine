@@ -54,7 +54,7 @@ std::vector<OmexDescription>
 OmexDescription::parseString(const std::string& xml)
 {
   const static std::string xml_declaration("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
-  if (xml.find(xml_declaration) == std::string::npos)
+  if (xml.find("<?xml version=") == std::string::npos)
   {
     return parseString(xml_declaration + xml);
   }

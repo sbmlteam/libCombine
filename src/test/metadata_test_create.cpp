@@ -59,7 +59,7 @@ SCENARIO("getting / setting metadata elements", "[combine][metadata]")
             AND_WHEN("the vcard is added to the description")
             {
               desc.addCreator(vcard);
-              THEN("the descriptio contains the vcard")
+              THEN("the description contains the vcard")
               {
                 REQUIRE(desc.getCreators().size() == 1);
 
