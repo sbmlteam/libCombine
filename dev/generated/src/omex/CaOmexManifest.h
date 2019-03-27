@@ -7,7 +7,11 @@
  * This file is part of libSBML. Please visit http://sbml.org for more
  * information about SBML, and the latest version of libSBML.
  *
- * Copyright (C) 2013-2016 jointly by the following organizations:
+ * Copyright (C) 2019 jointly by the following organizations:
+ * 1. California Institute of Technology, Pasadena, CA, USA
+ * 2. University of Heidelberg, Heidelberg, Germany
+ *
+ * Copyright (C) 2013-2018 jointly by the following organizations:
  * 1. California Institute of Technology, Pasadena, CA, USA
  * 2. EMBL European Bioinformatics Institute (EMBL-EBI), Hinxton, UK
  * 3. University of Heidelberg, Heidelberg, Germany
@@ -83,11 +87,7 @@ public:
    *
    * @param omexns the CaNamespaces object.
    *
-   * @throws OMEXConstructorException
-   * Thrown if the given @p level and @p version combination, or this kind of
-   * OMEX object, are either invalid or mismatched with respect to the parent
-   * CaOmexManifest object.
-   * @copydetails doc_note_setting_lv
+   * @copydetails doc_note_setting_lv_pkg
    */
   CaOmexManifest(CaNamespaces *omexns);
 
@@ -127,6 +127,16 @@ public:
    * Returns the CaListOfContents from this CaOmexManifest.
    *
    * @return the CaListOfContents from this CaOmexManifest.
+   *
+   * @copydetails doc_returned_unowned_pointer
+   *
+   * @see addContent(const CaContent* object)
+   * @see createContent()
+   * @see getContent(const std::string& sid)
+   * @see getContent(unsigned int n)
+   * @see getNumContents()
+   * @see removeContent(const std::string& sid)
+   * @see removeContent(unsigned int n)
    */
   const CaListOfContents* getListOfContents() const;
 
@@ -135,6 +145,16 @@ public:
    * Returns the CaListOfContents from this CaOmexManifest.
    *
    * @return the CaListOfContents from this CaOmexManifest.
+   *
+   * @copydetails doc_returned_unowned_pointer
+   *
+   * @see addContent(const CaContent* object)
+   * @see createContent()
+   * @see getContent(const std::string& sid)
+   * @see getContent(unsigned int n)
+   * @see getNumContents()
+   * @see removeContent(const std::string& sid)
+   * @see removeContent(unsigned int n)
    */
   CaListOfContents* getListOfContents();
 
@@ -148,7 +168,14 @@ public:
    * @return the nth CaContent in the CaListOfContents within this
    * CaOmexManifest.
    *
+   * @copydetails doc_returned_unowned_pointer
+   *
+   * @see addContent(const CaContent* object)
+   * @see createContent()
+   * @see getContent(const std::string& sid)
    * @see getNumContents()
+   * @see removeContent(const std::string& sid)
+   * @see removeContent(unsigned int n)
    */
   CaContent* getContent(unsigned int n);
 
@@ -162,7 +189,14 @@ public:
    * @return the nth CaContent in the CaListOfContents within this
    * CaOmexManifest.
    *
+   * @copydetails doc_returned_unowned_pointer
+   *
+   * @see addContent(const CaContent* object)
+   * @see createContent()
+   * @see getContent(const std::string& sid)
    * @see getNumContents()
+   * @see removeContent(const std::string& sid)
+   * @see removeContent(unsigned int n)
    */
   const CaContent* getContent(unsigned int n) const;
 
@@ -175,10 +209,21 @@ public:
    * @copydetails doc_returns_success_code
    * @li @omexconstant{LIBCOMBINE_OPERATION_SUCCESS, OperationReturnValues_t}
    * @li @omexconstant{LIBCOMBINE_OPERATION_FAILED, OperationReturnValues_t}
+   * @li @omexconstant{LIBCOMBINE_INVALID_OBJECT, OperationReturnValues_t}
+   * @li @omexconstant{LIBCOMBINE_LEVEL_MISMATCH, OperationReturnValues_t}
+   * @li @omexconstant{LIBCOMBINE_VERSION_MISMATCH, OperationReturnValues_t}
+   * @li @omexconstant{LIBCOMBINE_PKG_VERSION_MISMATCH,
+   * OperationReturnValues_t}
+   * @li @omexconstant{LIBCOMBINE_DUPLICATE_OBJECT_ID, OperationReturnValues_t}
    *
    * @copydetails doc_note_object_is_copied
    *
    * @see createContent()
+   * @see getContent(const std::string& sid)
+   * @see getContent(unsigned int n)
+   * @see getNumContents()
+   * @see removeContent(const std::string& sid)
+   * @see removeContent(unsigned int n)
    */
   int addContent(const CaContent* cc);
 
@@ -187,6 +232,13 @@ public:
    * Get the number of CaContent objects in this CaOmexManifest.
    *
    * @return the number of CaContent objects in this CaOmexManifest.
+   *
+   * @see addContent(const CaContent* object)
+   * @see createContent()
+   * @see getContent(const std::string& sid)
+   * @see getContent(unsigned int n)
+   * @see removeContent(const std::string& sid)
+   * @see removeContent(unsigned int n)
    */
   unsigned int getNumContents() const;
 
@@ -197,7 +249,14 @@ public:
    *
    * @return a new CaContent object instance.
    *
-   * @see addContent(const CaContent* cc)
+   * @copydetails doc_returned_unowned_pointer
+   *
+   * @see addContent(const CaContent* object)
+   * @see getContent(const std::string& sid)
+   * @see getContent(unsigned int n)
+   * @see getNumContents()
+   * @see removeContent(const std::string& sid)
+   * @see removeContent(unsigned int n)
    */
   CaContent* createContent();
 
@@ -211,10 +270,14 @@ public:
    *
    * @return a pointer to the nth CaContent in this CaOmexManifest.
    *
-   * @see getNumContents
+   * @copydetails doc_returned_owned_pointer
    *
-   * @note the caller owns the returned object and is responsible for deleting
-   * it.
+   * @see addContent(const CaContent* object)
+   * @see createContent()
+   * @see getContent(const std::string& sid)
+   * @see getContent(unsigned int n)
+   * @see getNumContents()
+   * @see removeContent(const std::string& sid)
    */
   CaContent* removeContent(unsigned int n);
 
@@ -235,27 +298,13 @@ public:
    * @copydetails doc_what_are_typecodes
    *
    * @return the OMEX type code for this object:
-   *
-   * @omexconstant{LIB_COMBINE_OMEXMANIFEST, OMEXCombineTypeCode_t}
+   * @omexconstant{LIB_COMBINE_OMEXMANIFEST, CaTypeCode_t}.
    *
    * @copydetails doc_warning_typecodes_not_unique
    *
    * @see getElementName()
    */
   virtual int getTypeCode() const;
-
-
-  /**
-   * Predicate returning @c true if all the required elements for this
-   * CaOmexManifest object have been set.
-   *
-   * @return @c true to indicate that all the required elements of this
-   * CaOmexManifest have been set, otherwise @c false is returned.
-   *
-   *
-   * @note The required elements for the CaOmexManifest object are:
-   */
-  virtual bool hasRequiredElements() const;
 
 
 
@@ -303,6 +352,333 @@ public:
   /** @endcond */
 
 
+
+
+  #ifndef SWIG
+
+
+
+  /** @cond doxygenlibCombineInternal */
+
+  /**
+   * Gets the value of the "attributeName" attribute of this CaOmexManifest.
+   *
+   * @param attributeName, the name of the attribute to retrieve.
+   *
+   * @param value, the address of the value to record.
+   *
+   * @copydetails doc_returns_success_code
+   * @li @omexconstant{LIBCOMBINE_OPERATION_SUCCESS, OperationReturnValues_t}
+   * @li @omexconstant{LIBCOMBINE_OPERATION_FAILED, OperationReturnValues_t}
+   */
+  virtual int getAttribute(const std::string& attributeName, bool& value)
+    const;
+
+  /** @endcond */
+
+
+
+  /** @cond doxygenlibCombineInternal */
+
+  /**
+   * Gets the value of the "attributeName" attribute of this CaOmexManifest.
+   *
+   * @param attributeName, the name of the attribute to retrieve.
+   *
+   * @param value, the address of the value to record.
+   *
+   * @copydetails doc_returns_success_code
+   * @li @omexconstant{LIBCOMBINE_OPERATION_SUCCESS, OperationReturnValues_t}
+   * @li @omexconstant{LIBCOMBINE_OPERATION_FAILED, OperationReturnValues_t}
+   */
+  virtual int getAttribute(const std::string& attributeName, int& value) const;
+
+  /** @endcond */
+
+
+
+  /** @cond doxygenlibCombineInternal */
+
+  /**
+   * Gets the value of the "attributeName" attribute of this CaOmexManifest.
+   *
+   * @param attributeName, the name of the attribute to retrieve.
+   *
+   * @param value, the address of the value to record.
+   *
+   * @copydetails doc_returns_success_code
+   * @li @omexconstant{LIBCOMBINE_OPERATION_SUCCESS, OperationReturnValues_t}
+   * @li @omexconstant{LIBCOMBINE_OPERATION_FAILED, OperationReturnValues_t}
+   */
+  virtual int getAttribute(const std::string& attributeName,
+                           double& value) const;
+
+  /** @endcond */
+
+
+
+  /** @cond doxygenlibCombineInternal */
+
+  /**
+   * Gets the value of the "attributeName" attribute of this CaOmexManifest.
+   *
+   * @param attributeName, the name of the attribute to retrieve.
+   *
+   * @param value, the address of the value to record.
+   *
+   * @copydetails doc_returns_success_code
+   * @li @omexconstant{LIBCOMBINE_OPERATION_SUCCESS, OperationReturnValues_t}
+   * @li @omexconstant{LIBCOMBINE_OPERATION_FAILED, OperationReturnValues_t}
+   */
+  virtual int getAttribute(const std::string& attributeName,
+                           unsigned int& value) const;
+
+  /** @endcond */
+
+
+
+  /** @cond doxygenlibCombineInternal */
+
+  /**
+   * Gets the value of the "attributeName" attribute of this CaOmexManifest.
+   *
+   * @param attributeName, the name of the attribute to retrieve.
+   *
+   * @param value, the address of the value to record.
+   *
+   * @copydetails doc_returns_success_code
+   * @li @omexconstant{LIBCOMBINE_OPERATION_SUCCESS, OperationReturnValues_t}
+   * @li @omexconstant{LIBCOMBINE_OPERATION_FAILED, OperationReturnValues_t}
+   */
+  virtual int getAttribute(const std::string& attributeName,
+                           std::string& value) const;
+
+  /** @endcond */
+
+
+
+  /** @cond doxygenlibCombineInternal */
+
+  /**
+   * Predicate returning @c true if this CaOmexManifest's attribute
+   * "attributeName" is set.
+   *
+   * @param attributeName, the name of the attribute to query.
+   *
+   * @return @c true if this CaOmexManifest's attribute "attributeName" has
+   * been set, otherwise @c false is returned.
+   */
+  virtual bool isSetAttribute(const std::string& attributeName) const;
+
+  /** @endcond */
+
+
+
+  /** @cond doxygenlibCombineInternal */
+
+  /**
+   * Sets the value of the "attributeName" attribute of this CaOmexManifest.
+   *
+   * @param attributeName, the name of the attribute to set.
+   *
+   * @param value, the value of the attribute to set.
+   *
+   * @copydetails doc_returns_success_code
+   * @li @omexconstant{LIBCOMBINE_OPERATION_SUCCESS, OperationReturnValues_t}
+   * @li @omexconstant{LIBCOMBINE_OPERATION_FAILED, OperationReturnValues_t}
+   */
+  virtual int setAttribute(const std::string& attributeName, bool value);
+
+  /** @endcond */
+
+
+
+  /** @cond doxygenlibCombineInternal */
+
+  /**
+   * Sets the value of the "attributeName" attribute of this CaOmexManifest.
+   *
+   * @param attributeName, the name of the attribute to set.
+   *
+   * @param value, the value of the attribute to set.
+   *
+   * @copydetails doc_returns_success_code
+   * @li @omexconstant{LIBCOMBINE_OPERATION_SUCCESS, OperationReturnValues_t}
+   * @li @omexconstant{LIBCOMBINE_OPERATION_FAILED, OperationReturnValues_t}
+   */
+  virtual int setAttribute(const std::string& attributeName, int value);
+
+  /** @endcond */
+
+
+
+  /** @cond doxygenlibCombineInternal */
+
+  /**
+   * Sets the value of the "attributeName" attribute of this CaOmexManifest.
+   *
+   * @param attributeName, the name of the attribute to set.
+   *
+   * @param value, the value of the attribute to set.
+   *
+   * @copydetails doc_returns_success_code
+   * @li @omexconstant{LIBCOMBINE_OPERATION_SUCCESS, OperationReturnValues_t}
+   * @li @omexconstant{LIBCOMBINE_OPERATION_FAILED, OperationReturnValues_t}
+   */
+  virtual int setAttribute(const std::string& attributeName, double value);
+
+  /** @endcond */
+
+
+
+  /** @cond doxygenlibCombineInternal */
+
+  /**
+   * Sets the value of the "attributeName" attribute of this CaOmexManifest.
+   *
+   * @param attributeName, the name of the attribute to set.
+   *
+   * @param value, the value of the attribute to set.
+   *
+   * @copydetails doc_returns_success_code
+   * @li @omexconstant{LIBCOMBINE_OPERATION_SUCCESS, OperationReturnValues_t}
+   * @li @omexconstant{LIBCOMBINE_OPERATION_FAILED, OperationReturnValues_t}
+   */
+  virtual int setAttribute(const std::string& attributeName,
+                           unsigned int value);
+
+  /** @endcond */
+
+
+
+  /** @cond doxygenlibCombineInternal */
+
+  /**
+   * Sets the value of the "attributeName" attribute of this CaOmexManifest.
+   *
+   * @param attributeName, the name of the attribute to set.
+   *
+   * @param value, the value of the attribute to set.
+   *
+   * @copydetails doc_returns_success_code
+   * @li @omexconstant{LIBCOMBINE_OPERATION_SUCCESS, OperationReturnValues_t}
+   * @li @omexconstant{LIBCOMBINE_OPERATION_FAILED, OperationReturnValues_t}
+   */
+  virtual int setAttribute(const std::string& attributeName,
+                           const std::string& value);
+
+  /** @endcond */
+
+
+
+  /** @cond doxygenlibCombineInternal */
+
+  /**
+   * Unsets the value of the "attributeName" attribute of this CaOmexManifest.
+   *
+   * @param attributeName, the name of the attribute to query.
+   *
+   * @copydetails doc_returns_success_code
+   * @li @omexconstant{LIBCOMBINE_OPERATION_SUCCESS, OperationReturnValues_t}
+   * @li @omexconstant{LIBCOMBINE_OPERATION_FAILED, OperationReturnValues_t}
+   */
+  virtual int unsetAttribute(const std::string& attributeName);
+
+  /** @endcond */
+
+
+
+  /** @cond doxygenlibCombineInternal */
+
+  /**
+   * Creates and returns an new "elementName" object in this CaOmexManifest.
+   *
+   * @param elementName, the name of the element to create.
+   *
+   * @return pointer to the element created.
+   */
+  virtual CaBase* createChildObject(const std::string& elementName);
+
+  /** @endcond */
+
+
+
+  /** @cond doxygenlibCombineInternal */
+
+  /**
+   * Adds a new "elementName" object to this CaOmexManifest.
+   *
+   * @param elementName, the name of the element to create.
+   *
+   * @param element, pointer to the element to be added.
+   *
+   * @copydetails doc_returns_success_code
+   * @li @omexconstant{LIBCOMBINE_OPERATION_SUCCESS, OperationReturnValues_t}
+   * @li @omexconstant{LIBCOMBINE_OPERATION_FAILED, OperationReturnValues_t}
+   */
+  virtual int addChildObject(const std::string& elementName,
+                             const CaBase* element);
+
+  /** @endcond */
+
+
+
+  /** @cond doxygenlibCombineInternal */
+
+  /**
+   * Removes and returns the new "elementName" object with the given id in this
+   * CaOmexManifest.
+   *
+   * @param elementName, the name of the element to remove.
+   *
+   * @param id, the id of the element to remove.
+   *
+   * @return pointer to the element removed.
+   */
+  virtual CaBase* removeChildObject(const std::string& elementName,
+                                    const std::string& id);
+
+  /** @endcond */
+
+
+
+  /** @cond doxygenlibCombineInternal */
+
+  /**
+   * Returns the number of "elementName" in this CaOmexManifest.
+   *
+   * @param elementName, the name of the element to get number of.
+   *
+   * @return unsigned int number of elements.
+   */
+  virtual unsigned int getNumObjects(const std::string& elementName);
+
+  /** @endcond */
+
+
+
+  /** @cond doxygenlibCombineInternal */
+
+  /**
+   * Returns the nth object of "objectName" in this CaOmexManifest.
+   *
+   * @param elementName, the name of the element to get number of.
+   *
+   * @param index, unsigned int the index of the object to retrieve.
+   *
+   * @return pointer to the object.
+   */
+  virtual CaBase* getObject(const std::string& elementName, unsigned int
+    index);
+
+  /** @endcond */
+
+
+
+
+  #endif /* !SWIG */
+
+
   /**
    * Returns the first child element that has the given @p id in the model-wide
    * SId namespace, or @c NULL if no such object is found.
@@ -310,7 +686,8 @@ public:
    * @param id a string representing the id attribute of the object to
    * retrieve.
    *
-   * @return a pointer to the CaBase element with the given @p id.
+   * @return a pointer to the CaBase element with the given @p id. If no such
+   * object is found, this method returns @c NULL.
    */
   virtual CaBase* getElementBySId(const std::string& id);
 
@@ -358,7 +735,9 @@ public:
    * @param n an unsigned int representing the index of the CaError to
    * retrieve.
    *
-   * @return the nth CaError in the CaListOfErrors within this CaDocument.
+   * @return the nth CaError within this CaDocument.
+   *
+   * @copydetails doc_returned_unowned_pointer
    *
    * @see getNumErrors()
    */
@@ -371,7 +750,9 @@ public:
    * @param n an unsigned int representing the index of the CaError to
    * retrieve.
    *
-   * @return the nth CaError in the CaListOfErrors within this CaDocument.
+   * @return the nth CaError within this CaDocument.
+   *
+   * @copydetails doc_returned_unowned_pointer
    *
    * @see getNumErrors()
    */
@@ -382,6 +763,8 @@ public:
    * Get the number of CaError objects in this CaDocument.
    *
    * @return the number of CaError objects in this CaDocument.
+   *
+   * @see getError(unsigned int n)
    */
   unsigned int getNumErrors() const;
 
@@ -393,6 +776,8 @@ public:
    * @param severity the severity of the CaError to return.
    *
    * @return the number of CaError objects in this CaDocument.
+   *
+   * @see getError(unsigned int n)
    */
   unsigned int getNumErrors(unsigned int severity) const;
 
@@ -467,6 +852,8 @@ CaOmexManifest_create();
  *
  * @return a (deep) copy of this CaOmexManifest_t object.
  *
+ * @copydetails doc_returned_owned_pointer
+ *
  * @memberof CaOmexManifest_t
  */
 LIBCOMBINE_EXTERN
@@ -487,13 +874,22 @@ CaOmexManifest_free(CaOmexManifest_t* com);
 
 
 /**
- * Returns a ListOf_t* containing CaContent_t objects from this
+ * Returns a ListOf_t * containing CaContent_t objects from this
  * CaOmexManifest_t.
  *
- * @param com the CaOmexManifest_t structure whose "CaListOfContents" is
- * sought.
+ * @param com the CaOmexManifest_t structure whose CaListOfContents is sought.
  *
- * @return the "CaListOfContents" from this CaOmexManifest_t as a ListOf_t *.
+ * @return the CaListOfContents from this CaOmexManifest_t as a ListOf_t *.
+ *
+ * @copydetails doc_returned_unowned_pointer
+ *
+ * @see CaOmexManifest_addContent()
+ * @see CaOmexManifest_createContent()
+ * @see CaOmexManifest_getContentById()
+ * @see CaOmexManifest_getContent()
+ * @see CaOmexManifest_getNumContents()
+ * @see CaOmexManifest_removeContentById()
+ * @see CaOmexManifest_removeContent()
  *
  * @memberof CaOmexManifest_t
  */
@@ -513,10 +909,12 @@ CaOmexManifest_getListOfContents(CaOmexManifest_t* com);
  * @return the nth CaContent_t in the CaListOfContents within this
  * CaOmexManifest.
  *
+ * @copydetails doc_returned_unowned_pointer
+ *
  * @memberof CaOmexManifest_t
  */
 LIBCOMBINE_EXTERN
-const CaContent_t*
+CaContent_t*
 CaOmexManifest_getContent(CaOmexManifest_t* com, unsigned int n);
 
 
@@ -531,6 +929,11 @@ CaOmexManifest_getContent(CaOmexManifest_t* com, unsigned int n);
  * @copydetails doc_returns_success_code
  * @li @omexconstant{LIBCOMBINE_OPERATION_SUCCESS, OperationReturnValues_t}
  * @li @omexconstant{LIBCOMBINE_OPERATION_FAILED, OperationReturnValues_t}
+ * @li @omexconstant{LIBCOMBINE_INVALID_OBJECT, OperationReturnValues_t}
+ * @li @omexconstant{LIBCOMBINE_LEVEL_MISMATCH, OperationReturnValues_t}
+ * @li @omexconstant{LIBCOMBINE_VERSION_MISMATCH, OperationReturnValues_t}
+ * @li @omexconstant{LIBCOMBINE_PKG_VERSION_MISMATCH, OperationReturnValues_t}
+ * @li @omexconstant{LIBCOMBINE_DUPLICATE_OBJECT_ID, OperationReturnValues_t}
  *
  * @memberof CaOmexManifest_t
  */
@@ -562,6 +965,8 @@ CaOmexManifest_getNumContents(CaOmexManifest_t* com);
  *
  * @return a new CaContent_t object instance.
  *
+ * @copydetails doc_returned_unowned_pointer
+ *
  * @memberof CaOmexManifest_t
  */
 LIBCOMBINE_EXTERN
@@ -580,30 +985,13 @@ CaOmexManifest_createContent(CaOmexManifest_t* com);
  *
  * @return a pointer to the nth CaContent_t in this CaOmexManifest_t.
  *
+ * @copydetails doc_returned_owned_pointer
+ *
  * @memberof CaOmexManifest_t
  */
 LIBCOMBINE_EXTERN
 CaContent_t*
 CaOmexManifest_removeContent(CaOmexManifest_t* com, unsigned int n);
-
-
-/**
- * Predicate returning @c 1 if all the required elements for this
- * CaOmexManifest_t object have been set.
- *
- * @param com the CaOmexManifest_t structure.
- *
- * @return @c 1 to indicate that all the required elements of this
- * CaOmexManifest_t have been set, otherwise @c 0 is returned.
- *
- *
- * @note The required elements for the CaOmexManifest_t object are:
- *
- * @memberof CaOmexManifest_t
- */
-LIBCOMBINE_EXTERN
-int
-CaOmexManifest_hasRequiredElements(const CaOmexManifest_t * com);
 
 
 

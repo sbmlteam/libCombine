@@ -7,7 +7,11 @@
  * This file is part of libSBML. Please visit http://sbml.org for more
  * information about SBML, and the latest version of libSBML.
  *
- * Copyright (C) 2013-2016 jointly by the following organizations:
+ * Copyright (C) 2019 jointly by the following organizations:
+ * 1. California Institute of Technology, Pasadena, CA, USA
+ * 2. University of Heidelberg, Heidelberg, Germany
+ *
+ * Copyright (C) 2013-2018 jointly by the following organizations:
  * 1. California Institute of Technology, Pasadena, CA, USA
  * 2. EMBL European Bioinformatics Institute (EMBL-EBI), Hinxton, UK
  * 3. University of Heidelberg, Heidelberg, Germany
@@ -49,7 +53,7 @@ BEGIN_C_DECLS
  */
 typedef enum
 {
-  CaUnknownError                      = 10000 /*!< Encountered unknown internal libCombine error. */
+  CaUnknown                      = 10000 /*!< Encountered unknown internal libCombine error. */
 , CaNotUTF8                               = 10001 /*!< File does not use UTF-8 encoding. */
 , CaUnrecognizedElement                   = 10002 /*!< Encountered unrecognized element. */
 , CaNotSchemaConformant                   = 10003 /*!< Document does not conform to the OMEX XML schema. */
@@ -72,17 +76,20 @@ typedef enum
 , InvalidNamespaceOnCa      = 20101
 , AllowedAttributes      = 20102
 , CaEmptyListElement      = 20103
-, CombineCaContentAllowedCoreAttributes      = 20201
-, CombineCaContentAllowedCoreElements      = 20202
-, CombineCaContentAllowedAttributes      = 20203
-, CombineCaContentLocationMustBeString      = 20204
-, CombineCaContentFormatMustBeString      = 20205
-, CombineCaContentMasterMustBeBoolean      = 20206
-, CombineCaOmexManifestAllowedCoreAttributes      = 20301
-, CombineCaOmexManifestAllowedCoreElements      = 20302
-, CombineCaOmexManifestAllowedElements      = 20303
-, CombineCaOmexManifestLOContentsAllowedCoreElements      = 20304
-, CombineCaOmexManifestLOContentsAllowedCoreAttributes      = 20305
+, CombineContentAllowedCoreAttributes      = 20201
+, CombineContentAllowedCoreElements      = 20202
+, CombineContentAllowedAttributes      = 20203
+, CombineContentAllowedElements      = 20204
+, CombineContentLocationMustBeString      = 20205
+, CombineContentFormatMustBeString      = 20206
+, CombineContentMasterMustBeBoolean      = 20207
+, CombineOmexManifestAllowedCoreAttributes      = 20301
+, CombineOmexManifestAllowedCoreElements      = 20302
+, CombineOmexManifestAllowedElements      = 20303
+, CombineCrossRefAllowedCoreAttributes      = 20401
+, CombineCrossRefAllowedCoreElements      = 20402
+, CombineCrossRefAllowedAttributes      = 20403
+, CombineCrossRefLocationMustBeString      = 20404
 , CaUnknownCoreAttribute                  = 99994 /*!< Encountered an unknown attribute in the OMEX Core namespace. */
 , CaCodesUpperBound                   = 99999 /*!< Upper boundary of libCombine-specific diagnostic codes. */
 } CaErrorCode_t;

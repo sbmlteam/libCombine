@@ -7,7 +7,11 @@
  * This file is part of libSBML. Please visit http://sbml.org for more
  * information about SBML, and the latest version of libSBML.
  *
- * Copyright (C) 2013-2016 jointly by the following organizations:
+ * Copyright (C) 2019 jointly by the following organizations:
+ * 1. California Institute of Technology, Pasadena, CA, USA
+ * 2. University of Heidelberg, Heidelberg, Germany
+ *
+ * Copyright (C) 2013-2018 jointly by the following organizations:
  * 1. California Institute of Technology, Pasadena, CA, USA
  * 2. EMBL European Bioinformatics Institute (EMBL-EBI), Hinxton, UK
  * 3. University of Heidelberg, Heidelberg, Germany
@@ -107,6 +111,7 @@ CaBase::getAllElements()
  */
 CaBase::CaBase (unsigned int level, unsigned int version) 
  : mMetaId ("")
+ , mId ("")
  , mNotes(NULL)
  , mAnnotation( NULL )
  , mCa      ( NULL )
@@ -137,6 +142,7 @@ CaBase::CaBase (unsigned int level, unsigned int version)
  */
 CaBase::CaBase (CaNamespaces *omexns) 
  : mMetaId("")
+ , mId("")
  , mNotes(NULL)
  , mAnnotation( NULL )
  , mCa      ( NULL )
@@ -167,6 +173,7 @@ CaBase::CaBase (CaNamespaces *omexns)
  */
 CaBase::CaBase(const CaBase& orig)
   : mMetaId (orig.mMetaId)
+  , mId (orig.mId)
   , mNotes (NULL)
   , mAnnotation (NULL)
   , mCa (NULL)
@@ -178,12 +185,12 @@ CaBase::CaBase(const CaBase& orig)
   , mURI(orig.mURI)
 {
   if(orig.mNotes != NULL)
-    this->mNotes = new XMLNode(*const_cast<CaBase&>(orig).getNotes());
+    this->mNotes = new LIBSBML_CPP_NAMESPACE_QUALIFIER XMLNode(*const_cast<CaBase&>(orig).getNotes());
   else
     this->mNotes = NULL;
 
   if(orig.mAnnotation != NULL)
-    this->mAnnotation = new XMLNode(*const_cast<CaBase&>(orig).mAnnotation);
+    this->mAnnotation = new LIBSBML_CPP_NAMESPACE_QUALIFIER XMLNode(*const_cast<CaBase&>(orig).mAnnotation);
   else
     this->mAnnotation = NULL;
 
@@ -216,18 +223,19 @@ CaBase& CaBase::operator=(const CaBase& rhs)
   if(&rhs!=this)
   {
     this->mMetaId = rhs.mMetaId;
+    this->mId = rhs.mId;
 
     delete this->mNotes;
 
     if(rhs.mNotes != NULL)
-      this->mNotes = new XMLNode(*const_cast<CaBase&>(rhs).getNotes());
+      this->mNotes = new LIBSBML_CPP_NAMESPACE_QUALIFIER XMLNode(*const_cast<CaBase&>(rhs).getNotes());
     else
       this->mNotes = NULL;
 
     delete this->mAnnotation;
 
     if(rhs.mAnnotation != NULL)
-      this->mAnnotation = new XMLNode(*const_cast<CaBase&>(rhs).mAnnotation);
+      this->mAnnotation = new LIBSBML_CPP_NAMESPACE_QUALIFIER XMLNode(*const_cast<CaBase&>(rhs).mAnnotation);
     else
       this->mAnnotation = NULL;
 
@@ -276,21 +284,21 @@ CaBase::getMetaId ()
 const string&
 CaBase::getId() const
 {
-  return mEmptyString;
+  return mId;
 }
 
 
 /*
  * @return the notes of this OMEX object.
  */
-XMLNode*
+LIBSBML_CPP_NAMESPACE_QUALIFIER XMLNode*
 CaBase::getNotes()
 {
   return mNotes;
 }
 
 
-const XMLNode*
+const LIBSBML_CPP_NAMESPACE_QUALIFIER XMLNode*
 CaBase::getNotes() const
 {
   return mNotes;
@@ -303,28 +311,28 @@ CaBase::getNotes() const
 std::string
 CaBase::getNotesString()
 {
-  return XMLNode::convertXMLNodeToString(mNotes);
+  return LIBSBML_CPP_NAMESPACE_QUALIFIER XMLNode::convertXMLNodeToString(mNotes);
 }
 
 
 std::string
 CaBase::getNotesString() const
 {
-  return XMLNode::convertXMLNodeToString(mNotes);
+  return LIBSBML_CPP_NAMESPACE_QUALIFIER XMLNode::convertXMLNodeToString(mNotes);
 }
 
 
 /*
  * @return the annotation of this OMEX object.
  */
-XMLNode*
+LIBSBML_CPP_NAMESPACE_QUALIFIER XMLNode*
 CaBase::getAnnotation ()
 {
   return mAnnotation;
 }
 
 
-const XMLNode*
+const LIBSBML_CPP_NAMESPACE_QUALIFIER XMLNode*
 CaBase::getAnnotation () const
 {
   return const_cast<CaBase *>(this)->getAnnotation();
@@ -337,14 +345,14 @@ CaBase::getAnnotation () const
 std::string
 CaBase::getAnnotationString ()
 {
-  return XMLNode::convertXMLNodeToString(getAnnotation());
+  return LIBSBML_CPP_NAMESPACE_QUALIFIER XMLNode::convertXMLNodeToString(getAnnotation());
 }
 
 
 std::string
 CaBase::getAnnotationString () const
 {
-  return XMLNode::convertXMLNodeToString(getAnnotation());
+  return LIBSBML_CPP_NAMESPACE_QUALIFIER XMLNode::convertXMLNodeToString(getAnnotation());
 }
 
 
@@ -422,7 +430,7 @@ CaBase::unsetUserData()
 /*
  * @return the Namespaces associated with this OMEX object
  */
-XMLNamespaces*
+LIBSBML_CPP_NAMESPACE_QUALIFIER XMLNamespaces*
 CaBase::getNamespaces()
 {
   if (mCa != NULL)
@@ -432,7 +440,7 @@ CaBase::getNamespaces()
 }
 
 
-const XMLNamespaces*
+const LIBSBML_CPP_NAMESPACE_QUALIFIER XMLNamespaces*
 CaBase::getNamespaces() const
 {
   if (mCa != NULL)
@@ -637,12 +645,34 @@ CaBase::setMetaId (const std::string& metaid)
   }
 }
 
+/*
+ * Sets the id field of the given OMEX object to a copy of sid.
+ */
+int
+CaBase::setId (const std::string& sid)
+{
+  if (sid.empty())
+  {
+    mId.erase();
+    return LIBCOMBINE_OPERATION_SUCCESS;
+  }
+  else if (!(SyntaxChecker::isValidXMLID(sid)))
+  {
+    return LIBCOMBINE_INVALID_ATTRIBUTE_VALUE;
+  }
+  else
+  {
+    mId = sid;
+    return LIBCOMBINE_OPERATION_SUCCESS;
+  }
+}
+
 
 /*
  * Sets the annotation of this OMEX object to a copy of annotation.
  */
 int
-CaBase::setAnnotation (XMLNode* annotation)
+CaBase::setAnnotation (LIBSBML_CPP_NAMESPACE_QUALIFIER XMLNode* annotation)
 {
   if (annotation == NULL)
   {
@@ -675,17 +705,17 @@ CaBase::setAnnotation (const std::string& annotation)
     return LIBCOMBINE_OPERATION_SUCCESS;
   }
   
-  XMLNode* annt_xmln;
+  LIBSBML_CPP_NAMESPACE_QUALIFIER XMLNode* annt_xmln;
   
   // you might not have a document !!
   if (getCaOmexManifest() != NULL)
   {
-    XMLNamespaces* xmlns = getCaOmexManifest()->getNamespaces();
-    annt_xmln = XMLNode::convertStringToXMLNode(annotation,xmlns);
+    LIBSBML_CPP_NAMESPACE_QUALIFIER XMLNamespaces* xmlns = getCaOmexManifest()->getNamespaces();
+    annt_xmln = LIBSBML_CPP_NAMESPACE_QUALIFIER XMLNode::convertStringToXMLNode(annotation,xmlns);
   }
   else
   {
-    annt_xmln = XMLNode::convertStringToXMLNode(annotation);
+    annt_xmln = LIBSBML_CPP_NAMESPACE_QUALIFIER XMLNode::convertStringToXMLNode(annotation);
   }
   
   if(annt_xmln != NULL)
@@ -703,7 +733,7 @@ CaBase::setAnnotation (const std::string& annotation)
  * adding additional information.
  */
 int
-CaBase::appendAnnotation (const XMLNode* annotation)
+CaBase::appendAnnotation (const LIBSBML_CPP_NAMESPACE_QUALIFIER XMLNode* annotation)
 {
   int success = LIBCOMBINE_OPERATION_FAILED;
   unsigned int duplicates = 0;
@@ -711,14 +741,14 @@ CaBase::appendAnnotation (const XMLNode* annotation)
   if(annotation == NULL)
     return LIBCOMBINE_OPERATION_SUCCESS;
 
-  XMLNode* new_annotation = NULL;
+  LIBSBML_CPP_NAMESPACE_QUALIFIER XMLNode* new_annotation = NULL;
   const string&  name = annotation->getName();
 
   // check for annotation tags and add if necessary
   if (name != "annotation")
   {
-    XMLToken ann_t = XMLToken(XMLTriple("annotation", "", ""), XMLAttributes());
-    new_annotation = new XMLNode(ann_t);
+    LIBSBML_CPP_NAMESPACE_QUALIFIER XMLToken ann_t = LIBSBML_CPP_NAMESPACE_QUALIFIER XMLToken(LIBSBML_CPP_NAMESPACE_QUALIFIER XMLTriple("annotation", "", ""), LIBSBML_CPP_NAMESPACE_QUALIFIER XMLAttributes());
+    new_annotation = new LIBSBML_CPP_NAMESPACE_QUALIFIER XMLNode(ann_t);
     new_annotation->addChild(*annotation);
   }
   else
@@ -767,7 +797,7 @@ CaBase::appendAnnotation (const XMLNode* annotation)
     }
     else
     {
-      XMLNode *copy = mAnnotation->clone();
+      LIBSBML_CPP_NAMESPACE_QUALIFIER XMLNode *copy = mAnnotation->clone();
       success = setAnnotation(copy);
       delete copy;
     }
@@ -793,15 +823,15 @@ int
 CaBase::appendAnnotation (const std::string& annotation)
 {
   int success = LIBCOMBINE_OPERATION_FAILED;
-  XMLNode* annt_xmln;
+  LIBSBML_CPP_NAMESPACE_QUALIFIER XMLNode* annt_xmln;
   if (getCaOmexManifest() != NULL)
   {
-    XMLNamespaces* xmlns = getCaOmexManifest()->getNamespaces();
-    annt_xmln = XMLNode::convertStringToXMLNode(annotation,xmlns);
+    LIBSBML_CPP_NAMESPACE_QUALIFIER XMLNamespaces* xmlns = getCaOmexManifest()->getNamespaces();
+    annt_xmln = LIBSBML_CPP_NAMESPACE_QUALIFIER XMLNode::convertStringToXMLNode(annotation,xmlns);
   }
   else
   {
-    annt_xmln = XMLNode::convertStringToXMLNode(annotation);
+    annt_xmln = LIBSBML_CPP_NAMESPACE_QUALIFIER XMLNode::convertStringToXMLNode(annotation);
   }
 
   if(annt_xmln != NULL)
@@ -838,7 +868,7 @@ CaBase::removeTopLevelAnnotationElement(const std::string elementName,
     // check uri matches
     if (elementURI.empty() == false)
     {
-      XMLNode child = mAnnotation->getChild(index);
+      LIBSBML_CPP_NAMESPACE_QUALIFIER XMLNode child = mAnnotation->getChild(index);
       std::string prefix = child.getPrefix();
 
       if (prefix.empty() == false
@@ -890,10 +920,10 @@ CaBase::removeTopLevelAnnotationElement(const std::string elementName,
 
 
 int
-CaBase::replaceTopLevelAnnotationElement(const XMLNode* annotation)
+CaBase::replaceTopLevelAnnotationElement(const LIBSBML_CPP_NAMESPACE_QUALIFIER XMLNode* annotation)
 {
   int success = LIBCOMBINE_OPERATION_FAILED;
-  XMLNode * replacement = NULL;
+  LIBSBML_CPP_NAMESPACE_QUALIFIER XMLNode * replacement = NULL;
   if (annotation->getName() == "annotation")
   {
     if (annotation->getNumChildren() != 1)
@@ -927,15 +957,15 @@ int
 CaBase::replaceTopLevelAnnotationElement(const std::string& annotation)
 {
   int success = LIBCOMBINE_OPERATION_FAILED;
-  XMLNode* annt_xmln;
+  LIBSBML_CPP_NAMESPACE_QUALIFIER XMLNode* annt_xmln;
   if (getCaOmexManifest() != NULL)
   {
-    XMLNamespaces* xmlns = getCaOmexManifest()->getNamespaces();
-    annt_xmln = XMLNode::convertStringToXMLNode(annotation,xmlns);
+    LIBSBML_CPP_NAMESPACE_QUALIFIER XMLNamespaces* xmlns = getCaOmexManifest()->getNamespaces();
+    annt_xmln = LIBSBML_CPP_NAMESPACE_QUALIFIER XMLNode::convertStringToXMLNode(annotation,xmlns);
   }
   else
   {
-    annt_xmln = XMLNode::convertStringToXMLNode(annotation);
+    annt_xmln = LIBSBML_CPP_NAMESPACE_QUALIFIER XMLNode::convertStringToXMLNode(annotation);
   }
 
   if(annt_xmln != NULL)
@@ -953,7 +983,7 @@ CaBase::replaceTopLevelAnnotationElement(const std::string& annotation)
  * Sets the notes of this OMEX object to a copy of notes.
  */
 int
-CaBase::setNotes(const XMLNode* notes)
+CaBase::setNotes(const LIBSBML_CPP_NAMESPACE_QUALIFIER XMLNode* notes)
 {
   if (mNotes == notes)
   {
@@ -973,13 +1003,13 @@ CaBase::setNotes(const XMLNode* notes)
 
   if (name == "notes")
   {
-    mNotes = static_cast<XMLNode*>( notes->clone() );
+    mNotes = static_cast<LIBSBML_CPP_NAMESPACE_QUALIFIER XMLNode*>( notes->clone() );
   }
   else
   {
-    XMLToken notes_t = XMLToken(XMLTriple("notes", "", ""),
-                                XMLAttributes());
-    mNotes = new XMLNode(notes_t);
+    LIBSBML_CPP_NAMESPACE_QUALIFIER XMLToken notes_t = LIBSBML_CPP_NAMESPACE_QUALIFIER XMLToken(LIBSBML_CPP_NAMESPACE_QUALIFIER XMLTriple("notes", "", ""),
+                                LIBSBML_CPP_NAMESPACE_QUALIFIER XMLAttributes());
+    mNotes = new LIBSBML_CPP_NAMESPACE_QUALIFIER XMLNode(notes_t);
 
     // The root node of the given XMLNode tree can be an empty XMLNode
     // (i.e. neither start, end, nor text XMLNode) if the given notes was
@@ -1028,17 +1058,17 @@ CaBase::setNotes(const std::string& notes, bool addXHTMLMarkup)
   }
   else
   {
-    XMLNode* notes_xmln;
+    LIBSBML_CPP_NAMESPACE_QUALIFIER XMLNode* notes_xmln;
 
     // you might not have a document !!
     if (getCaOmexManifest() != NULL)
     {
-      XMLNamespaces* xmlns = getCaOmexManifest()->getNamespaces();
-      notes_xmln = XMLNode::convertStringToXMLNode(notes,xmlns);
+      LIBSBML_CPP_NAMESPACE_QUALIFIER XMLNamespaces* xmlns = getCaOmexManifest()->getNamespaces();
+      notes_xmln = LIBSBML_CPP_NAMESPACE_QUALIFIER XMLNode::convertStringToXMLNode(notes,xmlns);
     }
     else
     {
-      notes_xmln = XMLNode::convertStringToXMLNode(notes);
+      notes_xmln = LIBSBML_CPP_NAMESPACE_QUALIFIER XMLNode::convertStringToXMLNode(notes);
     }
 
     if (notes_xmln != NULL)
@@ -1051,11 +1081,11 @@ CaBase::setNotes(const std::string& notes, bool addXHTMLMarkup)
             && notes_xmln->isText() == true)
         {
           //create a parent node of xhtml type p
-          XMLAttributes blank_att = XMLAttributes();
-          XMLTriple triple = XMLTriple("p", "http://www.w3.org/1999/xhtml", "");
-          XMLNamespaces xmlns = XMLNamespaces();
+          LIBSBML_CPP_NAMESPACE_QUALIFIER XMLAttributes blank_att = LIBSBML_CPP_NAMESPACE_QUALIFIER XMLAttributes();
+          LIBSBML_CPP_NAMESPACE_QUALIFIER XMLTriple triple = LIBSBML_CPP_NAMESPACE_QUALIFIER XMLTriple("p", "http://www.w3.org/1999/xhtml", "");
+          LIBSBML_CPP_NAMESPACE_QUALIFIER XMLNamespaces xmlns = LIBSBML_CPP_NAMESPACE_QUALIFIER XMLNamespaces();
           xmlns.add("http://www.w3.org/1999/xhtml", "");
-          XMLNode *xmlnode = new XMLNode(XMLToken(triple, blank_att, xmlns));
+          LIBSBML_CPP_NAMESPACE_QUALIFIER XMLNode *xmlnode = new LIBSBML_CPP_NAMESPACE_QUALIFIER XMLNode(LIBSBML_CPP_NAMESPACE_QUALIFIER XMLToken(triple, blank_att, xmlns));
 
           // create a text node from the text given
           xmlnode->addChild(*notes_xmln);
@@ -1085,7 +1115,7 @@ CaBase::setNotes(const std::string& notes, bool addXHTMLMarkup)
  * adding additional information.
  */
 int
-CaBase::appendNotes(const XMLNode* notes)
+CaBase::appendNotes(const LIBSBML_CPP_NAMESPACE_QUALIFIER XMLNode* notes)
 {
   int success = LIBCOMBINE_OPERATION_FAILED;
   if(notes == NULL)
@@ -1114,7 +1144,7 @@ CaBase::appendNotes(const XMLNode* notes)
   typedef enum { _ANotesHTML, _ANotesBody, _ANotesAny } _NotesType;
 
   _NotesType addedNotesType = _ANotesAny;
-  XMLNode   addedNotes;
+  LIBSBML_CPP_NAMESPACE_QUALIFIER XMLNode   addedNotes;
 
   //------------------------------------------------------------
   //
@@ -1225,7 +1255,7 @@ CaBase::appendNotes(const XMLNode* notes)
   if (getLevel() > 2
     || (getLevel() == 2 && getVersion() > 1))
   {
-    XMLNode tmpNotes(XMLTriple("notes","",""), XMLAttributes());
+    LIBSBML_CPP_NAMESPACE_QUALIFIER XMLNode tmpNotes(LIBSBML_CPP_NAMESPACE_QUALIFIER XMLTriple("notes","",""), LIBSBML_CPP_NAMESPACE_QUALIFIER XMLAttributes());
 
     if (addedNotesType == _ANotesAny)
     {
@@ -1255,7 +1285,7 @@ CaBase::appendNotes(const XMLNode* notes)
     //------------------------------------------------------------
 
     _NotesType curNotesType   = _ANotesAny;
-    XMLNode&  curNotes = *mNotes;
+    LIBSBML_CPP_NAMESPACE_QUALIFIER XMLNode&  curNotes = *mNotes;
 
     // curNotes.getChild(0) must be "html", "body", or any XHTML
     // element that would be permitted within a "body" element .
@@ -1264,7 +1294,7 @@ CaBase::appendNotes(const XMLNode* notes)
 
     if (cname == "html")
     {
-      XMLNode& curHTML = curNotes.getChild(0);
+      LIBSBML_CPP_NAMESPACE_QUALIFIER XMLNode& curHTML = curNotes.getChild(0);
       //
       // checks the curHTML if the html tag contains "head" and "body" tags
       // which must be located in this order, otherwise nothing will be done.
@@ -1304,14 +1334,14 @@ CaBase::appendNotes(const XMLNode* notes)
 
     if (curNotesType == _ANotesHTML)
     {
-      XMLNode& curHTML = curNotes.getChild(0);
-      XMLNode& curBody = curHTML.getChild(1);
+      LIBSBML_CPP_NAMESPACE_QUALIFIER XMLNode& curHTML = curNotes.getChild(0);
+      LIBSBML_CPP_NAMESPACE_QUALIFIER XMLNode& curBody = curHTML.getChild(1);
 
       if (addedNotesType == _ANotesHTML)
       {
         // adds the given html tag to the current html tag
 
-        XMLNode& addedBody = addedNotes.getChild(1);
+        LIBSBML_CPP_NAMESPACE_QUALIFIER XMLNode& addedBody = addedNotes.getChild(1);
 
         for (i=0; i < addedBody.getNumChildren(); i++)
         {
@@ -1339,9 +1369,9 @@ CaBase::appendNotes(const XMLNode* notes)
       {
         // adds the given html tag to the current body tag
 
-        XMLNode  addedHTML(addedNotes);
-        XMLNode& addedBody = addedHTML.getChild(1);
-        XMLNode& curBody   = curNotes.getChild(0);
+        LIBSBML_CPP_NAMESPACE_QUALIFIER XMLNode  addedHTML(addedNotes);
+        LIBSBML_CPP_NAMESPACE_QUALIFIER XMLNode& addedBody = addedHTML.getChild(1);
+        LIBSBML_CPP_NAMESPACE_QUALIFIER XMLNode& curBody   = curNotes.getChild(0);
 
         for (i=0; i < curBody.getNumChildren(); i++)
         {
@@ -1357,7 +1387,7 @@ CaBase::appendNotes(const XMLNode* notes)
         // adds the given body or other tag (permitted in the body) to the current
         // body tag
 
-        XMLNode& curBody = curNotes.getChild(0);
+        LIBSBML_CPP_NAMESPACE_QUALIFIER XMLNode& curBody = curNotes.getChild(0);
 
         for (i=0; i < addedNotes.getNumChildren(); i++)
         {
@@ -1373,8 +1403,8 @@ CaBase::appendNotes(const XMLNode* notes)
       {
         // adds the given html tag to the current any tag permitted in the body.
 
-        XMLNode  addedHTML(addedNotes);
-        XMLNode& addedBody = addedHTML.getChild(1);
+        LIBSBML_CPP_NAMESPACE_QUALIFIER XMLNode  addedHTML(addedNotes);
+        LIBSBML_CPP_NAMESPACE_QUALIFIER XMLNode& addedBody = addedHTML.getChild(1);
 
         for (i=0; i < curNotes.getNumChildren(); i++)
         {
@@ -1389,7 +1419,7 @@ CaBase::appendNotes(const XMLNode* notes)
       {
         // adds the given body tag to the current any tag permitted in the body.
 
-        XMLNode addedBody(addedNotes);
+        LIBSBML_CPP_NAMESPACE_QUALIFIER XMLNode addedBody(addedNotes);
 
         for (i=0; i < curNotes.getNumChildren(); i++)
         {
@@ -1437,16 +1467,16 @@ CaBase::appendNotes(const std::string& notes)
     return LIBCOMBINE_OPERATION_SUCCESS;
   }
 
-  XMLNode* notes_xmln;
+  LIBSBML_CPP_NAMESPACE_QUALIFIER XMLNode* notes_xmln;
   // you might not have a document !!
   if (getCaOmexManifest() != NULL)
   {
-      XMLNamespaces* xmlns = getCaOmexManifest()->getNamespaces();
-      notes_xmln = XMLNode::convertStringToXMLNode(notes,xmlns);
+      LIBSBML_CPP_NAMESPACE_QUALIFIER XMLNamespaces* xmlns = getCaOmexManifest()->getNamespaces();
+      notes_xmln = LIBSBML_CPP_NAMESPACE_QUALIFIER XMLNode::convertStringToXMLNode(notes,xmlns);
   }
   else
   {
-      notes_xmln = XMLNode::convertStringToXMLNode(notes);
+      notes_xmln = LIBSBML_CPP_NAMESPACE_QUALIFIER XMLNode::convertStringToXMLNode(notes);
   }
 
   if(notes_xmln != NULL)
@@ -1570,7 +1600,7 @@ CaBase::getAncestorOfType(int type) const
  * @param xmlns the namespaces to set
  */
 int
-CaBase::setNamespaces(XMLNamespaces* xmlns)
+CaBase::setNamespaces(LIBSBML_CPP_NAMESPACE_QUALIFIER XMLNamespaces* xmlns)
 {
   if (xmlns == NULL)
   {
@@ -1606,6 +1636,25 @@ CaBase::unsetMetaId ()
 
 
 /*
+ * Unsets the id of this OMEX object.
+ */
+int
+CaBase::unsetId ()
+{
+  mId.erase();
+
+  if (mId.empty())
+  {
+    return LIBCOMBINE_OPERATION_SUCCESS;
+  }
+  else
+  {
+    return LIBCOMBINE_OPERATION_FAILED;
+  }
+}
+
+
+/*
  * Unsets the notes of this OMEX object.
  */
 int
@@ -1623,7 +1672,7 @@ CaBase::unsetNotes ()
 int
 CaBase::unsetAnnotation ()
 {
-  XMLNode* empty = NULL;
+  LIBSBML_CPP_NAMESPACE_QUALIFIER XMLNode* empty = NULL;
   return setAnnotation(empty);
 }
 
@@ -1634,9 +1683,7 @@ CaBase::unsetAnnotation ()
 unsigned int
 CaBase::getLevel () const
 {
-  if (mCa != NULL)
-    return mCa->getLevel();
-  else if (mCaNamespaces != NULL)
+  if (mCaNamespaces != NULL)
     return mCaNamespaces->getLevel();
   else
     return OMEX_DEFAULT_LEVEL;
@@ -1649,9 +1696,7 @@ CaBase::getLevel () const
 unsigned int
 CaBase::getVersion () const
 {
-  if (mCa != NULL)
-    return mCa->getVersion();
-  else if (mCaNamespaces != NULL)
+  if (mCaNamespaces != NULL)
     return mCaNamespaces->getVersion();
   else
     return OMEX_DEFAULT_VERSION;
@@ -1681,7 +1726,7 @@ bool
 CaBase::hasValidLevelVersionNamespaceCombination()
 {
   int typecode = getTypeCode();
-  XMLNamespaces *xmlns = getNamespaces();
+  LIBSBML_CPP_NAMESPACE_QUALIFIER XMLNamespaces *xmlns = getNamespaces();
 
   return hasValidLevelVersionNamespaceCombination(typecode, xmlns);
 }
@@ -1779,7 +1824,7 @@ CaBase::matchesCoreCaNamespace(const CaBase * sb) const
 
 
 bool
-CaBase::hasValidLevelVersionNamespaceCombination(int typecode, XMLNamespaces *xmlns)
+CaBase::hasValidLevelVersionNamespaceCombination(int typecode, LIBSBML_CPP_NAMESPACE_QUALIFIER XMLNamespaces *xmlns)
 {
 
 
@@ -1859,7 +1904,7 @@ CaBase::getCaNamespaces() const
   
   // initialize OMEX namespace if need be
   if (mCaNamespaces == NULL)
-    const_cast<CaBase*>(this)->mCaNamespaces = new CaNamespaces();
+    const_cast<CaBase*>(this)->mCaNamespaces = new CaNamespaces(getLevel(), getVersion());
   return mCaNamespaces;  
 }
 /** @endcond */
@@ -1873,7 +1918,7 @@ char*
 CaBase::toCa ()
 {
   ostringstream    os;
-  XMLOutputStream  stream(os, "UTF-8", false);
+  LIBSBML_CPP_NAMESPACE_QUALIFIER XMLOutputStream  stream(os, "UTF-8", false);
 
   write(stream);
 
@@ -1882,15 +1927,206 @@ CaBase::toCa ()
 
 
 /** @cond doxygenLibomexInternal */
+int 
+CaBase::getAttribute(const std::string& attributeName, double& value) const
+{
+  return LIBCOMBINE_OPERATION_FAILED;
+}
+/** @endcond */
+
+
+/** @cond doxygenLibomexInternal */
+int 
+CaBase::getAttribute(const std::string& attributeName, bool& value) const
+{
+  return LIBCOMBINE_OPERATION_FAILED;
+}
+/** @endcond */
+
+
+/** @cond doxygenLibomexInternal */
+int 
+CaBase::getAttribute(const std::string& attributeName, int& value) const
+{
+  return LIBCOMBINE_OPERATION_FAILED;
+}
+/** @endcond */
+
+
+/** @cond doxygenLibomexInternal */
+int 
+CaBase::getAttribute(const std::string& attributeName, unsigned int& value) const
+{
+  return LIBCOMBINE_OPERATION_FAILED;
+}
+/** @endcond */
+
+
+/** @cond doxygenLibomexInternal */
+int 
+CaBase::getAttribute(const std::string& attributeName, std::string& value) const
+{
+  if (attributeName == "metaid")
+  {
+    value = getMetaId();
+    return LIBCOMBINE_OPERATION_SUCCESS;
+  }
+  else if (attributeName == "id")
+  {
+    value = getId();
+    return LIBCOMBINE_OPERATION_SUCCESS;
+  }
+
+  return LIBCOMBINE_OPERATION_FAILED;
+}
+/** @endcond */
+
+
+/** @cond doxygenLibomexInternal */
+bool 
+CaBase::isSetAttribute(const std::string& attributeName) const
+{
+  bool value = false;
+  if (attributeName == "metaid")
+  {
+    value = isSetMetaId();
+  }
+  else if (attributeName == "id")
+  {
+    value = isSetId();
+  }
+
+  return value;
+}
+/** @endcond */
+
+
+/** @cond doxygenLibomexInternal */
+int 
+CaBase::setAttribute(const std::string& attributeName, double value)
+{
+  return LIBCOMBINE_OPERATION_FAILED;
+}
+/** @endcond */
+
+
+/** @cond doxygenLibomexInternal */
+int 
+CaBase::setAttribute(const std::string& attributeName, bool value)
+{
+  return LIBCOMBINE_OPERATION_FAILED;
+}
+/** @endcond */
+
+
+/** @cond doxygenLibomexInternal */
+int 
+CaBase::setAttribute(const std::string& attributeName, int value)
+{
+  return LIBCOMBINE_OPERATION_FAILED;
+}
+/** @endcond */
+
+
+/** @cond doxygenLibomexInternal */
+int 
+CaBase::setAttribute(const std::string& attributeName, unsigned int value)
+{
+  return LIBCOMBINE_OPERATION_FAILED;
+}
+/** @endcond */
+
+
+/** @cond doxygenLibomexInternal */
+int 
+CaBase::setAttribute(const std::string& attributeName, const std::string& value)
+{
+  int return_value = LIBCOMBINE_OPERATION_FAILED;
+  if (attributeName == "metaid")
+  {
+    return_value = setMetaId(value);
+  }
+  else if (attributeName == "id")
+  {
+    return_value = setId(value);
+  }
+
+  return return_value;
+}
+/** @endcond */
+
+
+/** @cond doxygenLibomexInternal */
+int 
+CaBase::unsetAttribute(const std::string& attributeName)
+{
+  int value = LIBCOMBINE_OPERATION_FAILED;
+  if (attributeName == "metaid")
+  {
+    value = unsetMetaId();
+  }
+  else if (attributeName == "id")
+  {
+    value = unsetId();
+  }
+
+  return value;
+}
+/** @endcond */
+
+/** @cond doxygenLibomexInternal */
+CaBase* 
+CaBase::createChildObject(const std::string& elementName)
+{
+  return NULL;
+}
+/** @endcond */
+
+/** @cond doxygenLibomexInternal */
+int
+CaBase::addChildObject(const std::string& elementName, const CaBase* element)
+{
+  return LIBCOMBINE_OPERATION_FAILED;
+}
+/** @endcond */
+
+/** @cond doxygenLibomexInternal */
+CaBase*
+CaBase::removeChildObject(const std::string& elementName, const std::string& id)
+{
+  return NULL;
+}
+/** @endcond */
+
+/** @cond doxygenLibomexInternal */
+
+unsigned int
+  CaBase::getNumObjects(const std::string& objectName)
+{
+  return 0;
+}
+
+  /** @endcond */
+
+  /** @cond doxygenLibomexInternal */
+
+CaBase* 
+CaBase::getObject(const std::string& objectName, unsigned int index)
+{
+  return NULL;
+}
+
+  /** @endcond */
+/** @cond doxygenLibomexInternal */
 /*
  * Reads (initializes) this OMEX object by reading from XMLInputStream.
  */
 void
-CaBase::read (XMLInputStream& stream)
+CaBase::read (LIBSBML_CPP_NAMESPACE_QUALIFIER XMLInputStream& stream)
 {
   if ( !stream.peek().isStart() ) return;
 
-  const XMLToken  element  = stream.next();
+  const LIBSBML_CPP_NAMESPACE_QUALIFIER XMLToken  element  = stream.next();
   int             position =  0;
 
   setCaBaseFields( element );
@@ -1904,13 +2140,13 @@ CaBase::read (XMLInputStream& stream)
    * thus the MathML reader can find out what level/version
    * of OMEX it is parsing
    */
-  if (element.getName() == "omex")
+  if (element.getName() == "OmexManifest")
   {
  //   stream.setCaNamespaces(this->getCaNamespaces());
     // need to check that any prefix on the omexns also occurs on element
     // remembering the horrible situation where the omexns might be declared
     // with more than one prefix
-    XMLNamespaces * xmlns = this->getCaNamespaces()->getNamespaces();
+    LIBSBML_CPP_NAMESPACE_QUALIFIER XMLNamespaces * xmlns = this->getCaNamespaces()->getNamespaces();
     if (xmlns != NULL)
     {
       int i = xmlns->getIndexByPrefix(element.getPrefix());
@@ -1937,7 +2173,7 @@ CaBase::read (XMLInputStream& stream)
         {
           unsigned int errorId =
                              this->getErrorLog()->getError(n)->getErrorId();
-          if ( errorId == CombineCaOmexManifestAllowedCoreAttributes
+          if ( errorId == CombineOmexManifestAllowedCoreAttributes
             || errorId == InvalidNamespaceOnCa)
           {
             errorLoggedAlready = true;
@@ -1968,7 +2204,7 @@ CaBase::read (XMLInputStream& stream)
     checkDefaultNamespace(mCaNamespaces->getNamespaces(), element.getName());
     if (!element.getPrefix().empty())
     {
-      XMLNamespaces * prefixedNS = new XMLNamespaces();
+      LIBSBML_CPP_NAMESPACE_QUALIFIER XMLNamespaces * prefixedNS = new LIBSBML_CPP_NAMESPACE_QUALIFIER XMLNamespaces();
       prefixedNS->add(element.getURI(), element.getPrefix());
       checkDefaultNamespace(prefixedNS, element.getName(), element.getPrefix());
       delete prefixedNS;
@@ -1989,7 +2225,7 @@ CaBase::read (XMLInputStream& stream)
     }
     setElementText(text);
 
-    const XMLToken& next = stream.peek();
+    const LIBSBML_CPP_NAMESPACE_QUALIFIER XMLToken& next = stream.peek();
 
     // Re-check stream.isGood() because stream.peek() could hit something.
     if ( !stream.isGood() ) break;
@@ -2044,7 +2280,7 @@ CaBase::setElementText(const std::string &text)
  * Writes (serializes) this OMEX object by writing it to XMLOutputStream.
  */
 void
-CaBase::write (XMLOutputStream& stream) const
+CaBase::write (LIBSBML_CPP_NAMESPACE_QUALIFIER XMLOutputStream& stream) const
 {
   stream.startElement( getElementName(), getPrefix() );
 
@@ -2065,7 +2301,7 @@ CaBase::write (XMLOutputStream& stream) const
  * implementation of this method as well.
  */
 void
-CaBase::writeElements (XMLOutputStream& stream) const
+CaBase::writeElements (LIBSBML_CPP_NAMESPACE_QUALIFIER XMLOutputStream& stream) const
 {
   if ( mNotes != NULL ) stream << *mNotes;
 
@@ -2083,7 +2319,7 @@ CaBase::writeElements (XMLOutputStream& stream) const
  * XMLInputStream or @c NULL if the token was not recognized.
  */
 CaBase*
-CaBase::createObject (XMLInputStream& stream)
+CaBase::createObject (LIBSBML_CPP_NAMESPACE_QUALIFIER XMLInputStream& stream)
 {
   return NULL;
 }
@@ -2100,7 +2336,7 @@ CaBase::createObject (XMLInputStream& stream)
  * @return true if the subclass read from the stream, false otherwise.
  */
 bool
-CaBase::readOtherXML (XMLInputStream& stream)
+CaBase::readOtherXML (LIBSBML_CPP_NAMESPACE_QUALIFIER XMLInputStream& stream)
 {
   bool read = false;
   return read;
@@ -2113,7 +2349,7 @@ CaBase::readOtherXML (XMLInputStream& stream)
  * @return true if read an <annotation> element from the stream
  */
 bool
-CaBase::readAnnotation (XMLInputStream& stream)
+CaBase::readAnnotation (LIBSBML_CPP_NAMESPACE_QUALIFIER XMLInputStream& stream)
 {
   const string& name = stream.peek().getName();
 
@@ -2130,7 +2366,7 @@ CaBase::readAnnotation (XMLInputStream& stream)
     }
 
     delete mAnnotation;
-    mAnnotation = new XMLNode(stream);
+    mAnnotation = new LIBSBML_CPP_NAMESPACE_QUALIFIER XMLNode(stream);
     checkAnnotation();
     return true;
   }
@@ -2145,7 +2381,7 @@ CaBase::readAnnotation (XMLInputStream& stream)
  * @return true if read a <notes> element from the stream
  */
 bool
-CaBase::readNotes (XMLInputStream& stream)
+CaBase::readNotes (LIBSBML_CPP_NAMESPACE_QUALIFIER XMLInputStream& stream)
 {
   const string& name = stream.peek().getName();
 
@@ -2161,13 +2397,13 @@ CaBase::readNotes (XMLInputStream& stream)
     }
 
     delete mNotes;
-    mNotes = new XMLNode(stream);
+    mNotes = new LIBSBML_CPP_NAMESPACE_QUALIFIER XMLNode(stream);
 
     //
     // checks if the given default namespace (if any) is a valid
     // OMEX namespace
     //
-    const XMLNamespaces &xmlns = mNotes->getNamespaces();
+    const LIBSBML_CPP_NAMESPACE_QUALIFIER XMLNamespaces &xmlns = mNotes->getNamespaces();
     checkDefaultNamespace(&xmlns,"notes");
 
     return true;
@@ -2336,10 +2572,10 @@ CaBase::addExpectedAttributes(ExpectedAttributes& attributes)
  * parents implementation of this method as well.
  */
 void
-CaBase::readAttributes (const XMLAttributes& attributes,
-                       const ExpectedAttributes& expectedAttributes)
+CaBase::readAttributes (const LIBSBML_CPP_NAMESPACE_QUALIFIER XMLAttributes& attributes,
+                       const LIBSBML_CPP_NAMESPACE_QUALIFIER ExpectedAttributes& expectedAttributes)
 {
-  const_cast<XMLAttributes&>(attributes).setErrorLog(getErrorLog());
+  const_cast<LIBSBML_CPP_NAMESPACE_QUALIFIER XMLAttributes&>(attributes).setErrorLog(getErrorLog());
 
   const unsigned int level   = getLevel  ();
   const unsigned int version = getVersion();
@@ -2371,7 +2607,7 @@ CaBase::readAttributes (const XMLAttributes& attributes,
     // if we happen to be on the omex element (document) then
     // getPrefix() and mURI have not been set and just return defaults
     // thus a prefix does not appear to come from the right place !!!
-    if (!prefix.empty() && getElementName() == "omex")
+    if (!prefix.empty() && getElementName() == "OmexManifest")
     {
       if (!expectedAttributes.hasAttribute(name))
       {
@@ -2412,7 +2648,7 @@ CaBase::getPrefix() const
 {
   std::string prefix = "";
 
-  const XMLNamespaces *xmlns = getNamespaces();
+  const LIBSBML_CPP_NAMESPACE_QUALIFIER XMLNamespaces *xmlns = getNamespaces();
   string uri = getURI();
   if(xmlns && mCa)
   {
@@ -2431,7 +2667,7 @@ CaBase::getCaPrefix() const
 {
   std::string prefix = "";
 
-  const XMLNamespaces *xmlns = getNamespaces();
+  const LIBSBML_CPP_NAMESPACE_QUALIFIER XMLNamespaces *xmlns = getNamespaces();
   if (xmlns == NULL)
     return getPrefix();
 
@@ -2476,7 +2712,7 @@ CaBase::getRootElement()
  * of this method as well.
  */
 void
-CaBase::writeAttributes (XMLOutputStream& stream) const
+CaBase::writeAttributes (LIBSBML_CPP_NAMESPACE_QUALIFIER XMLOutputStream& stream) const
 {
   string omexPrefix    = getCaPrefix();
   if ( !mMetaId.empty() )
@@ -2495,7 +2731,7 @@ CaBase::writeAttributes (XMLOutputStream& stream) const
  *
  */
 void
-CaBase::writeXMLNS (XMLOutputStream& stream) const
+CaBase::writeXMLNS (LIBSBML_CPP_NAMESPACE_QUALIFIER XMLOutputStream& stream) const
 {
   // do nothing.
 }
@@ -2553,7 +2789,7 @@ int CaBase::removeFromParentAndDelete()
 
 /** @cond doxygenLibomexInternal */
 const std::string
-CaBase::checkMathMLNamespace(const XMLToken elem)
+CaBase::checkMathMLNamespace(const LIBSBML_CPP_NAMESPACE_QUALIFIER XMLToken elem)
 {
   std::string prefix = "";
   unsigned int match = 0;
@@ -2599,7 +2835,7 @@ CaBase::checkMathMLNamespace(const XMLToken elem)
 
 /** @cond doxygenLibomexInternal */
 void
-CaBase::checkDefaultNamespace(const XMLNamespaces* xmlns,
+CaBase::checkDefaultNamespace(const LIBSBML_CPP_NAMESPACE_QUALIFIER XMLNamespaces* xmlns,
                              const std::string& elementName,
                              const std::string& prefix)
 {
@@ -2649,12 +2885,12 @@ CaBase::checkAnnotation()
   // checks if the given default namespace (if any) is a valid
   // OMEX namespace
   //
-  const XMLNamespaces &xmlns = mAnnotation->getNamespaces();
+  const LIBSBML_CPP_NAMESPACE_QUALIFIER XMLNamespaces &xmlns = mAnnotation->getNamespaces();
   checkDefaultNamespace(&xmlns,"annotation");
 
   while (nNodes < mAnnotation->getNumChildren())
   {
-    XMLNode topLevel = mAnnotation->getChild(nNodes);
+    LIBSBML_CPP_NAMESPACE_QUALIFIER XMLNode topLevel = mAnnotation->getChild(nNodes);
 
     // the top level must be an element (so it should be a start)
     if (topLevel.isStart() == false)
@@ -2750,7 +2986,7 @@ CaBase::checkAnnotation()
  * an omex document, an error is logged.
  */
 void
-CaBase::checkXHTML(const XMLNode * xhtml)
+CaBase::checkXHTML(const LIBSBML_CPP_NAMESPACE_QUALIFIER XMLNode * xhtml)
 {
   if (xhtml == NULL) return;
 
@@ -2766,7 +3002,7 @@ CaBase::checkXHTML(const XMLNode * xhtml)
   }
   else                                  // We shouldn't ever get to this point.
   {
-    logError(CaUnknownError);
+    logError(CaUnknown);
     return;
   }
 
@@ -2789,7 +3025,7 @@ CaBase::checkXHTML(const XMLNode * xhtml)
     }
   }
 
-  XMLNamespaces* toplevelNS = (mCa) ? mCa->getNamespaces() : NULL;
+  LIBSBML_CPP_NAMESPACE_QUALIFIER XMLNamespaces* toplevelNS = (mCa) ? mCa->getNamespaces() : NULL;
 
   /*
   * namespace declaration is variable
@@ -2897,14 +3133,14 @@ CaBase::checkCompatibility(const CaBase * object) const
  * roundtripping) declared on this OMEX (XML) element.
  */
 void
-CaBase::setCaBaseFields (const XMLToken& element)
+CaBase::setCaBaseFields (const LIBSBML_CPP_NAMESPACE_QUALIFIER XMLToken& element)
 {
   mLine   = element.getLine  ();
   mColumn = element.getColumn();
 
   if (element.getNamespaces().getLength() > 0)
   {
-    XMLNamespaces tmpxmlns(element.getNamespaces());
+    LIBSBML_CPP_NAMESPACE_QUALIFIER XMLNamespaces tmpxmlns(element.getNamespaces());
     setNamespaces(&tmpxmlns);
   }
   else
@@ -2936,6 +3172,15 @@ CaBase::getElementNamespace() const
 /** @endcond */
 
 #endif /* __cplusplus */
+
+
+LIBCOMBINE_EXTERN
+int
+CaBase_getTypeCode (const CaBase_t *sb)
+{
+  return (sb != NULL) ? sb->getTypeCode() : OMEX_UNKNOWN;
+}
+
 
 LIBCOMBINE_EXTERN
 const char *

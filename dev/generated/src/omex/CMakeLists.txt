@@ -14,7 +14,7 @@ configure_file(
   "${CMAKE_CURRENT_BINARY_DIR}/common/libcombine-config-common.h"
   )
 
-# Replace: @LIBCOMBINE_VERSION@ and @LIBCOMBINE_VERSION_NUMERIC@
+# Replace: @PACKAGE_VERSION@ and @LIBCOMBINE_VERSION_NUMERIC@
 configure_file (
   "${CMAKE_CURRENT_SOURCE_DIR}/common/libcombine-version.h.cmake"
   "${CMAKE_CURRENT_BINARY_DIR}/common/libcombine-version.h"

@@ -7,7 +7,11 @@
  * This file is part of libSBML. Please visit http://sbml.org for more
  * information about SBML, and the latest version of libSBML.
  *
- * Copyright (C) 2013-2016 jointly by the following organizations:
+ * Copyright (C) 2019 jointly by the following organizations:
+ * 1. California Institute of Technology, Pasadena, CA, USA
+ * 2. University of Heidelberg, Heidelberg, Germany
+ *
+ * Copyright (C) 2013-2018 jointly by the following organizations:
  * 1. California Institute of Technology, Pasadena, CA, USA
  * 2. EMBL European Bioinformatics Institute (EMBL-EBI), Hinxton, UK
  * 3. University of Heidelberg, Heidelberg, Germany
@@ -74,11 +78,7 @@ public:
    *
    * @param omexns the CaNamespaces object.
    *
-   * @throws OMEXConstructorException
-   * Thrown if the given @p level and @p version combination, or this kind of
-   * OMEX object, are either invalid or mismatched with respect to the parent
-   * CaOmexManifest object.
-   * @copydetails doc_note_setting_lv
+   * @copydetails doc_note_setting_lv_pkg
    */
   CaListOfContents(CaNamespaces *omexns);
 
@@ -122,7 +122,14 @@ public:
    *
    * @return the nth CaContent in this CaListOfContents.
    *
-   * @see size()
+   * @copydetails doc_returned_unowned_pointer
+   *
+   * @see addContent(const CaContent* object)
+   * @see createContent()
+   * @see get(const std::string& sid)
+   * @see getNumContents()
+   * @see remove(const std::string& sid)
+   * @see remove(unsigned int n)
    */
   virtual CaContent* get(unsigned int n);
 
@@ -135,7 +142,14 @@ public:
    *
    * @return the nth CaContent in this CaListOfContents.
    *
-   * @see size()
+   * @copydetails doc_returned_unowned_pointer
+   *
+   * @see addContent(const CaContent* object)
+   * @see createContent()
+   * @see get(const std::string& sid)
+   * @see getNumContents()
+   * @see remove(const std::string& sid)
+   * @see remove(unsigned int n)
    */
   virtual const CaContent* get(unsigned int n) const;
 
@@ -146,10 +160,17 @@ public:
    * @param sid a string representing the identifier of the CaContent to
    * retrieve.
    *
-   * @return the CaContent in this CaListOfContents with the given id or NULL
-   * if no such CaContent exists.
+   * @return the CaContent in this CaListOfContents with the given @p sid or
+   * @c NULL if no such CaContent exists.
    *
-   * @see size()
+   * @copydetails doc_returned_unowned_pointer
+   *
+   * @see addContent(const CaContent* object)
+   * @see createContent()
+   * @see get(unsigned int n)
+   * @see getNumContents()
+   * @see remove(const std::string& sid)
+   * @see remove(unsigned int n)
    */
   virtual CaContent* get(const std::string& sid);
 
@@ -160,10 +181,17 @@ public:
    * @param sid a string representing the identifier of the CaContent to
    * retrieve.
    *
-   * @return the CaContent in this CaListOfContents with the given id or NULL
-   * if no such CaContent exists.
+   * @return the CaContent in this CaListOfContents with the given @p sid or
+   * @c NULL if no such CaContent exists.
    *
-   * @see size()
+   * @copydetails doc_returned_unowned_pointer
+   *
+   * @see addContent(const CaContent* object)
+   * @see createContent()
+   * @see get(unsigned int n)
+   * @see getNumContents()
+   * @see remove(const std::string& sid)
+   * @see remove(unsigned int n)
    */
   virtual const CaContent* get(const std::string& sid) const;
 
@@ -177,10 +205,14 @@ public:
    *
    * @return a pointer to the nth CaContent in this CaListOfContents.
    *
-   * @see size()
+   * @copydetails doc_returned_owned_pointer
    *
-   * @note the caller owns the returned object and is responsible for deleting
-   * it.
+   * @see addContent(const CaContent* object)
+   * @see createContent()
+   * @see get(const std::string& sid)
+   * @see get(unsigned int n)
+   * @see getNumContents()
+   * @see remove(const std::string& sid)
    */
   virtual CaContent* remove(unsigned int n);
 
@@ -195,8 +227,14 @@ public:
    * @return the CaContent in this CaListOfContents based on the identifier or
    * NULL if no such CaContent exists.
    *
-   * @note the caller owns the returned object and is responsible for deleting
-   * it.
+   * @copydetails doc_returned_owned_pointer
+   *
+   * @see addContent(const CaContent* object)
+   * @see createContent()
+   * @see get(const std::string& sid)
+   * @see get(unsigned int n)
+   * @see getNumContents()
+   * @see remove(unsigned int n)
    */
   virtual CaContent* remove(const std::string& sid);
 
@@ -209,10 +247,21 @@ public:
    * @copydetails doc_returns_success_code
    * @li @omexconstant{LIBCOMBINE_OPERATION_SUCCESS, OperationReturnValues_t}
    * @li @omexconstant{LIBCOMBINE_OPERATION_FAILED, OperationReturnValues_t}
+   * @li @omexconstant{LIBCOMBINE_INVALID_OBJECT, OperationReturnValues_t}
+   * @li @omexconstant{LIBCOMBINE_LEVEL_MISMATCH, OperationReturnValues_t}
+   * @li @omexconstant{LIBCOMBINE_VERSION_MISMATCH, OperationReturnValues_t}
+   * @li @omexconstant{LIBCOMBINE_PKG_VERSION_MISMATCH,
+   * OperationReturnValues_t}
+   * @li @omexconstant{LIBCOMBINE_DUPLICATE_OBJECT_ID, OperationReturnValues_t}
    *
    * @copydetails doc_note_object_is_copied
    *
    * @see createContent()
+   * @see get(const std::string& sid)
+   * @see get(unsigned int n)
+   * @see getNumContents()
+   * @see remove(const std::string& sid)
+   * @see remove(unsigned int n)
    */
   int addContent(const CaContent* cc);
 
@@ -221,6 +270,13 @@ public:
    * Get the number of CaContent objects in this CaListOfContents.
    *
    * @return the number of CaContent objects in this CaListOfContents.
+   *
+   * @see addContent(const CaContent* object)
+   * @see createContent()
+   * @see get(const std::string& sid)
+   * @see get(unsigned int n)
+   * @see remove(const std::string& sid)
+   * @see remove(unsigned int n)
    */
   unsigned int getNumContents() const;
 
@@ -231,7 +287,14 @@ public:
    *
    * @return a new CaContent object instance.
    *
-   * @see addContent(const CaContent* cc)
+   * @copydetails doc_returned_unowned_pointer
+   *
+   * @see addContent(const CaContent* object)
+   * @see get(const std::string& sid)
+   * @see get(unsigned int n)
+   * @see getNumContents()
+   * @see remove(const std::string& sid)
+   * @see remove(unsigned int n)
    */
   CaContent* createContent();
 
@@ -252,8 +315,7 @@ public:
    * @copydetails doc_what_are_typecodes
    *
    * @return the OMEX type code for this object:
-   *
-   * @omexconstant{OMEX_LIST_OF, OMEXTypeCode_t}
+   * @omexconstant{OMEX_LIST_OF, CaTypeCode_t}.
    *
    * @copydetails doc_warning_typecodes_not_unique
    */
@@ -268,14 +330,23 @@ public:
    *
    * @return the OMEX typecode for the objects contained in this
    * CaListOfContents:
-   *
-   * @omexconstant{LIB_COMBINE_CONTENT, OMEXCombineTypeCode_t}
+   * @omexconstant{LIB_COMBINE_CONTENT, CaTypeCode_t}.
    *
    * @copydetails doc_warning_typecodes_not_unique
    *
    * @see getElementName()
    */
   virtual int getItemTypeCode() const;
+
+
+
+
+  #ifndef SWIG
+
+
+
+
+  #endif /* !SWIG */
 
 
 protected:
@@ -342,10 +413,12 @@ BEGIN_C_DECLS
  *
  * @return the nth CaContent_t in this CaListOf_t.
  *
- * @memberof CaContent_t
+ * @copydetails doc_returned_unowned_pointer
+ *
+ * @memberof CaListOfContents_t
  */
 LIBCOMBINE_EXTERN
-const CaContent_t*
+CaContent_t*
 CaListOfContents_getContent(CaListOf_t* clo, unsigned int n);
 
 
@@ -357,13 +430,15 @@ CaListOfContents_getContent(CaListOf_t* clo, unsigned int n);
  * @param sid a string representing the identifier of the CaContent_t to
  * retrieve.
  *
- * @return the CaContent_t in this CaListOf_t with the given id or NULL if no
- * such CaContent_t exists.
+ * @return the CaContent_t in this CaListOf_t with the given @p sid or @c NULL
+ * if no such CaContent_t exists.
  *
- * @memberof CaContent_t
+ * @copydetails doc_returned_unowned_pointer
+ *
+ * @memberof CaListOfContents_t
  */
 LIBCOMBINE_EXTERN
-const CaContent_t*
+CaContent_t*
 CaListOfContents_getById(CaListOf_t* clo, const char *sid);
 
 
@@ -378,7 +453,9 @@ CaListOfContents_getById(CaListOf_t* clo, const char *sid);
  *
  * @return a pointer to the nth CaContent_t in this CaListOf_t.
  *
- * @memberof CaContent_t
+ * @copydetails doc_returned_owned_pointer
+ *
+ * @memberof CaListOfContents_t
  */
 LIBCOMBINE_EXTERN
 CaContent_t*
@@ -397,7 +474,9 @@ CaListOfContents_remove(CaListOf_t* clo, unsigned int n);
  * @return the CaContent_t in this CaListOf_t based on the identifier or NULL
  * if no such CaContent_t exists.
  *
- * @memberof CaContent_t
+ * @copydetails doc_returned_owned_pointer
+ *
+ * @memberof CaListOfContents_t
  */
 LIBCOMBINE_EXTERN
 CaContent_t*

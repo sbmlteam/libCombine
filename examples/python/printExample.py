@@ -53,6 +53,9 @@ def printArchive(fileName):
         print(" {0}: location: {1} format: {2}".format(i, entry.getLocation(), entry.getFormat()))
         printMetaDataFor(archive, entry.getLocation())
 
+        for j in range(entry.getNumCrossRefs()):
+            print("  {0}: crossRef location {1}".format(j, entry.getCrossRef(j).getLocation()))
+
         # the entry could now be extracted via
         # archive.extractEntry(entry.getLocation(), <filename or folder>)
 

@@ -7,7 +7,11 @@
  * This file is part of libSBML. Please visit http://sbml.org for more
  * information about SBML, and the latest version of libSBML.
  *
- * Copyright (C) 2013-2016 jointly by the following organizations:
+ * Copyright (C) 2019 jointly by the following organizations:
+ * 1. California Institute of Technology, Pasadena, CA, USA
+ * 2. University of Heidelberg, Heidelberg, Germany
+ *
+ * Copyright (C) 2013-2018 jointly by the following organizations:
  * 1. California Institute of Technology, Pasadena, CA, USA
  * 2. EMBL European Bioinformatics Institute (EMBL-EBI), Hinxton, UK
  * 3. University of Heidelberg, Heidelberg, Germany
@@ -329,9 +333,9 @@ CaListOfContents::writeXMLNS(LIBSBML_CPP_NAMESPACE_QUALIFIER XMLOutputStream&
   {
     const LIBSBML_CPP_NAMESPACE_QUALIFIER XMLNamespaces* thisxmlns =
       getNamespaces();
-    if (thisxmlns && thisxmlns->hasURI(OMEX_XMLNS_L1V1))
+    if (thisxmlns && thisxmlns->hasURI(OMEX_XMLNS_L3V1))
     {
-      xmlns.add(OMEX_XMLNS_L1V1, prefix);
+      xmlns.add(OMEX_XMLNS_L3V1, prefix);
     }
   }
 
@@ -350,7 +354,7 @@ CaListOfContents::writeXMLNS(LIBSBML_CPP_NAMESPACE_QUALIFIER XMLOutputStream&
  * Get a CaContent_t from the CaListOf_t.
  */
 LIBCOMBINE_EXTERN
-const CaContent_t*
+CaContent_t*
 CaListOfContents_getContent(CaListOf_t* clo, unsigned int n)
 {
   if (clo == NULL)
@@ -366,7 +370,7 @@ CaListOfContents_getContent(CaListOf_t* clo, unsigned int n)
  * Get a CaContent_t from the CaListOf_t based on its identifier.
  */
 LIBCOMBINE_EXTERN
-const CaContent_t*
+CaContent_t*
 CaListOfContents_getById(CaListOf_t* clo, const char *sid)
 {
   if (clo == NULL)

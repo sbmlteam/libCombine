@@ -73,6 +73,16 @@ SCENARIO("creating a new combine archive", "[combine]")
         REQUIRE(entry->getLocation() == "./model/BorisEJB.xml");
         REQUIRE(entry->getFormat() == "http://identifiers.org/combine.specifications/sbml");
         REQUIRE(entry->isFormat("sbml"));
+        REQUIRE(entry->getNumCrossRefs() == 0);
+
+        CaCrossRef* ref = entry->createCrossRef();
+        ref->setLocation("foo.xml");
+
+        REQUIRE(entry->getNumCrossRefs() == 1);
+        REQUIRE(entry->getCrossRef(0) != NULL);
+        REQUIRE(entry->getCrossRef(0)->getLocation() == "foo.xml");
+
+        entry->removeCrossRef(0);
 
         std::string modelContent = archive.extractEntryToString("./model/BorisEJB.xml");
         REQUIRE(!modelContent.empty());

@@ -40,7 +40,7 @@ if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/VERSION.txt")
 endif()
 
 MATH(EXPR LIBCOMBINE_VERSION_NUMERIC "${LIBCOMBINE_VERSION_MAJOR} * 10000 + ${LIBCOMBINE_VERSION_MINOR} * 100 + ${LIBCOMBINE_VERSION_PATCH}" )
-set(LIBCOMBINE_VERSION "${LIBCOMBINE_VERSION_MAJOR}.${LIBCOMBINE_VERSION_MINOR}.${LIBCOMBINE_VERSION_PATCH}${LIBCOMBINE_VERSION_RELEASE}")
+set(PACKAGE_VERSION "${LIBCOMBINE_VERSION_MAJOR}.${LIBCOMBINE_VERSION_MINOR}.${LIBCOMBINE_VERSION_PATCH}${LIBCOMBINE_VERSION_RELEASE}")
 set(PACKAGE_NAME "libCombine")
 
 # add make dist and make check target as they are already familiar for
@@ -69,16 +69,19 @@ set(CPACK_RPM_PACKAGE_LICENSE "BSD")
 set(CPACK_RPM_PACKAGE_GROUP "Libraries/Development")
 set(CPACK_DEBIAN_PACKAGE_SECTION "Libraries")
 
-set(CPACK_SOURCE_IGNORE_FILES "${CMAKE_CURRENT_BINARY_DIR};/.svn/;/.libs/;/.deps/;/.bzr/;.*.o$;.*.lo$;.*.la$;/.git/;${CPACK_SOURCE_IGNORE_FILES};/.DS_Store;/.svnignore;blib;libsbml-dist;*.txt.user")
+set(CPACK_SOURCE_IGNORE_FILES "${CMAKE_CURRENT_BINARY_DIR};/out/;/.git/;/.svn/;/.libs/;/.deps/;/.bzr/;.*.pyc$;.*.o$;.*.lo$;.*.la$;${CPACK_SOURCE_IGNORE_FILES};/.DS_Store;/.svnignore;blib;libcombine-dist")
 
-set(ADDITIONAL_LIB_DIRS)
+if(UNIX)
+    set(CPACK_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}")
+    set(CPACK_SET_DESTDIR "ON")
+endif()
+
 if(CMAKE_SIZEOF_VOID_P EQUAL 4)
     set(CPACK_DEBIAN_PACKAGE_ARCHITECTURE "i386")
     set(CPACK_RPM_PACKAGE_ARCHITECTURE "i386")
 else()
     set(CPACK_DEBIAN_PACKAGE_ARCHITECTURE "amd64")
     set(CPACK_RPM_PACKAGE_ARCHITECTURE "x86_64")
-    set(ADDITIONAL_LIB_DIRS "/usr/lib64" "/usr/lib/x86_64-linux-gnu/")
 endif()
 
 include(CPack)
@@ -173,8 +176,6 @@ if("${LIBCOMBINE_DEPENDENCY_DIR}" STREQUAL "")
   "Directory containing libraries that libCombine depends upon. (Particularly important on Windows.)" FORCE)
 endif()
 
-set(LIBCOMBINE_ROOT_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR})
-set(LIBCOMBINE_ROOT_BINARY_DIR ${CMAKE_CURRENT_BINARY_DIR})
 
 ###############################################################################
 #
@@ -191,6 +192,9 @@ if(WITH_SWIG)
     find_program(SWIG_EXECUTABLE
       NAMES swig
       PATHS
+        c:/swigwin-3.0.12
+        c:/swigwin-3.0.10
+        c:/swigwin-3.0.8
         c:/swigwin-3.0.5
         c:/swigwin-3.0.2
         c:/swigwin-3.0.0
@@ -385,13 +389,13 @@ if(UNIX OR CYGWIN)
     set(PATH_SEP "/")
     set(FILE_SEP ":")
     set( MISC_PREFIX "share/libcombine/" )
-    set(LIBCOMBINE_LIBRARY omex)
+    set(LIBCOMBINE_LIBRARY combine)
 else()
     set( MISC_PREFIX "" )
     set(PATH_SEP "\\")
     set(FILE_SEP ";")
     if(MINGW)
-        set(LIBCOMBINE_LIBRARY omex)
+        set(LIBCOMBINE_LIBRARY combine)
     else()
         set(LIBCOMBINE_LIBRARY libcombine)
     endif()
@@ -474,11 +478,11 @@ if(UNIX)
         set(BUILD_DEFINITIONS "${BUILD_DEFINITIONS} -DLINUX")
     endif(APPLE)
 
-    add_definitions( -DPACKAGE_VERSION=\"${LIBCOMBINE_VERSION}\"  -DPACKAGE_NAME=\"${PROJECT_NAME}\")
-    set(BUILD_DEFINITIONS "${BUILD_DEFINITIONS} -DPACKAGE_VERSION=\"${LIBCOMBINE_VERSION}\"  -DPACKAGE_NAME=\"${PROJECT_NAME}\"")
+    add_definitions( -DPACKAGE_VERSION=\"${PACKAGE_VERSION}\"  -DPACKAGE_NAME=\"${PROJECT_NAME}\")
+    set(BUILD_DEFINITIONS "${BUILD_DEFINITIONS} -DPACKAGE_VERSION=\"${PACKAGE_VERSION}\"  -DPACKAGE_NAME=\"${PROJECT_NAME}\"")
 
 else(UNIX)
-    add_definitions(-DPACKAGE_VERSION=\"${LIBCOMBINE_VERSION}\"  -DPACKAGE_NAME=\"${PROJECT_NAME}\")
+    add_definitions(-DPACKAGE_VERSION=\"${PACKAGE_VERSION}\"  -DPACKAGE_NAME=\"${PROJECT_NAME}\")
     
     add_definitions(-DWIN32)
     set(BUILD_DEFINITIONS "${BUILD_DEFINITIONS} -DWIN32")
@@ -576,7 +580,7 @@ endif()
 
 ###############################################################################
 #
-# Initialize OMEX sources
+# Initialize LIBCOMBINE sources
 #
 set(LIBCOMBINE_SOURCES)
 
@@ -665,6 +669,7 @@ add_subdirectory(src/bindings)
 
 
 
+
 ###############################################################################
 #
 # Build examples if specified
@@ -708,16 +713,14 @@ endif()
 
 message(STATUS "
 ----------------------------------------------------------------------
-libCombine version ${LIBCOMBINE_VERSION}
+libCombine version ${PACKAGE_VERSION}
 ----------------------------------------------------------------------
 
    More information and the latest version are available online at
-   https://github.com/fbergmann/libCombine/
 
    Please report problems using the issue tracker at
-   https://github.com/fbergmann/libCombine/issues
 
-   To contact the developers directly, email fbergman@caltech.edu
+   To contact the developers directly, email sbml-team@caltech.edu
 
    Configured on host '${HOSTNAME}'
      host type                     = ${CMAKE_SYSTEM_NAME}

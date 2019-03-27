@@ -7,7 +7,11 @@
  * This file is part of libSBML. Please visit http://sbml.org for more
  * information about SBML, and the latest version of libSBML.
  *
- * Copyright (C) 2013-2016 jointly by the following organizations:
+ * Copyright (C) 2019 jointly by the following organizations:
+ * 1. California Institute of Technology, Pasadena, CA, USA
+ * 2. University of Heidelberg, Heidelberg, Germany
+ *
+ * Copyright (C) 2013-2018 jointly by the following organizations:
  * 1. California Institute of Technology, Pasadena, CA, USA
  * 2. EMBL European Bioinformatics Institute (EMBL-EBI), Hinxton, UK
  * 3. University of Heidelberg, Heidelberg, Germany
@@ -262,19 +266,6 @@ CaOmexManifest::getTypeCode() const
 }
 
 
-/*
- * Predicate returning @c true if all the required elements for this
- * CaOmexManifest object have been set.
- */
-bool
-CaOmexManifest::hasRequiredElements() const
-{
-  bool allPresent = true;
-
-  return allPresent;
-}
-
-
 
 /** @cond doxygenlibCombineInternal */
 
@@ -287,9 +278,9 @@ CaOmexManifest::writeElements(LIBSBML_CPP_NAMESPACE_QUALIFIER XMLOutputStream&
 {
   CaBase::writeElements(stream);
 
-  if (getNumContents() > 0)
+  for (unsigned int i = 0; i < getNumContents(); i++)
   {
-    mContents.write(stream);
+    getContent(i)->write(stream);
   }
 }
 
@@ -340,6 +331,334 @@ CaOmexManifest::connectToChild()
   CaBase::connectToChild();
 
   mContents.connectToParent(this);
+}
+
+/** @endcond */
+
+
+
+/** @cond doxygenlibCombineInternal */
+
+/*
+ * Gets the value of the "attributeName" attribute of this CaOmexManifest.
+ */
+int
+CaOmexManifest::getAttribute(const std::string& attributeName,
+                             bool& value) const
+{
+  int return_value = CaBase::getAttribute(attributeName, value);
+
+  return return_value;
+}
+
+/** @endcond */
+
+
+
+/** @cond doxygenlibCombineInternal */
+
+/*
+ * Gets the value of the "attributeName" attribute of this CaOmexManifest.
+ */
+int
+CaOmexManifest::getAttribute(const std::string& attributeName,
+                             int& value) const
+{
+  int return_value = CaBase::getAttribute(attributeName, value);
+
+  return return_value;
+}
+
+/** @endcond */
+
+
+
+/** @cond doxygenlibCombineInternal */
+
+/*
+ * Gets the value of the "attributeName" attribute of this CaOmexManifest.
+ */
+int
+CaOmexManifest::getAttribute(const std::string& attributeName,
+                             double& value) const
+{
+  int return_value = CaBase::getAttribute(attributeName, value);
+
+  return return_value;
+}
+
+/** @endcond */
+
+
+
+/** @cond doxygenlibCombineInternal */
+
+/*
+ * Gets the value of the "attributeName" attribute of this CaOmexManifest.
+ */
+int
+CaOmexManifest::getAttribute(const std::string& attributeName,
+                             unsigned int& value) const
+{
+  int return_value = CaBase::getAttribute(attributeName, value);
+
+  return return_value;
+}
+
+/** @endcond */
+
+
+
+/** @cond doxygenlibCombineInternal */
+
+/*
+ * Gets the value of the "attributeName" attribute of this CaOmexManifest.
+ */
+int
+CaOmexManifest::getAttribute(const std::string& attributeName,
+                             std::string& value) const
+{
+  int return_value = CaBase::getAttribute(attributeName, value);
+
+  return return_value;
+}
+
+/** @endcond */
+
+
+
+/** @cond doxygenlibCombineInternal */
+
+/*
+ * Predicate returning @c true if this CaOmexManifest's attribute
+ * "attributeName" is set.
+ */
+bool
+CaOmexManifest::isSetAttribute(const std::string& attributeName) const
+{
+  bool value = CaBase::isSetAttribute(attributeName);
+
+  return value;
+}
+
+/** @endcond */
+
+
+
+/** @cond doxygenlibCombineInternal */
+
+/*
+ * Sets the value of the "attributeName" attribute of this CaOmexManifest.
+ */
+int
+CaOmexManifest::setAttribute(const std::string& attributeName, bool value)
+{
+  int return_value = CaBase::setAttribute(attributeName, value);
+
+  return return_value;
+}
+
+/** @endcond */
+
+
+
+/** @cond doxygenlibCombineInternal */
+
+/*
+ * Sets the value of the "attributeName" attribute of this CaOmexManifest.
+ */
+int
+CaOmexManifest::setAttribute(const std::string& attributeName, int value)
+{
+  int return_value = CaBase::setAttribute(attributeName, value);
+
+  return return_value;
+}
+
+/** @endcond */
+
+
+
+/** @cond doxygenlibCombineInternal */
+
+/*
+ * Sets the value of the "attributeName" attribute of this CaOmexManifest.
+ */
+int
+CaOmexManifest::setAttribute(const std::string& attributeName, double value)
+{
+  int return_value = CaBase::setAttribute(attributeName, value);
+
+  return return_value;
+}
+
+/** @endcond */
+
+
+
+/** @cond doxygenlibCombineInternal */
+
+/*
+ * Sets the value of the "attributeName" attribute of this CaOmexManifest.
+ */
+int
+CaOmexManifest::setAttribute(const std::string& attributeName,
+                             unsigned int value)
+{
+  int return_value = CaBase::setAttribute(attributeName, value);
+
+  return return_value;
+}
+
+/** @endcond */
+
+
+
+/** @cond doxygenlibCombineInternal */
+
+/*
+ * Sets the value of the "attributeName" attribute of this CaOmexManifest.
+ */
+int
+CaOmexManifest::setAttribute(const std::string& attributeName,
+                             const std::string& value)
+{
+  int return_value = CaBase::setAttribute(attributeName, value);
+
+  return return_value;
+}
+
+/** @endcond */
+
+
+
+/** @cond doxygenlibCombineInternal */
+
+/*
+ * Unsets the value of the "attributeName" attribute of this CaOmexManifest.
+ */
+int
+CaOmexManifest::unsetAttribute(const std::string& attributeName)
+{
+  int value = CaBase::unsetAttribute(attributeName);
+
+  return value;
+}
+
+/** @endcond */
+
+
+
+/** @cond doxygenlibCombineInternal */
+
+/*
+ * Creates and returns an new "elementName" object in this CaOmexManifest.
+ */
+CaBase*
+CaOmexManifest::createChildObject(const std::string& elementName)
+{
+  CaBase* obj = NULL;
+
+  if (elementName == "content")
+  {
+    return createContent();
+  }
+
+  return obj;
+}
+
+/** @endcond */
+
+
+
+/** @cond doxygenlibCombineInternal */
+
+/*
+ * Adds a new "elementName" object to this CaOmexManifest.
+ */
+int
+CaOmexManifest::addChildObject(const std::string& elementName,
+                               const CaBase* element)
+{
+  if (elementName == "content" && element->getTypeCode() ==
+    LIB_COMBINE_CONTENT)
+  {
+    return addContent((const CaContent*)(element));
+  }
+
+  return LIBSBML_OPERATION_FAILED;
+}
+
+/** @endcond */
+
+
+
+/** @cond doxygenlibCombineInternal */
+
+/*
+ * Removes and returns the new "elementName" object with the given id in this
+ * CaOmexManifest.
+ */
+CaBase*
+CaOmexManifest::removeChildObject(const std::string& elementName,
+                                  const std::string& id)
+{
+  if (elementName == "content")
+  {
+    for (unsigned int i = 0; i < getNumContents(); i++)
+    {
+      if (getContent(i)->getId() == id)
+      {
+        return removeContent(i);
+      }
+    }
+  }
+
+  return NULL;
+}
+
+/** @endcond */
+
+
+
+/** @cond doxygenlibCombineInternal */
+
+/*
+ * Returns the number of "elementName" in this CaOmexManifest.
+ */
+unsigned int
+CaOmexManifest::getNumObjects(const std::string& elementName)
+{
+  unsigned int n = 0;
+
+  if (elementName == "content")
+  {
+    return getNumContents();
+  }
+
+  return n;
+}
+
+/** @endcond */
+
+
+
+/** @cond doxygenlibCombineInternal */
+
+/*
+ * Returns the nth object of "objectName" in this CaOmexManifest.
+ */
+CaBase*
+CaOmexManifest::getObject(const std::string& elementName, unsigned int index)
+{
+  CaBase* obj = NULL;
+
+  if (elementName == "content")
+  {
+    return getContent(index);
+  }
+
+  return obj;
 }
 
 /** @endcond */
@@ -465,7 +784,10 @@ CaOmexManifest::createObject(LIBSBML_CPP_NAMESPACE_QUALIFIER XMLInputStream&
 
   const std::string& name = stream.peek().getName();
 
-  obj = mContents.createObject(stream);
+  if (name == "content")
+  {
+    obj = mContents.createObject(stream);
+  }
 
   connectToChild();
 
@@ -492,9 +814,9 @@ CaOmexManifest::writeXMLNS(LIBSBML_CPP_NAMESPACE_QUALIFIER XMLOutputStream&
   {
     const LIBSBML_CPP_NAMESPACE_QUALIFIER XMLNamespaces* thisxmlns =
       getNamespaces();
-    if (thisxmlns && thisxmlns->hasURI(OMEX_XMLNS_L1V1))
+    if (thisxmlns && thisxmlns->hasURI(OMEX_XMLNS_L3V1))
     {
-      xmlns.add(OMEX_XMLNS_L1V1, prefix);
+      xmlns.add(OMEX_XMLNS_L3V1, prefix);
     }
   }
 
@@ -553,7 +875,7 @@ CaOmexManifest_free(CaOmexManifest_t* com)
 
 
 /*
- * Returns a ListOf_t* containing CaContent_t objects from this
+ * Returns a ListOf_t * containing CaContent_t objects from this
  * CaOmexManifest_t.
  */
 LIBCOMBINE_EXTERN
@@ -568,7 +890,7 @@ CaOmexManifest_getListOfContents(CaOmexManifest_t* com)
  * Get a CaContent_t from the CaOmexManifest_t.
  */
 LIBCOMBINE_EXTERN
-const CaContent_t*
+CaContent_t*
 CaOmexManifest_getContent(CaOmexManifest_t* com, unsigned int n)
 {
   return (com != NULL) ? com->getContent(n) : NULL;
@@ -618,18 +940,6 @@ CaContent_t*
 CaOmexManifest_removeContent(CaOmexManifest_t* com, unsigned int n)
 {
   return (com != NULL) ? com->removeContent(n) : NULL;
-}
-
-
-/*
- * Predicate returning @c 1 if all the required elements for this
- * CaOmexManifest_t object have been set.
- */
-LIBCOMBINE_EXTERN
-int
-CaOmexManifest_hasRequiredElements(const CaOmexManifest_t * com)
-{
-  return (com != NULL) ? static_cast<int>(com->hasRequiredElements()) : 0;
 }
 
 

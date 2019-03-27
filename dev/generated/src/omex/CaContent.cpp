@@ -7,7 +7,11 @@
  * This file is part of libSBML. Please visit http://sbml.org for more
  * information about SBML, and the latest version of libSBML.
  *
- * Copyright (C) 2013-2016 jointly by the following organizations:
+ * Copyright (C) 2019 jointly by the following organizations:
+ * 1. California Institute of Technology, Pasadena, CA, USA
+ * 2. University of Heidelberg, Heidelberg, Germany
+ *
+ * Copyright (C) 2013-2018 jointly by the following organizations:
  * 1. California Institute of Technology, Pasadena, CA, USA
  * 2. EMBL European Bioinformatics Institute (EMBL-EBI), Hinxton, UK
  * 3. University of Heidelberg, Heidelberg, Germany
@@ -56,7 +60,9 @@ CaContent::CaContent()
   , mFormat ("")
   , mMaster (false)
   , mIsSetMaster (false)
+  , mCrossRefs ()
 {
+  connectToChild();
 }
 
 
@@ -69,8 +75,10 @@ CaContent::CaContent(CaNamespaces *omexns)
   , mFormat ("")
   , mMaster (false)
   , mIsSetMaster (false)
+  , mCrossRefs (omexns)
 {
   setElementNamespace(omexns->getURI());
+  connectToChild();
 }
 
 
@@ -83,7 +91,9 @@ CaContent::CaContent(const CaContent& orig)
   , mFormat ( orig.mFormat )
   , mMaster ( orig.mMaster )
   , mIsSetMaster ( orig.mIsSetMaster )
+  , mCrossRefs ( orig.mCrossRefs )
 {
+  connectToChild();
 }
 
 
@@ -100,6 +110,8 @@ CaContent::operator=(const CaContent& rhs)
     mFormat = rhs.mFormat;
     mMaster = rhs.mMaster;
     mIsSetMaster = rhs.mIsSetMaster;
+    mCrossRefs = rhs.mCrossRefs;
+    connectToChild();
   }
 
   return *this;
@@ -277,6 +289,126 @@ CaContent::unsetMaster()
 
 
 /*
+ * Returns the CaListOfCrossRefs from this CaContent.
+ */
+const CaListOfCrossRefs*
+CaContent::getListOfCrossRefs() const
+{
+  return &mCrossRefs;
+}
+
+
+/*
+ * Returns the CaListOfCrossRefs from this CaContent.
+ */
+CaListOfCrossRefs*
+CaContent::getListOfCrossRefs()
+{
+  return &mCrossRefs;
+}
+
+
+/*
+ * Get a CaCrossRef from the CaContent.
+ */
+CaCrossRef*
+CaContent::getCrossRef(unsigned int n)
+{
+  return mCrossRefs.get(n);
+}
+
+
+/*
+ * Get a CaCrossRef from the CaContent.
+ */
+const CaCrossRef*
+CaContent::getCrossRef(unsigned int n) const
+{
+  return mCrossRefs.get(n);
+}
+
+
+/*
+ * Adds a copy of the given CaCrossRef to this CaContent.
+ */
+int
+CaContent::addCrossRef(const CaCrossRef* ccr)
+{
+  if (ccr == NULL)
+  {
+    return LIBCOMBINE_OPERATION_FAILED;
+  }
+  else if (ccr->hasRequiredAttributes() == false)
+  {
+    return LIBCOMBINE_INVALID_OBJECT;
+  }
+  else if (getLevel() != ccr->getLevel())
+  {
+    return LIBCOMBINE_LEVEL_MISMATCH;
+  }
+  else if (getVersion() != ccr->getVersion())
+  {
+    return LIBCOMBINE_VERSION_MISMATCH;
+  }
+  else if (matchesRequiredCaNamespacesForAddition(static_cast<const
+    CaBase*>(ccr)) == false)
+  {
+    return LIBCOMBINE_NAMESPACES_MISMATCH;
+  }
+  else
+  {
+    return mCrossRefs.append(ccr);
+  }
+}
+
+
+/*
+ * Get the number of CaCrossRef objects in this CaContent.
+ */
+unsigned int
+CaContent::getNumCrossRefs() const
+{
+  return mCrossRefs.size();
+}
+
+
+/*
+ * Creates a new CaCrossRef object, adds it to this CaContent object and
+ * returns the CaCrossRef object created.
+ */
+CaCrossRef*
+CaContent::createCrossRef()
+{
+  CaCrossRef* ccr = NULL;
+
+  try
+  {
+    ccr = new CaCrossRef(getCaNamespaces());
+  }
+  catch (...)
+  {
+  }
+
+  if (ccr != NULL)
+  {
+    mCrossRefs.appendAndOwn(ccr);
+  }
+
+  return ccr;
+}
+
+
+/*
+ * Removes the nth CaCrossRef from this CaContent and returns a pointer to it.
+ */
+CaCrossRef*
+CaContent::removeCrossRef(unsigned int n)
+{
+  return mCrossRefs.remove(n);
+}
+
+
+/*
  * Returns the XML element name of this CaContent object.
  */
 const std::string&
@@ -331,6 +463,11 @@ CaContent::writeElements(LIBSBML_CPP_NAMESPACE_QUALIFIER XMLOutputStream&
   stream) const
 {
   CaBase::writeElements(stream);
+
+  for (unsigned int i = 0; i < getNumCrossRefs(); i++)
+  {
+    getCrossRef(i)->write(stream);
+  }
 }
 
 /** @endcond */
@@ -361,6 +498,467 @@ void
 CaContent::setCaOmexManifest(CaOmexManifest* d)
 {
   CaBase::setCaOmexManifest(d);
+
+  mCrossRefs.setCaOmexManifest(d);
+}
+
+/** @endcond */
+
+
+
+/** @cond doxygenlibCombineInternal */
+
+/*
+ * Connects to child elements
+ */
+void
+CaContent::connectToChild()
+{
+  CaBase::connectToChild();
+
+  mCrossRefs.connectToParent(this);
+}
+
+/** @endcond */
+
+
+
+/** @cond doxygenlibCombineInternal */
+
+/*
+ * Gets the value of the "attributeName" attribute of this CaContent.
+ */
+int
+CaContent::getAttribute(const std::string& attributeName, bool& value) const
+{
+  int return_value = CaBase::getAttribute(attributeName, value);
+
+  if (return_value == LIBCOMBINE_OPERATION_SUCCESS)
+  {
+    return return_value;
+  }
+
+  if (attributeName == "master")
+  {
+    value = getMaster();
+    return_value = LIBCOMBINE_OPERATION_SUCCESS;
+  }
+
+  return return_value;
+}
+
+/** @endcond */
+
+
+
+/** @cond doxygenlibCombineInternal */
+
+/*
+ * Gets the value of the "attributeName" attribute of this CaContent.
+ */
+int
+CaContent::getAttribute(const std::string& attributeName, int& value) const
+{
+  int return_value = CaBase::getAttribute(attributeName, value);
+
+  return return_value;
+}
+
+/** @endcond */
+
+
+
+/** @cond doxygenlibCombineInternal */
+
+/*
+ * Gets the value of the "attributeName" attribute of this CaContent.
+ */
+int
+CaContent::getAttribute(const std::string& attributeName, double& value) const
+{
+  int return_value = CaBase::getAttribute(attributeName, value);
+
+  return return_value;
+}
+
+/** @endcond */
+
+
+
+/** @cond doxygenlibCombineInternal */
+
+/*
+ * Gets the value of the "attributeName" attribute of this CaContent.
+ */
+int
+CaContent::getAttribute(const std::string& attributeName,
+                        unsigned int& value) const
+{
+  int return_value = CaBase::getAttribute(attributeName, value);
+
+  return return_value;
+}
+
+/** @endcond */
+
+
+
+/** @cond doxygenlibCombineInternal */
+
+/*
+ * Gets the value of the "attributeName" attribute of this CaContent.
+ */
+int
+CaContent::getAttribute(const std::string& attributeName,
+                        std::string& value) const
+{
+  int return_value = CaBase::getAttribute(attributeName, value);
+
+  if (return_value == LIBCOMBINE_OPERATION_SUCCESS)
+  {
+    return return_value;
+  }
+
+  if (attributeName == "location")
+  {
+    value = getLocation();
+    return_value = LIBCOMBINE_OPERATION_SUCCESS;
+  }
+  else if (attributeName == "format")
+  {
+    value = getFormat();
+    return_value = LIBCOMBINE_OPERATION_SUCCESS;
+  }
+
+  return return_value;
+}
+
+/** @endcond */
+
+
+
+/** @cond doxygenlibCombineInternal */
+
+/*
+ * Predicate returning @c true if this CaContent's attribute "attributeName" is
+ * set.
+ */
+bool
+CaContent::isSetAttribute(const std::string& attributeName) const
+{
+  bool value = CaBase::isSetAttribute(attributeName);
+
+  if (attributeName == "location")
+  {
+    value = isSetLocation();
+  }
+  else if (attributeName == "format")
+  {
+    value = isSetFormat();
+  }
+  else if (attributeName == "master")
+  {
+    value = isSetMaster();
+  }
+
+  return value;
+}
+
+/** @endcond */
+
+
+
+/** @cond doxygenlibCombineInternal */
+
+/*
+ * Sets the value of the "attributeName" attribute of this CaContent.
+ */
+int
+CaContent::setAttribute(const std::string& attributeName, bool value)
+{
+  int return_value = CaBase::setAttribute(attributeName, value);
+
+  if (attributeName == "master")
+  {
+    return_value = setMaster(value);
+  }
+
+  return return_value;
+}
+
+/** @endcond */
+
+
+
+/** @cond doxygenlibCombineInternal */
+
+/*
+ * Sets the value of the "attributeName" attribute of this CaContent.
+ */
+int
+CaContent::setAttribute(const std::string& attributeName, int value)
+{
+  int return_value = CaBase::setAttribute(attributeName, value);
+
+  return return_value;
+}
+
+/** @endcond */
+
+
+
+/** @cond doxygenlibCombineInternal */
+
+/*
+ * Sets the value of the "attributeName" attribute of this CaContent.
+ */
+int
+CaContent::setAttribute(const std::string& attributeName, double value)
+{
+  int return_value = CaBase::setAttribute(attributeName, value);
+
+  return return_value;
+}
+
+/** @endcond */
+
+
+
+/** @cond doxygenlibCombineInternal */
+
+/*
+ * Sets the value of the "attributeName" attribute of this CaContent.
+ */
+int
+CaContent::setAttribute(const std::string& attributeName, unsigned int value)
+{
+  int return_value = CaBase::setAttribute(attributeName, value);
+
+  return return_value;
+}
+
+/** @endcond */
+
+
+
+/** @cond doxygenlibCombineInternal */
+
+/*
+ * Sets the value of the "attributeName" attribute of this CaContent.
+ */
+int
+CaContent::setAttribute(const std::string& attributeName,
+                        const std::string& value)
+{
+  int return_value = CaBase::setAttribute(attributeName, value);
+
+  if (attributeName == "location")
+  {
+    return_value = setLocation(value);
+  }
+  else if (attributeName == "format")
+  {
+    return_value = setFormat(value);
+  }
+
+  return return_value;
+}
+
+/** @endcond */
+
+
+
+/** @cond doxygenlibCombineInternal */
+
+/*
+ * Unsets the value of the "attributeName" attribute of this CaContent.
+ */
+int
+CaContent::unsetAttribute(const std::string& attributeName)
+{
+  int value = CaBase::unsetAttribute(attributeName);
+
+  if (attributeName == "location")
+  {
+    value = unsetLocation();
+  }
+  else if (attributeName == "format")
+  {
+    value = unsetFormat();
+  }
+  else if (attributeName == "master")
+  {
+    value = unsetMaster();
+  }
+
+  return value;
+}
+
+/** @endcond */
+
+
+
+/** @cond doxygenlibCombineInternal */
+
+/*
+ * Creates and returns an new "elementName" object in this CaContent.
+ */
+CaBase*
+CaContent::createChildObject(const std::string& elementName)
+{
+  CaBase* obj = NULL;
+
+  if (elementName == "crossRef")
+  {
+    return createCrossRef();
+  }
+
+  return obj;
+}
+
+/** @endcond */
+
+
+
+/** @cond doxygenlibCombineInternal */
+
+/*
+ * Adds a new "elementName" object to this CaContent.
+ */
+int
+CaContent::addChildObject(const std::string& elementName,
+                          const CaBase* element)
+{
+  if (elementName == "crossRef" && element->getTypeCode() ==
+    LIB_COMBINE_CROSSREF)
+  {
+    return addCrossRef((const CaCrossRef*)(element));
+  }
+
+  return LIBSBML_OPERATION_FAILED;
+}
+
+/** @endcond */
+
+
+
+/** @cond doxygenlibCombineInternal */
+
+/*
+ * Removes and returns the new "elementName" object with the given id in this
+ * CaContent.
+ */
+CaBase*
+CaContent::removeChildObject(const std::string& elementName,
+                             const std::string& id)
+{
+  if (elementName == "crossRef")
+  {
+    for (unsigned int i = 0; i < getNumCrossRefs(); i++)
+    {
+      if (getCrossRef(i)->getId() == id)
+      {
+        return removeCrossRef(i);
+      }
+    }
+  }
+
+  return NULL;
+}
+
+/** @endcond */
+
+
+
+/** @cond doxygenlibCombineInternal */
+
+/*
+ * Returns the number of "elementName" in this CaContent.
+ */
+unsigned int
+CaContent::getNumObjects(const std::string& elementName)
+{
+  unsigned int n = 0;
+
+  if (elementName == "crossRef")
+  {
+    return getNumCrossRefs();
+  }
+
+  return n;
+}
+
+/** @endcond */
+
+
+
+/** @cond doxygenlibCombineInternal */
+
+/*
+ * Returns the nth object of "objectName" in this CaContent.
+ */
+CaBase*
+CaContent::getObject(const std::string& elementName, unsigned int index)
+{
+  CaBase* obj = NULL;
+
+  if (elementName == "crossRef")
+  {
+    return getCrossRef(index);
+  }
+
+  return obj;
+}
+
+/** @endcond */
+
+
+/*
+ * Returns the first child element that has the given @p id in the model-wide
+ * SId namespace, or @c NULL if no such object is found.
+ */
+CaBase*
+CaContent::getElementBySId(const std::string& id)
+{
+  if (id.empty())
+  {
+    return NULL;
+  }
+
+  CaBase* obj = NULL;
+
+  obj = mCrossRefs.getElementBySId(id);
+
+  if (obj != NULL)
+  {
+    return obj;
+  }
+
+  return obj;
+}
+
+
+
+/** @cond doxygenlibCombineInternal */
+
+/*
+ * Creates a new object from the next XMLToken on the XMLInputStream
+ */
+CaBase*
+CaContent::createObject(LIBSBML_CPP_NAMESPACE_QUALIFIER XMLInputStream& stream)
+{
+  CaBase* obj = NULL;
+
+  const std::string& name = stream.peek().getName();
+
+  if (name == "crossRef")
+  {
+    obj = mCrossRefs.createObject(stream);
+  }
+
+  connectToChild();
+
+  return obj;
 }
 
 /** @endcond */
@@ -407,7 +1005,8 @@ CaContent::readAttributes(
   bool assigned = false;
   CaErrorLog* log = getErrorLog();
 
-  if (static_cast<CaListOfContents*>(getParentCaObject())->size() < 2)
+  if (log && getParentCaObject() &&
+    static_cast<CaListOfContents*>(getParentCaObject())->size() < 2)
   {
     numErrs = log->getNumErrors();
     for (int n = numErrs-1; n >= 0; n--)
@@ -416,23 +1015,26 @@ CaContent::readAttributes(
       {
         const std::string details = log->getError(n)->getMessage();
         log->remove(CaUnknownCoreAttribute);
-        log->logError(CombineCaOmexManifestLOContentsAllowedCoreAttributes,
-          level, version, details);
+        log->logError(CaUnknown, level, version, details);
       }
     }
   }
 
   CaBase::readAttributes(attributes, expectedAttributes);
-  numErrs = log->getNumErrors();
 
-  for (int n = numErrs-1; n >= 0; n--)
+  if (log)
   {
-    if (log->getError(n)->getErrorId() == CaUnknownCoreAttribute)
+    numErrs = log->getNumErrors();
+
+    for (int n = numErrs-1; n >= 0; n--)
     {
-      const std::string details = log->getError(n)->getMessage();
-      log->remove(CaUnknownCoreAttribute);
-      log->logError(CombineCaContentAllowedAttributes, level, version,
-        details);
+      if (log->getError(n)->getErrorId() == CaUnknownCoreAttribute)
+      {
+        const std::string details = log->getError(n)->getMessage();
+        log->remove(CaUnknownCoreAttribute);
+        log->logError(CombineContentAllowedAttributes, level, version, details,
+          getLine(), getColumn());
+      }
     }
   }
 
@@ -453,7 +1055,7 @@ CaContent::readAttributes(
   {
     std::string message = "Combine attribute 'location' is missing from the "
       "<CaContent> element.";
-    log->logError(CombineCaContentAllowedAttributes, level, version, message);
+    log->logError(CombineContentAllowedAttributes, level, version, message);
   }
 
   // 
@@ -473,14 +1075,25 @@ CaContent::readAttributes(
   {
     std::string message = "Combine attribute 'format' is missing from the "
       "<CaContent> element.";
-    log->logError(CombineCaContentAllowedAttributes, level, version, message);
+    log->logError(CombineContentAllowedAttributes, level, version, message);
   }
 
   // 
   // master bool (use = "optional" )
   // 
 
+  numErrs = log->getNumErrors();
   mIsSetMaster = attributes.readInto("master", mMaster);
+
+  if (mIsSetMaster == false)
+  {
+    if (log->getNumErrors() == numErrs + 1 &&
+      log->contains(XMLAttributeTypeMismatch))
+    {
+      log->remove(XMLAttributeTypeMismatch);
+      log->logError(CombineContentMasterMustBeBoolean, level, version);
+    }
+  }
 }
 
 /** @endcond */
@@ -569,7 +1182,7 @@ CaContent_free(CaContent_t* cc)
  * Returns the value of the "location" attribute of this CaContent_t.
  */
 LIBCOMBINE_EXTERN
-const char *
+char *
 CaContent_getLocation(const CaContent_t * cc)
 {
   if (cc == NULL)
@@ -586,7 +1199,7 @@ CaContent_getLocation(const CaContent_t * cc)
  * Returns the value of the "format" attribute of this CaContent_t.
  */
 LIBCOMBINE_EXTERN
-const char *
+char *
 CaContent_getFormat(const CaContent_t * cc)
 {
   if (cc == NULL)
@@ -610,7 +1223,8 @@ CaContent_getMaster(const CaContent_t * cc)
 
 
 /*
- * Predicate returning @c 1 if this CaContent_t's "location" attribute is set.
+ * Predicate returning @c 1 (true) if this CaContent_t's "location" attribute
+ * is set.
  */
 LIBCOMBINE_EXTERN
 int
@@ -621,7 +1235,8 @@ CaContent_isSetLocation(const CaContent_t * cc)
 
 
 /*
- * Predicate returning @c 1 if this CaContent_t's "format" attribute is set.
+ * Predicate returning @c 1 (true) if this CaContent_t's "format" attribute is
+ * set.
  */
 LIBCOMBINE_EXTERN
 int
@@ -632,7 +1247,8 @@ CaContent_isSetFormat(const CaContent_t * cc)
 
 
 /*
- * Predicate returning @c 1 if this CaContent_t's "master" attribute is set.
+ * Predicate returning @c 1 (true) if this CaContent_t's "master" attribute is
+ * set.
  */
 LIBCOMBINE_EXTERN
 int
@@ -709,8 +1325,76 @@ CaContent_unsetMaster(CaContent_t * cc)
 
 
 /*
- * Predicate returning @c 1 if all the required attributes for this CaContent_t
- * object have been set.
+ * Returns a ListOf_t * containing CaCrossRef_t objects from this CaContent_t.
+ */
+LIBCOMBINE_EXTERN
+CaListOf_t*
+CaContent_getListOfCrossRefs(CaContent_t* cc)
+{
+  return (cc != NULL) ? cc->getListOfCrossRefs() : NULL;
+}
+
+
+/*
+ * Get a CaCrossRef_t from the CaContent_t.
+ */
+LIBCOMBINE_EXTERN
+CaCrossRef_t*
+CaContent_getCrossRef(CaContent_t* cc, unsigned int n)
+{
+  return (cc != NULL) ? cc->getCrossRef(n) : NULL;
+}
+
+
+/*
+ * Adds a copy of the given CaCrossRef_t to this CaContent_t.
+ */
+LIBCOMBINE_EXTERN
+int
+CaContent_addCrossRef(CaContent_t* cc, const CaCrossRef_t* ccr)
+{
+  return (cc != NULL) ? cc->addCrossRef(ccr) : LIBCOMBINE_INVALID_OBJECT;
+}
+
+
+/*
+ * Get the number of CaCrossRef_t objects in this CaContent_t.
+ */
+LIBCOMBINE_EXTERN
+unsigned int
+CaContent_getNumCrossRefs(CaContent_t* cc)
+{
+  return (cc != NULL) ? cc->getNumCrossRefs() : OMEX_INT_MAX;
+}
+
+
+/*
+ * Creates a new CaCrossRef_t object, adds it to this CaContent_t object and
+ * returns the CaCrossRef_t object created.
+ */
+LIBCOMBINE_EXTERN
+CaCrossRef_t*
+CaContent_createCrossRef(CaContent_t* cc)
+{
+  return (cc != NULL) ? cc->createCrossRef() : NULL;
+}
+
+
+/*
+ * Removes the nth CaCrossRef_t from this CaContent_t and returns a pointer to
+ * it.
+ */
+LIBCOMBINE_EXTERN
+CaCrossRef_t*
+CaContent_removeCrossRef(CaContent_t* cc, unsigned int n)
+{
+  return (cc != NULL) ? cc->removeCrossRef(n) : NULL;
+}
+
+
+/*
+ * Predicate returning @c 1 (true) if all the required attributes for this
+ * CaContent_t object have been set.
  */
 LIBCOMBINE_EXTERN
 int

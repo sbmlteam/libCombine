@@ -2,12 +2,12 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
-[assembly: AssemblyTitle("libCombine C# Binding Proxy Class DLL")]
+[assembly: AssemblyTitle("libSEDML C# Binding Proxy Class DLL")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("The SBML Team")]
-[assembly: AssemblyProduct("libcombinecsP.dll")]
-[assembly: AssemblyCopyright("Copyright (C) 2016 SBML Team")]
+[assembly: AssemblyCompany("The SEDML Team")]
+[assembly: AssemblyProduct("libsedmlcsP.dll")]
+[assembly: AssemblyCopyright("Copyright (C) Frank T. Bergmann 2013")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

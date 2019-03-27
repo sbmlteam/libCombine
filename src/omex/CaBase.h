@@ -7,7 +7,11 @@
  * This file is part of libSBML. Please visit http://sbml.org for more
  * information about SBML, and the latest version of libSBML.
  *
- * Copyright (C) 2013-2016 jointly by the following organizations:
+ * Copyright (C) 2019 jointly by the following organizations:
+ * 1. California Institute of Technology, Pasadena, CA, USA
+ * 2. University of Heidelberg, Heidelberg, Germany
+ *
+ * Copyright (C) 2013-2018 jointly by the following organizations:
  * 1. California Institute of Technology, Pasadena, CA, USA
  * 2. EMBL European Bioinformatics Institute (EMBL-EBI), Hinxton, UK
  * 3. University of Heidelberg, Heidelberg, Germany
@@ -30,7 +34,7 @@
  * available online as http://sbml.org/software/libsbml/license.html
  * ------------------------------------------------------------------------ -->
  *
- * @class 
+ * @class CaBase
  * @sbmlbrief{} TODO:Definition of the CaBase class.
  */
 
@@ -41,6 +45,7 @@
 
 #include <omex/common/extern.h>
 #include <omex/common/libcombine-namespace.h>
+#include <sbml/common/libsbml-namespace.h>
 #include <omex/common/combinefwd.h>
 #include <omex/CaTypeCodes.h>
 #include <omex/CaNamespaces.h>
@@ -58,6 +63,7 @@
 #include <algorithm>
 
 #include <omex/CaErrorLog.h>
+#include <omex/CaVisitor.h>
 
 LIBSBML_CPP_NAMESPACE_BEGIN
 
@@ -75,7 +81,6 @@ LIBSBML_CPP_NAMESPACE_END
 
 LIBCOMBINE_CPP_NAMESPACE_BEGIN
 
-class CaVisitor;
 class CaOmexManifest;
 
 
@@ -239,7 +244,7 @@ public:
    * @see unsetNotes()
    * @see SyntaxChecker::hasExpectedXHTMLSyntax(@if java XMLNode@endif)
    */
-  XMLNode* getNotes();
+  LIBSBML_CPP_NAMESPACE_QUALIFIER XMLNode* getNotes();
 
 
   /**
@@ -265,7 +270,7 @@ public:
    * @see unsetNotes()
    * @see SyntaxChecker::hasExpectedXHTMLSyntax(@if java XMLNode@endif)
    */
-  const XMLNode* getNotes() const;
+  const LIBSBML_CPP_NAMESPACE_QUALIFIER XMLNode* getNotes() const;
 
 
   /**
@@ -336,7 +341,7 @@ public:
    * @see appendAnnotation(const std::string& annotation)
    * @see unsetAnnotation()
    */
-  XMLNode* getAnnotation ();
+  LIBSBML_CPP_NAMESPACE_QUALIFIER XMLNode* getAnnotation ();
 
 
   /**
@@ -359,7 +364,7 @@ public:
    * @see appendAnnotation(const std::string& annotation)
    * @see unsetAnnotation()
    */
-  const XMLNode* getAnnotation () const;
+  const LIBSBML_CPP_NAMESPACE_QUALIFIER XMLNode* getAnnotation () const;
 
 
   /**
@@ -416,7 +421,7 @@ public:
    * @see getLevel()
    * @see getVersion()
    */
-  virtual const XMLNamespaces* getNamespaces() const ;
+  virtual const LIBSBML_CPP_NAMESPACE_QUALIFIER XMLNamespaces* getNamespaces() const ;
 
 
   /**
@@ -433,7 +438,7 @@ public:
    * @see getLevel()
    * @see getVersion()
    */
-  virtual XMLNamespaces* getNamespaces();
+  virtual LIBSBML_CPP_NAMESPACE_QUALIFIER XMLNamespaces* getNamespaces();
 
 
   /**
@@ -739,6 +744,14 @@ public:
 
 
   /**
+   * Sets the value of the "id" attribute of this OMEX object.
+   *
+   * @copydetails doc_set_id
+   */
+  virtual int setId(const std::string& sid);
+
+
+  /**
    * Sets the value of the "annotation" subelement of this OMEX object.
    *
    * The content of @p annotation is copied, and any previous content of
@@ -781,7 +794,7 @@ public:
    * @see appendAnnotation(const std::string& annotation)
    * @see unsetAnnotation()
    */
-  virtual int setAnnotation (XMLNode* annotation);
+  virtual int setAnnotation (LIBSBML_CPP_NAMESPACE_QUALIFIER XMLNode* annotation);
 
 
   /**
@@ -869,7 +882,7 @@ public:
    * @see appendAnnotation(const std::string& annotation)
    * @see unsetAnnotation()
    */
-  virtual int appendAnnotation (const XMLNode* annotation);
+  virtual int appendAnnotation (const LIBSBML_CPP_NAMESPACE_QUALIFIER XMLNode* annotation);
 
 
   /**
@@ -970,7 +983,7 @@ public:
    * @see removeTopLevelAnnotationElement(const std::string elementName, const std::string elementURI)
    * @see replaceTopLevelAnnotationElement(const std::string&)
    */
-  int replaceTopLevelAnnotationElement(const XMLNode* annotation);
+  int replaceTopLevelAnnotationElement(const LIBSBML_CPP_NAMESPACE_QUALIFIER XMLNode* annotation);
 
 
   /**
@@ -1044,7 +1057,7 @@ public:
    * @see unsetNotes()
    * @see SyntaxChecker::hasExpectedXHTMLSyntax(@if java XMLNode@endif)
    */
-  int setNotes(const XMLNode* notes);
+  int setNotes(const LIBSBML_CPP_NAMESPACE_QUALIFIER XMLNode* notes);
 
 
   /**
@@ -1141,7 +1154,7 @@ public:
    * @see unsetNotes()
    * @see SyntaxChecker::hasExpectedXHTMLSyntax(@if java XMLNode@endif)
    */
-  int appendNotes(const XMLNode* notes);
+  int appendNotes(const LIBSBML_CPP_NAMESPACE_QUALIFIER XMLNode* notes);
 
 
   /**
@@ -1252,7 +1265,7 @@ public:
    * @copydetails doc_returns_success_code
    * @li @omexconstant{LIBCOMBINE_OPERATION_SUCCESS, OperationReturnValues_t}
    */
-  int setNamespaces(XMLNamespaces* xmlns);
+  int setNamespaces(LIBSBML_CPP_NAMESPACE_QUALIFIER XMLNamespaces* xmlns);
 
 
   /**
@@ -1260,6 +1273,14 @@ public:
    *
    */
   int unsetMetaId ();
+
+
+  /**
+   * Unsets the value of the "id" attribute of this OMEX object.
+   *
+   * @copydetails doc_unset_id
+   */
+  virtual int unsetId ();
 
 
   /**
@@ -1414,12 +1435,136 @@ public:
 
   // ------------------------------------------------------------------
 
+  #ifndef SWIG
+   /** @cond doxygenLibomexInternal */
+
+
+   virtual int getAttribute(const std::string& attributeName, double& value) const;
+
+  /** @endcond */
+
+  /** @cond doxygenLibomexInternal */
+
+   virtual int getAttribute(const std::string& attributeName, bool& value) const;
+
+  /** @endcond */
+
+  /** @cond doxygenLibomexInternal */
+
+   virtual int getAttribute(const std::string& attributeName, int& value) const;
+
+  /** @endcond */
+
+  /** @cond doxygenLibomexInternal */
+
+   virtual int getAttribute(const std::string& attributeName, unsigned int& value) const;
+
+  /** @endcond */
+
+  /** @cond doxygenLibomexInternal */
+
+   virtual int getAttribute(const std::string& attributeName, std::string& value) const;
+
+  /** @endcond */
+
+//   virtual int getAttribute(const std::string& attributeName, const char * value) const;
+
+
+   virtual bool isSetAttribute(const std::string& attributeName) const;
+
+  /** @endcond */
+
+  /** @cond doxygenLibomexInternal */
+
+   virtual int setAttribute(const std::string& attributeName, double value);
+
+  /** @endcond */
+
+  /** @cond doxygenLibomexInternal */
+
+   virtual int setAttribute(const std::string& attributeName, bool value);
+
+  /** @endcond */
+
+  /** @cond doxygenLibomexInternal */
+
+   virtual int setAttribute(const std::string& attributeName, int value);
+
+  /** @endcond */
+
+  /** @cond doxygenLibomexInternal */
+
+   virtual int setAttribute(const std::string& attributeName, unsigned int value);
+
+  /** @endcond */
+
+  /** @cond doxygenLibomexInternal */
+
+   virtual int setAttribute(const std::string& attributeName, const std::string& value);
+
+  /** @endcond */
+
+  /** @cond doxygenLibomexInternal */
+
+//   virtual int setAttribute(const std::string& attributeName, const char* value);
+
+  /** @endcond */
+
+  /** @cond doxygenLibomexInternal */
+
+   virtual int unsetAttribute(const std::string& attributeName);
+
+  /** @endcond */
+
+  /** @cond doxygenLibomexInternal */
+
+   virtual CaBase* createChildObject(const std::string& elementName);
+
+  /** @endcond */
+
+  /** @cond doxygenLibomexInternal */
+
+   virtual int addChildObject(const std::string& elementName, const CaBase* element);
+
+   /** @endcond */
+
+   /** @cond doxygenLibomexInternal */
+
+   virtual CaBase* removeChildObject(const std::string& elementName, const std::string& id);
+
+   /** @endcond */
+
+   /** @cond doxygenLibomexInternal */
+
+   virtual unsigned int getNumObjects(const std::string& objectName);
+
+  /** @endcond */
+
+  /** @cond doxygenLibomexInternal */
+
+   virtual CaBase* getObject(const std::string& objectName, unsigned int index);
+
+  /** @endcond */
+
+  /** @cond doxygenLibomexInternal */
+
+  template<typename T> T getAttribute(const std::string& attributeName)
+  {
+    T result;
+    getAttribute(attributeName, result);
+    return result;
+  }
+  /** @endcond */
+
+#endif /* SWIG */
+
+
 
   /** @cond doxygenLibomexInternal */
   /**
    * Reads (initializes) this OMEX object by reading from XMLInputStream.
    */
-  void read (XMLInputStream& stream);
+  void read (LIBSBML_CPP_NAMESPACE_QUALIFIER XMLInputStream& stream);
   /** @endcond */
 
 
@@ -1427,7 +1572,7 @@ public:
   /**
    * Writes (serializes) this OMEX object by writing it to XMLOutputStream.
    */
-  virtual void write (XMLOutputStream& stream) const;
+  virtual void write (LIBSBML_CPP_NAMESPACE_QUALIFIER XMLOutputStream& stream) const;
   /** @endcond */
 
 
@@ -1443,7 +1588,7 @@ public:
    *   ...
    * </pre>@endif@~
    */
-  virtual void writeElements (XMLOutputStream& stream) const;
+  virtual void writeElements (LIBSBML_CPP_NAMESPACE_QUALIFIER XMLOutputStream& stream) const;
   /** @endcond */
 
 
@@ -1661,7 +1806,7 @@ protected:
    * @return the OMEX object corresponding to next XMLToken in the
    * XMLInputStream or @c NULL if the token was not recognized.
    */
-  virtual CaBase* createObject (XMLInputStream& stream);
+  virtual CaBase* createObject (LIBSBML_CPP_NAMESPACE_QUALIFIER XMLInputStream& stream);
 
 
   /**
@@ -1678,7 +1823,7 @@ protected:
    * @return @c true if the level, version and namespace values of this 
    * OMEX object correspond to a valid set of values, @c false otherwise.
    */
-  bool hasValidLevelVersionNamespaceCombination(int typecode, XMLNamespaces *xmlns);
+  bool hasValidLevelVersionNamespaceCombination(int typecode, LIBSBML_CPP_NAMESPACE_QUALIFIER XMLNamespaces *xmlns);
 
 
   /**
@@ -1687,7 +1832,7 @@ protected:
    *
    * @return true if the subclass read from the stream, false otherwise.
    */
-  virtual bool readOtherXML (XMLInputStream& stream);
+  virtual bool readOtherXML (LIBSBML_CPP_NAMESPACE_QUALIFIER XMLInputStream& stream);
 
 
   /**
@@ -1757,8 +1902,8 @@ protected:
    * XMLAttributes set into their specific fields.  Be sure to call your
    * parents implementation of this method as well.
    */
-  virtual void readAttributes (const XMLAttributes& attributes, 
-                               const ExpectedAttributes& expectedAttributes);
+  virtual void readAttributes (const LIBSBML_CPP_NAMESPACE_QUALIFIER XMLAttributes& attributes, 
+                               const LIBSBML_CPP_NAMESPACE_QUALIFIER ExpectedAttributes& expectedAttributes);
 
 
   /**
@@ -1775,7 +1920,7 @@ protected:
    * Be sure to implement wirteXMLNS() function to write xmlns attributes.
    *
    */
-  virtual void writeAttributes (XMLOutputStream& stream) const;
+  virtual void writeAttributes (LIBSBML_CPP_NAMESPACE_QUALIFIER XMLOutputStream& stream) const;
 
 
   /**
@@ -1784,7 +1929,7 @@ protected:
    * (if any) to the XMLOutputStream. 
    *
    */
-  virtual void writeXMLNS (XMLOutputStream& stream) const;
+  virtual void writeXMLNS (LIBSBML_CPP_NAMESPACE_QUALIFIER XMLOutputStream& stream) const;
 
 
   /**
@@ -1798,7 +1943,7 @@ protected:
    * Checks that the given default namespace in the given element is valid.
    * If the given default namespace is not valid, an error is logged.
    */
-  void checkDefaultNamespace(const XMLNamespaces* xmlns, 
+  void checkDefaultNamespace(const LIBSBML_CPP_NAMESPACE_QUALIFIER XMLNamespaces* xmlns, 
     const std::string& elementName, const std::string& prefix = "");
 
   /**
@@ -1813,13 +1958,13 @@ protected:
    * If the xhtml does not conform to the specification of valid xhtml within
    * an omex document, an error is logged.
    */
-  void checkXHTML(const XMLNode *);
+  void checkXHTML(const LIBSBML_CPP_NAMESPACE_QUALIFIER XMLNode *);
 
 
   /**
    * Checks that the math ml ns has been declared
    */
-  const std::string checkMathMLNamespace(const XMLToken elem);
+  const std::string checkMathMLNamespace(const LIBSBML_CPP_NAMESPACE_QUALIFIER XMLToken elem);
 
    /**
    * Sets the XML namespace to which this element belongs to.
@@ -1872,8 +2017,9 @@ protected:
 
 
   std::string     mMetaId;
-  XMLNode*        mNotes;
-  XMLNode*        mAnnotation;
+  std::string     mId;
+  LIBSBML_CPP_NAMESPACE_QUALIFIER XMLNode*        mNotes;
+  LIBSBML_CPP_NAMESPACE_QUALIFIER XMLNode*        mAnnotation;
   CaOmexManifest*   mCa;
   CaNamespaces* mCaNamespaces;
   void*           mUserData;
@@ -1914,7 +2060,7 @@ private:
    * Stores the location (line and column) and any XML namespaces (for
    * roundtripping) declared on this OMEX (XML) element.
    */
-  void setCaBaseFields (const XMLToken& element);
+  void setCaBaseFields (const LIBSBML_CPP_NAMESPACE_QUALIFIER XMLToken& element);
 
 
   /**
@@ -1922,7 +2068,7 @@ private:
    *
    * @return true if read an <annotation> element from the stream
    */
-  bool readAnnotation (XMLInputStream& stream);
+  bool readAnnotation (LIBSBML_CPP_NAMESPACE_QUALIFIER XMLInputStream& stream);
 
 
   /**
@@ -1930,7 +2076,7 @@ private:
    *
    * @return true if read a <notes> element from the stream
    */
-  bool readNotes (XMLInputStream& stream);
+  bool readNotes (LIBSBML_CPP_NAMESPACE_QUALIFIER XMLInputStream& stream);
 
 
   /** @endcond */

@@ -7,7 +7,11 @@
  * This file is part of libSBML. Please visit http://sbml.org for more
  * information about SBML, and the latest version of libSBML.
  *
- * Copyright (C) 2013-2016 jointly by the following organizations:
+ * Copyright (C) 2019 jointly by the following organizations:
+ * 1. California Institute of Technology, Pasadena, CA, USA
+ * 2. University of Heidelberg, Heidelberg, Germany
+ *
+ * Copyright (C) 2013-2018 jointly by the following organizations:
  * 1. California Institute of Technology, Pasadena, CA, USA
  * 2. EMBL European Bioinformatics Institute (EMBL-EBI), Hinxton, UK
  * 3. University of Heidelberg, Heidelberg, Germany
@@ -201,6 +205,9 @@ SWIGCSHARP_IMTYPE_WSTRING(const char*)
     case (int) libcombine.LIB_COMBINE_CONTENT:
       return new CaContent(cPtr, owner);
 
+    case (int) libcombine.OMEX_COMBINE_CROSSREF:
+      return new CaCrossRef(cPtr, owner);
+
     case (int) libcombine.OMEX_LIST_OF:
       String name = sb.getElementName();
       if(name == "listOf")
@@ -210,6 +217,10 @@ SWIGCSHARP_IMTYPE_WSTRING(const char*)
       else if (name == "listOfContents")
       {
          return new CaListOfContents(cPtr, owner);
+      }
+      else if (name == "listOfCrossRefs")
+      {
+         return new CaListOfCrossRefs(cPtr, owner);
       }
       
       return new CaListOf(cPtr, owner);        
@@ -551,7 +562,9 @@ COVARIANT_RTYPE_CLONE(CaConstructorException)
 COVARIANT_RTYPE_CLONE(CaNamespaces)
 COVARIANT_RTYPE_CLONE(CaContent)
 COVARIANT_RTYPE_CLONE(CaOmexManifest)
+COVARIANT_RTYPE_CLONE(CaCrossRef)
 COVARIANT_RTYPE_CLONE(CaListOfContents)
+COVARIANT_RTYPE_CLONE(CaListOfCrossRefs)
 
 /**
 *
@@ -601,6 +614,7 @@ COVARIANT_RTYPE_LISTOF_GET_REMOVE(Unit)
 %csmethodmodifiers ListOfLocalParameters::remove(unsigned int n)  "public new"
 
 COVARIANT_RTYPE_LISTOF_GET_REMOVE(CaListOfContents)
+COVARIANT_RTYPE_LISTOF_GET_REMOVE(CaListOfCrossRefs)
 
 %define COVARIANT_GETID(_CNAME_)
 %typemap(cstype) string   _CNAME_ ## ::getId  "_CNAME_"
@@ -733,7 +747,9 @@ COVARIANT_RTYPE_LISTOF_GET_REMOVE(CaListOfContents)
 
 SEDMLCONSTRUCTOR_EXCEPTION(CaContent)
 SEDMLCONSTRUCTOR_EXCEPTION(CaOmexManifest)
+SEDMLCONSTRUCTOR_EXCEPTION(CaCrossRef)
 SEDMLCONSTRUCTOR_EXCEPTION(CaListOfContents)
+SEDMLCONSTRUCTOR_EXCEPTION(CaListOfCrossRefs)
 
 %define XMLCONSTRUCTOR_EXCEPTION(SBASE_CLASS_NAME)
 %exception SBASE_CLASS_NAME

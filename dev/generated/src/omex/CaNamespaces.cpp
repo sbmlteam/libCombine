@@ -7,7 +7,11 @@
  * This file is part of libSBML. Please visit http://sbml.org for more
  * information about SBML, and the latest version of libSBML.
  *
- * Copyright (C) 2013-2016 jointly by the following organizations:
+ * Copyright (C) 2019 jointly by the following organizations:
+ * 1. California Institute of Technology, Pasadena, CA, USA
+ * 2. University of Heidelberg, Heidelberg, Germany
+ *
+ * Copyright (C) 2013-2018 jointly by the following organizations:
  * 1. California Institute of Technology, Pasadena, CA, USA
  * 2. EMBL European Bioinformatics Institute (EMBL-EBI), Hinxton, UK
  * 3. University of Heidelberg, Heidelberg, Germany
@@ -56,11 +60,11 @@ CaNamespaces::initCaNamespace()
 
   switch (mLevel)
   {
-  case 1:
+  case 0:
   default:
     switch (mVersion)
     {
-    case 1:
+    case 0:
     default:
       mNamespaces->add(OMEX_XMLNS_L1V1);
       break;
@@ -112,7 +116,7 @@ const List *
 CaNamespaces::getSupportedNamespaces()
 {
   List *result = new List();
-  result->add(new CaNamespaces(1,1));
+  result->add(new CaNamespaces(0,0));
   return result;
 }
 
@@ -168,11 +172,11 @@ CaNamespaces::getCaNamespaceURI(unsigned int level,
   std::string uri = "";
   switch (level)
   {
-  case 1:
+  case 0:
   default:
     switch (version)
     {
-    case 1:
+    case 0:
     default:
       uri = OMEX_XMLNS_L1V1;
       break;
@@ -330,10 +334,10 @@ CaNamespaces::isValidCombination()
 
   switch (getLevel())
   {
-    case 1:
+    case 0:
      switch (version)
       {
-        case 1:
+        case 0:
           // the namespaces contains the omex namespaces
           // check it is the correct ns for the level/version
           if (omexDeclared)

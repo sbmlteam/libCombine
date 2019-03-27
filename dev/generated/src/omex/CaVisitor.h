@@ -7,7 +7,11 @@
  * This file is part of libSBML. Please visit http://sbml.org for more
  * information about SBML, and the latest version of libSBML.
  *
- * Copyright (C) 2013-2016 jointly by the following organizations:
+ * Copyright (C) 2019 jointly by the following organizations:
+ * 1. California Institute of Technology, Pasadena, CA, USA
+ * 2. University of Heidelberg, Heidelberg, Germany
+ *
+ * Copyright (C) 2013-2018 jointly by the following organizations:
  * 1. California Institute of Technology, Pasadena, CA, USA
  * 2. EMBL European Bioinformatics Institute (EMBL-EBI), Hinxton, UK
  * 3. University of Heidelberg, Heidelberg, Germany
@@ -30,7 +34,7 @@
  * available online as http://sbml.org/software/libsbml/license.html
  * ------------------------------------------------------------------------ -->
  *
- * @class 
+ * @class CaVisitor
  * @sbmlbrief{} TODO:Definition of the CaVisitor class.
  */
 
@@ -59,6 +63,7 @@ class CaListOf;
 
 class CaContent;
 class CaOmexManifest;
+class CaCrossRef;
 
 
 class CaVisitor
@@ -113,6 +118,16 @@ public:
 virtual bool visit (const CaContent &x);
 
 
+/**
+ * Interface method for using the <a target="_blank"
+ * href="http://en.wikipedia.org/wiki/Design_pattern_(computer_science)"><i>Visitor
+ * Pattern</i></a> to perform operations on CaBase objects.
+ *
+ * @param x the CaBase object to visit.
+ */
+virtual bool visit (const CaCrossRef &x);
+
+
   /**
    * Interface method for using the <a target="_blank" 
    * href="http://en.wikipedia.org/wiki/Design_pattern_(computer_science)"><i>Visitor
@@ -154,6 +169,16 @@ virtual bool visit (const CaContent &x);
  * @param x the CaBase object to leave.
  */
 virtual void leave (const CaContent &x);
+
+
+/**
+ * Interface method for using the <a target="_blank"
+ * href="http://en.wikipedia.org/wiki/Design_pattern_(computer_science)"><i>Visitor
+ * Pattern</i></a> to perform operations on CaBase objects.
+ *
+ * @param x the CaBase object to leave.
+ */
+virtual void leave (const CaCrossRef &x);
 };
 
 LIBCOMBINE_CPP_NAMESPACE_END

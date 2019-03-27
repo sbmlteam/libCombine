@@ -7,7 +7,11 @@
  * This file is part of libSBML. Please visit http://sbml.org for more
  * information about SBML, and the latest version of libSBML.
  *
- * Copyright (C) 2013-2016 jointly by the following organizations:
+ * Copyright (C) 2019 jointly by the following organizations:
+ * 1. California Institute of Technology, Pasadena, CA, USA
+ * 2. University of Heidelberg, Heidelberg, Germany
+ *
+ * Copyright (C) 2013-2018 jointly by the following organizations:
  * 1. California Institute of Technology, Pasadena, CA, USA
  * 2. EMBL European Bioinformatics Institute (EMBL-EBI), Hinxton, UK
  * 3. University of Heidelberg, Heidelberg, Germany
@@ -36,6 +40,8 @@
 #define combinefwd_H__
 
 
+#include <omex/common/libcombine-namespace.h>
+
 /**
  * Forward declaration of all opaque C types.
  *
@@ -57,6 +63,7 @@ LIBCOMBINE_CPP_NAMESPACE_BEGIN
 
 typedef CLASS_OR_STRUCT CaContent      CaContent_t;
 typedef CLASS_OR_STRUCT CaOmexManifest CaOmexManifest_t;
+typedef CLASS_OR_STRUCT CaCrossRef     CaCrossRef_t;
 typedef CLASS_OR_STRUCT CaBase         CaBase_t;
 typedef CLASS_OR_STRUCT CaListOf       CaListOf_t;
 typedef CLASS_OR_STRUCT CaReader       CaReader_t;
@@ -67,6 +74,25 @@ typedef CLASS_OR_STRUCT CaError        CaError_t;
 
 LIBCOMBINE_CPP_NAMESPACE_END
 
+
+
+#include <sbml/common/libsbml-namespace.h>
+
+LIBSBML_CPP_NAMESPACE_BEGIN
+
+/**
+ * @var typedef class ASTNode ASTNode_t
+ * @copydoc ASTNode
+ */
+typedef CLASS_OR_STRUCT ASTNode ASTNode_t;
+
+/**
+ * @var typedef class XMLNode XMLNode_t
+ * @copydoc XMLNode
+ */
+typedef CLASS_OR_STRUCT XMLNode XMLNode_t;
+
+LIBSBML_CPP_NAMESPACE_END
 
 #undef CLASS_OR_STRUCT
 

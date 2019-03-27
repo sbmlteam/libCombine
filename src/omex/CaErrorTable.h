@@ -7,7 +7,11 @@
  * This file is part of libSBML. Please visit http://sbml.org for more
  * information about SBML, and the latest version of libSBML.
  *
- * Copyright (C) 2013-2016 jointly by the following organizations:
+ * Copyright (C) 2019 jointly by the following organizations:
+ * 1. California Institute of Technology, Pasadena, CA, USA
+ * 2. University of Heidelberg, Heidelberg, Germany
+ *
+ * Copyright (C) 2013-2018 jointly by the following organizations:
  * 1. California Institute of Technology, Pasadena, CA, USA
  * 2. EMBL European Bioinformatics Institute (EMBL-EBI), Hinxton, UK
  * 3. University of Heidelberg, Heidelberg, Germany
@@ -59,7 +63,7 @@ typedef struct {
 static const omexErrorTableEntry omexErrorTable[] =
 {
   // 10000
-  { CaUnknownError, 
+  { CaUnknown,
     "Encountered unknown internal libCombine error",
     LIBCOMBINE_CAT_INTERNAL, 
     LIBCOMBINE_SEV_FATAL,
@@ -325,7 +329,7 @@ static const omexErrorTableEntry omexErrorTable[] =
   },
 
   // 20201
-  { CombineCaContentAllowedCoreAttributes,
+  { CombineContentAllowedCoreAttributes,
     "Core attributes allowed on <content>.",
     LIBCOMBINE_CAT_GENERAL_CONSISTENCY,
     LIBCOMBINE_SEV_ERROR,
@@ -337,7 +341,7 @@ static const omexErrorTableEntry omexErrorTable[] =
   },
 
   // 20202
-  { CombineCaContentAllowedCoreElements,
+  { CombineContentAllowedCoreElements,
     "Core elements allowed on <content>.",
     LIBCOMBINE_CAT_GENERAL_CONSISTENCY,
     LIBCOMBINE_SEV_ERROR,
@@ -349,7 +353,7 @@ static const omexErrorTableEntry omexErrorTable[] =
   },
 
   // 20203
-  { CombineCaContentAllowedAttributes,
+  { CombineContentAllowedAttributes,
     "Attributes allowed on <content>.",
     LIBCOMBINE_CAT_GENERAL_CONSISTENCY,
     LIBCOMBINE_SEV_ERROR,
@@ -362,8 +366,20 @@ static const omexErrorTableEntry omexErrorTable[] =
   },
 
   // 20204
-  { CombineCaContentLocationMustBeString,
-    "Location attribute must be String.",
+  { CombineContentAllowedElements,
+    "Elements allowed on <content>.",
+    LIBCOMBINE_CAT_GENERAL_CONSISTENCY,
+    LIBCOMBINE_SEV_ERROR,
+    "A <content> object may contain one and only one instance of the "
+    "<listOfCrossRefs> element. No other elements from the SBML Level 3 Combine "
+    "Archive namespaces are permitted on a <content> object. ",
+    { "L3V1 Combine V1 Section"
+    }
+  },
+
+  // 20205
+  { CombineContentLocationMustBeString,
+    "The 'location' attribute must be String.",
     LIBCOMBINE_CAT_GENERAL_CONSISTENCY,
     LIBCOMBINE_SEV_ERROR,
     "The attribute 'combine:location' on a <content> must have a value of data "
@@ -372,9 +388,9 @@ static const omexErrorTableEntry omexErrorTable[] =
     }
   },
 
-  // 20205
-  { CombineCaContentFormatMustBeString,
-    "Format attribute must be String.",
+  // 20206
+  { CombineContentFormatMustBeString,
+    "The 'format' attribute must be String.",
     LIBCOMBINE_CAT_GENERAL_CONSISTENCY,
     LIBCOMBINE_SEV_ERROR,
     "The attribute 'combine:format' on a <content> must have a value of data "
@@ -383,9 +399,9 @@ static const omexErrorTableEntry omexErrorTable[] =
     }
   },
 
-  // 20206
-  { CombineCaContentMasterMustBeBoolean,
-    "Master attribute must be Boolean.",
+  // 20207
+  { CombineContentMasterMustBeBoolean,
+    "The 'master' attribute must be Boolean.",
     LIBCOMBINE_CAT_GENERAL_CONSISTENCY,
     LIBCOMBINE_SEV_ERROR,
     "The attribute 'combine:master' on a <content> must have a value of data "
@@ -395,7 +411,7 @@ static const omexErrorTableEntry omexErrorTable[] =
   },
 
   // 20301
-  { CombineCaOmexManifestAllowedCoreAttributes,
+  { CombineOmexManifestAllowedCoreAttributes,
     "Core attributes allowed on <omexManifest>.",
     LIBCOMBINE_CAT_GENERAL_CONSISTENCY,
     LIBCOMBINE_SEV_ERROR,
@@ -407,7 +423,7 @@ static const omexErrorTableEntry omexErrorTable[] =
   },
 
   // 20302
-  { CombineCaOmexManifestAllowedCoreElements,
+  { CombineOmexManifestAllowedCoreElements,
     "Core elements allowed on <omexManifest>.",
     LIBCOMBINE_CAT_GENERAL_CONSISTENCY,
     LIBCOMBINE_SEV_ERROR,
@@ -419,7 +435,7 @@ static const omexErrorTableEntry omexErrorTable[] =
   },
 
   // 20303
-  { CombineCaOmexManifestAllowedElements,
+  { CombineOmexManifestAllowedElements,
     "Elements allowed on <omexManifest>.",
     LIBCOMBINE_CAT_GENERAL_CONSISTENCY,
     LIBCOMBINE_SEV_ERROR,
@@ -430,26 +446,49 @@ static const omexErrorTableEntry omexErrorTable[] =
     }
   },
 
-  // 20304
-  { CombineCaOmexManifestLOContentsAllowedCoreElements,
-    "Core elements allowed on <listOfContents>.",
+  // 20401
+  { CombineCrossRefAllowedCoreAttributes,
+    "Core attributes allowed on <crossRef>.",
     LIBCOMBINE_CAT_GENERAL_CONSISTENCY,
     LIBCOMBINE_SEV_ERROR,
-    "Apart from the general notes and annotations subobjects permitted on all "
-    "SBML objects, a <listOfContents> container object may only contain "
-    "<content> objects.",
+    "A <crossRef> object may have the optional SBML Level 3 Core attributes "
+    "'metaid' and 'sboTerm'. No other attributes from the SBML Level 3 Core "
+    "namespaces are permitted on a <crossRef>.",
     { "L3V1 Combine V1 Section"
     }
   },
 
-  // 20305
-  { CombineCaOmexManifestLOContentsAllowedCoreAttributes,
-    "Core attributes allowed on <listOfContents>.",
+  // 20402
+  { CombineCrossRefAllowedCoreElements,
+    "Core elements allowed on <crossRef>.",
     LIBCOMBINE_CAT_GENERAL_CONSISTENCY,
     LIBCOMBINE_SEV_ERROR,
-    "A <listOfContents> object may have the optional SBML Level 3 Core "
-    "attributes 'metaid' and 'sboTerm'. No other attributes from the SBML Level "
-    "3 Core namespaces are permitted on a <listOfContents> object.",
+    "A <crossRef> object may have the optional SBML Level 3 Core subobjects for "
+    "notes and annotations. No other elements from the SBML Level 3 Core "
+    "namespaces are permitted on a <crossRef>.",
+    { "L3V1 Combine V1 Section"
+    }
+  },
+
+  // 20403
+  { CombineCrossRefAllowedAttributes,
+    "Attributes allowed on <crossRef>.",
+    LIBCOMBINE_CAT_GENERAL_CONSISTENCY,
+    LIBCOMBINE_SEV_ERROR,
+    "A <crossRef> object may have the optional attribute 'combine:location'. No "
+    "other attributes from the SBML Level 3 Combine Archive namespaces are "
+    "permitted on a <crossRef> object. ",
+    { "L3V1 Combine V1 Section"
+    }
+  },
+
+  // 20404
+  { CombineCrossRefLocationMustBeString,
+    "The 'location' attribute must be String.",
+    LIBCOMBINE_CAT_GENERAL_CONSISTENCY,
+    LIBCOMBINE_SEV_ERROR,
+    "The attribute 'combine:location' on a <crossRef> must have a value of data "
+    "type 'string'.",
     { "L3V1 Combine V1 Section"
     }
   },

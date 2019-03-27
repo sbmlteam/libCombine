@@ -368,7 +368,9 @@ typedef std::vector<CaError> CaErrorStdVector;
 %include <omex/CaNamespaces.h>
 
 %include <omex/CaContent.h>
+%include <omex/CaCrossRef.h>
 %include <omex/CaListOfContents.h>
+%include <omex/CaListOfCrossRefs.h>
 %include <omex/CaOmexManifest.h>
 
 %template(StringVector) std::vector<std::string>;
