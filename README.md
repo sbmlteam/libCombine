@@ -53,7 +53,7 @@ We have some examples using the library in the [examples folder](./examples) tha
 This project is open source and freely available under the [Simplified BSD](http://opensource.org/licenses/BSD-2-Clause) license. Should that license not meet your needs, please contact me. 
 
 
-  Copyright (c) 2016, Sarah M. Keating & Frank T. Bergmann 
+  Copyright (c) 2016-2019, Sarah M. Keating & Frank T. Bergmann 
   All rights reserved.
   
   Redistribution and use in source and binary forms, with or without
