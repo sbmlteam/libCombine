@@ -1,0 +1,43 @@
+@echo off
+SET BASE_DIR=%~dp0
+SET OLD_INCLUDE=%INCLUDE%
+SET OLD_PREINIT=%__VSCMD_PREINIT_PATH%
+SET OLD_PATH=%PATH%
+SET OLD_LIBPATH=%LIBPATH%
+SET OLD_LIB=%LIB%
+
+pushd %BASE_DIR%
+
+
+:: extract archive
+cmake -P extract_archive.cmake
+
+
+call compile_copasi.bat
+
+SET INCLUDE=%OLD_INCLUDE%
+SET __VSCMD_PREINIT_PATH=%OLD_PREINIT%
+SET PATH=%OLD_PATH%
+SET LIBPATH=%OLD_LIBPATH%
+SET LIB=%OLD_LIB%
+call create_python_source.bat
+
+call vs15
+call build_python_32.bat
+
+SET INCLUDE=%OLD_INCLUDE%
+SET __VSCMD_PREINIT_PATH=%OLD_PREINIT%
+SET PATH=%OLD_PATH%
+SET LIBPATH=%OLD_LIBPATH%
+SET LIB=%OLD_LIB%
+call vs15 x64
+call build_python_64.bat
+
+call test_python.bat > last_result.txt
+type  last_result.txt
+
+SET INCLUDE=%OLD_INCLUDE%
+SET __VSCMD_PREINIT_PATH=%OLD_PREINIT%
+SET PATH=%OLD_PATH%
+SET LIBPATH=%OLD_LIBPATH%
+SET LIB=%OLD_LIB%

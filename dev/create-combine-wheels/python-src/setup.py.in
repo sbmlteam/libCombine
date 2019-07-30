@@ -1,0 +1,146 @@
+## @file    setup.py
+## @brief   Python distutils code for libCombine Python module (including dependencies)
+## @author  Michael Hucka
+## @author  Ben Bornstein
+## @author  Ben Kovitz
+## @author  Frank Bergmann (fbergman@caltech.edu)
+## 
+##<!---------------------------------------------------------------------------
+
+import glob
+import os
+import sys
+import shutil
+import platform
+from distutils.sysconfig import get_config_vars
+
+current_dir = os.path.dirname(os.path.realpath(__file__))
+
+# remove -Wstrict-prototypes
+(opt,) = get_config_vars('OPT')
+if opt != None:
+  os.environ['OPT'] = " ".join(
+      flag for flag in opt.split() if flag != '-Wstrict-prototypes'
+  )
+
+# we need to switch the __init__.py file based on the python version
+# as python 3 uses a different syntax for metaclasses
+if sys.version_info >= (3,0):
+  # this is python 3.x
+  if (os.path.exists(current_dir + '/libcombine/__init__.py')):
+    os.remove(current_dir + '/libcombine/__init__.py')
+  shutil.copyfile(current_dir + '/script/libcombine.py', current_dir + '/libcombine/__init__.py')
+else:
+  # this is an older python
+  if (os.path.exists(current_dir + '/libcombine/__init__.py')):
+    os.remove(current_dir + '/libcombine/__init__.py')
+  shutil.copyfile(current_dir + '/script/libcombine.py', current_dir + '/libcombine/__init__.py')
+
+# prepend the import statement that seems to be needed now 
+with open(current_dir + '/libcombine/__init__.py', 'r') as original: data = original.read()
+with open(current_dir + '/libcombine/__init__.py', 'w') as modified: modified.write("""
+
+# import statement needed on some systems
+import sys
+import os.path
+sys.path.append(os.path.dirname(__file__))
+
+""" + data)
+  
+# figure out the os
+#basepath = current_dir + '/base/'
+basepath = './src/'
+current_os = 'LINUX'
+package_name = '"libcombine"'
+inc_dirs = ['swig']
+lib_dirs = []
+libs = []
+definitions = []
+packages = [
+  ('LIBSBML_USE_LEGACY_MATH', None)
+]
+if platform.system() == 'Darwin': 
+  current_os = 'DARWIN'
+elif platform.system() == 'Windows':
+  current_os = 'WIN32'
+  package_name = '\\"libcombine\\"'
+  definitions = [
+    ('LIBSEDML_EXPORTS', None),
+    ('libcombine_STATIC', None),
+    ('LIBSBML_STATIC', None),
+    ('LIBSEDML_STATIC', None),
+    ('LIBLAX_STATIC', None)
+  ]
+
+definitions = definitions  + [
+#  ('BZIP2_STATIC', None),
+  ('HAVE_MEMMOVE', None),
+  ('_LIB', None)
+  ]
+  
+  
+cfiles = [ basepath + 'libcombine_wrap.cpp' ]
+
+# add dependencies
+cfiles = cfiles + glob.glob(basepath + "*.c");
+
+
+exclude = ['miniunz.c', 'minizip.c', 'iowin32.c', 'dirent.c', '']
+
+for subdir in ['sbml', 'combine', 'omex', 'zipper', 'minizip']:
+  for root, dirs, files in os.walk(basepath + subdir):
+    for file in files:
+      if file.endswith('.c') or file.endswith('.cpp')  and not file in exclude:
+        cfiles.append(os.path.join(root, file))
+
+
+
+try:
+  from setuptools import setup, Extension, Command
+except ImportError:
+  from distutils.core import setup, Extension
+try:
+    import distutils.command.bdist_conda
+except:
+    pass
+
+setup(name             = "python-libcombine",
+      version          = "@VERSION@",
+      description      = "LibCombine Python API",
+      long_description = ("LibCombine implements a C++ API library providing support for the Combine Archive.  For more information about SEDML, please see https://github.com/sbmlteam/libcombine."),
+      license          = "BSD",
+      author           = "Frank T. Bergmann",
+      author_email     = "fbergman@caltech.edu",
+      url              = "https://github.com/sbmlteam/libcombine",
+      packages         = ["libcombine"],
+      package_dir      = {'libcombine': 'libcombine'},
+      #data_files       = [('lib/site-packages', ['llibcombine.pth'])],
+      ext_package      = "libcombine",
+      ext_modules      = [Extension("_libcombine", 
+                            sources = cfiles,
+                            define_macros =  definitions +
+                            [ (current_os, None), 
+                              ('USE_EXPAT', None),
+                              ('USE_ZLIB', None)
+                            ] 
+                            + packages,
+                            include_dirs = inc_dirs +
+                            [ 
+                              basepath + "/",
+                              basepath + "/swig",
+                              basepath + "/combine",
+                              basepath + "/combine/omex",
+                              basepath + "/combine/combine",
+                              basepath + "/combine/zipper",
+                              basepath + "/zipper",
+                              basepath + "/sbml", 
+                              basepath + "/sbml/compress", 
+                              basepath + "/sbml/validator/constraints", 
+                              basepath + "/sbml/packages/comp/validator", 
+                              basepath + "/sbml/packages/comp/validator/constraints", 
+                              "."],
+                            libraries = libs,
+                            library_dirs = lib_dirs
+                            )
+                         ]
+)

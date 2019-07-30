@@ -1,0 +1,6 @@
+include *
+include src/*
+include swig/*
+include script/*
+exclude *.bat
+exclude CMakeLists.txt
