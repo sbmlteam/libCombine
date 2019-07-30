@@ -87,8 +87,10 @@ set(CPACK_PACKAGE_VERSION_PATCH "${LIBCOMBINE_VERSION_PATCH}")
 set(CPACK_RPM_PACKAGE_LICENSE "BSD")
 set(CPACK_RPM_PACKAGE_GROUP "Libraries/Development")
 set(CPACK_DEBIAN_PACKAGE_SECTION "Libraries")
+set(CPACK_SOURCE_TGZ "ON")
+set(CPACK_SOURCE_ZIP "ON")
 
-set(CPACK_SOURCE_IGNORE_FILES "${CMAKE_CURRENT_BINARY_DIR};/.svn/;/.libs/;/.deps/;/.bzr/;.*.o$;.*.lo$;.*.la$;/.git/;${CPACK_SOURCE_IGNORE_FILES};/.DS_Store;/.svnignore;blib;libsbml-dist;*.txt.user")
+set(CPACK_SOURCE_IGNORE_FILES "${CMAKE_CURRENT_BINARY_DIR};/.svn/;/.libs/;/.deps/;/.bzr/;/.*.o$/;/.*.lo$/;/.*.la$/;/.git/;${CPACK_SOURCE_IGNORE_FILES};/.DS_Store;/.svnignore;blib;libsbml-dist;/*.txt.user/;/.vs/;/.vscode/")
 
 set(ADDITIONAL_LIB_DIRS)
 if(CMAKE_SIZEOF_VOID_P EQUAL 4)
