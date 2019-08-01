@@ -307,6 +307,7 @@ find_library(ZIPPER_LIBRARY
           ${COMBINE_DEPENDENCY_DIR}/lib
           ${ADDITIONAL_LIB_DIRS}
           $ENV{ZLIBROOT}/lib
+          ${CONAN_LIB_DIRS_ZIPPER}
     DOC "The file name of the ZIPPER library."
 )
 
@@ -317,6 +318,7 @@ find_path(ZIPPER_INCLUDE_DIR
             /usr/include /usr/local/include
             ${COMBINE_DEPENDENCY_DIR}/include
             $ENV{ZLIBROOT}/include
+            ${CONAN_INCLUDE_DIRS_ZIPPER}
             NO_DEFAULT_PATH
       DOC "The directory containing the ZIPPER include files."
             )
@@ -326,6 +328,7 @@ else()
   find_path(ZIPPER_INCLUDE_DIR
       NAMES zipper/zipper.h
       PATHS ${CMAKE_CURRENT_SOURCE_DIR}/src
+            ${CONAN_INCLUDE_DIRS_ZIPPER}
             NO_DEFAULT_PATH
       DOC "The directory containing the ZIPPER include files."
             )
