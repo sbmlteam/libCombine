@@ -4,6 +4,9 @@ doc
 .idea/
 .vs
 .vscode
-build
+build*
+dist
+install*
+python_libcombine.egg-info
 temp_deviser_file.xml
 .DS_Store
