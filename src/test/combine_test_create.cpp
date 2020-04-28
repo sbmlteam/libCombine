@@ -159,3 +159,18 @@ SCENARIO("creating a new combine archive", "[combine]")
     }
   }
 }
+
+SCENARIO("reading an existing archive", "[combine]")
+{
+  GIVEN("a user loads a file with unexpected metadata")
+  {
+    CombineArchive archive;
+    REQUIRE(archive.getManifest() == NULL);
+    REQUIRE(archive.initializeFromArchive(getTestFile("test-data/Smith_2004.omex")) == true);
+    
+    // try and extract the unrecognized data
+    std::string annotation = archive.extractEntryToString("./model/smith_2004.rdf");
+    REQUIRE(annotation.find("semsim:") != std::string::npos);
+    
+  }
+}
