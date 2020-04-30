@@ -37,4 +37,4 @@ jobs:
         - CMAKE_GENERATOR="Visual Studio 15 2017 Win64"
 
 script:
-  - cd libnuml && (python3 src/bindings/python/setup.py build || python src/bindings/python/setup.py build)
+  - python3 src/bindings/python/setup.py build || python src/bindings/python/setup.py build
