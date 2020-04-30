@@ -1,0 +1,40 @@
+ language: python     # this works for Linux but is an error on macOS or Windows
+
+git:
+  depth: 1
+
+branches:
+  only:
+  - master
+
+jobs:
+  include:
+    - name: "Python 3.8.0 on Xenial Linux"
+      python: 3.8           # this works for Linux but is ignored on macOS or Windows
+      before_install:
+        - sudo apt-get -y install swig
+        - pip install -U pip setuptools wheel tox
+        
+    - name: "Python 3.7.4 on macOS"
+      os: osx
+      osx_image: xcode11.2  # Python 3.7.4 running on macOS 10.14.4
+      language: shell       # 'language: python' is an error on Travis CI macOS
+      before_install:
+        - brew install swig
+        - pip install -U pip setuptools wheel tox
+        
+    - name: "Python 3.8.0 on Windows"
+      os: windows           # Windows 10.0.17134 N/A Build 17134
+      language: shell       # 'language: python' is an error on Travis CI Windows
+      before_install:
+        - choco install python --version 3.8.0
+        - choco install -y swig
+        - choco install -y conan
+        - python -m pip install --upgrade pip
+        
+      env: 
+        - PATH=/c/Python38:/c/Python38/Scripts:$PATH
+        - CMAKE_GENERATOR="Visual Studio 15 2017 Win64"
+
+script:
+  - cd libnuml && (python3 src/bindings/python/setup.py build || python src/bindings/python/setup.py build)
