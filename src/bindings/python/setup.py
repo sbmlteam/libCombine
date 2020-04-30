@@ -11,6 +11,7 @@ import sys
 import shutil
 import platform
 from os.path import abspath, exists, join, split
+from sysconfig import get_paths
 
 from setuptools import setup, Extension
 from setuptools.command.build_ext import build_ext
@@ -262,7 +263,8 @@ class CMakeBuild(build_ext):
             '-DWITH_SWIG=ON',
             '-DWITH_ZLIB=ON',
             '-DWITH_PYTHON=ON',
-            '-DPYTHON_EXECUTABLE=' + sys.executable
+            '-DPYTHON_EXECUTABLE=' + sys.executable,
+            '-DPYTHON_INCLUDE_DIR=' + get_paths()['include']
         ]
 
         libcombine_args = prepend_variables(libcombine_args, [
