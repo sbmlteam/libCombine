@@ -52,7 +52,8 @@ CombineArchive::initializeFromDirectory(const std::string &directory)
 
 bool
 CombineArchive::initializeFromArchive(
-    const std::string &archiveFile)
+    const std::string &archiveFile,
+    bool skipOmex /*= false*/)
 {
   cleanUp();
 
@@ -105,6 +106,9 @@ CombineArchive::initializeFromArchive(
     break;
   }
   mMap.erase("manifest.xml");
+
+  // if metadata processing is not requested, skip it
+  if (skipOmex) return true;
 
   // now go through the list again and extract all metadata
   // elements from the content list, leaving only those that
