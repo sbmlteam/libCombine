@@ -16,13 +16,13 @@ from os.path import abspath, exists, join, split
 from setuptools import setup, Extension
 from setuptools.command.build_ext import build_ext
 
-def get_python_include(): 
-  dir = sysconfig.get_paths()['include']
-  if exists(dir):
-    return dir
-  dir = dir.replace('/local', '/')
-  if exists(dir):
-    return dir
+def get_python_include():
+  include_dir = sysconfig.get_paths()['include']
+  if exists(include_dir):
+    return include_dir
+  include_dir = include_dir.replace('/local', '/')
+  if exists(include_dir):
+    return include_dir
   return ''
 
 def prepend_variables(args, variables):
