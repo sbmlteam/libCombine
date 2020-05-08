@@ -10,8 +10,8 @@ import os
 import sys
 import shutil
 import platform
+import sysconfig 
 from os.path import abspath, exists, join, split
-from sysconfig import get_paths
 
 from setuptools import setup, Extension
 from setuptools.command.build_ext import build_ext
@@ -171,6 +171,10 @@ class CMakeBuild(build_ext):
           'CMAKE_GENERATOR'
         ])
 
+        if is_win_32:
+          if not '-G' in str(cmake_args):
+            cmake_args.append('-A')
+            cmake_args.append('win32')
         if is_osx: 
           cmake_args.append('-DCLANG_USE_LIBCPP=ON')
           cmake_args.append('-DCMAKE_OSX_DEPLOYMENT_TARGET=10.9')
@@ -184,8 +188,9 @@ class CMakeBuild(build_ext):
         global DEP_DIR
         if not DEP_DIR and not self.dry_run:
             print("compiling dependencies")
-            dep_build_dir = os.path.join(cwd, 'build_dependencies_' + suffix)
-            dep_inst_dir = os.path.join(cwd, 'install_dependencies_' + suffix)
+            dep_suffix = sysconfig.get_platform()
+            dep_build_dir = os.path.join(cwd, 'build_dependencies_' + dep_suffix)
+            dep_inst_dir = os.path.join(cwd, 'install_dependencies_' + dep_suffix)
             dep_src_dir = DEP_SRC_DIR
             makedirs(dep_build_dir)
             os.chdir(dep_build_dir)
@@ -205,7 +210,7 @@ class CMakeBuild(build_ext):
             
             os.chdir(cwd)
             
-            dep_build_dir = os.path.join(cwd, 'build_libSBML_' + suffix)
+            dep_build_dir = os.path.join(cwd, 'build_libSBML_' + dep_suffix)
             makedirs(dep_build_dir)
             os.chdir(dep_build_dir)
             zlib = get_lib_full_path(os.path.join(dep_inst_dir, 'lib'), 'zlib')
@@ -232,7 +237,7 @@ class CMakeBuild(build_ext):
             
             os.chdir(cwd)
             
-            dep_build_dir = os.path.join(cwd, 'build_zipper_' + suffix)
+            dep_build_dir = os.path.join(cwd, 'build_zipper_' + dep_suffix)
             makedirs(dep_build_dir)
             os.chdir(dep_build_dir)
             zlib = get_lib_full_path(os.path.join(dep_inst_dir, 'lib'), 'zlib')
@@ -264,7 +269,7 @@ class CMakeBuild(build_ext):
             '-DWITH_ZLIB=ON',
             '-DWITH_PYTHON=ON',
             '-DPYTHON_EXECUTABLE=' + sys.executable,
-            '-DPYTHON_INCLUDE_DIR=' + get_paths()['include']
+            '-DPYTHON_INCLUDE_DIR=' + sysconfig.get_paths()['include']
         ]
 
         libcombine_args = prepend_variables(libcombine_args, [
@@ -282,9 +287,6 @@ class CMakeBuild(build_ext):
           cmake_args.append('-DLIBEXPAT_INCLUDE_DIR=' + join(DEP_DIR, 'include'))
 
         if is_win_32:
-          if not '-G' in str(cmake_args):
-            cmake_args.append('-A')
-            cmake_args.append('win32')
           if DEP_DIR32:
             cmake_args.append('-DCOMBINE_DEPENDENCY_DIR=' + DEP_DIR32)
             cmake_args.append('-DLIBEXPAT_INCLUDE_DIR=' + join(DEP_DIR32, 'include'))
