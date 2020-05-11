@@ -27,6 +27,8 @@ if (NOT ${LIBSBML_LIBRARY_NAME}_FOUND)
           /opt/lib/cmake
           /opt/local/lib/cmake
           /sw/lib/cmake
+          ${COMBINE_DEPENDENCY_DIR}/lib/cmake
+          ${COMBINE_DEPENDENCY_DIR}/lib64/cmake
           ${CONAN_LIB_DIRS_LIBSBML}/cmake
   )
 endif()
