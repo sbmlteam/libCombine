@@ -272,7 +272,6 @@ class CMakeBuild(build_ext):
 
         libcombine_args = [
             '-DWITH_SWIG=ON',
-            '-DWITH_ZLIB=ON',
             '-DWITH_PYTHON=ON',
             '-DPYTHON_EXECUTABLE=' + sys.executable,
             '-DPYTHON_INCLUDE_DIR=' + get_python_include()
