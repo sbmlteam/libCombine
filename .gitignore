@@ -1,7 +1,10 @@
 doc
 *.bak
+*.pyc
+__pycache__
 *.user
 .idea/
+.cache/
 .vs
 .vscode
 build*
@@ -10,3 +13,4 @@ install*
 python_libcombine.egg-info
 temp_deviser_file.xml
 .DS_Store
+libcombine
