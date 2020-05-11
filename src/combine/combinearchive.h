@@ -265,6 +265,15 @@ public:
    * @return the metadata object if found (otherwise it will be empty)
    */
   OmexDescription getMetadataForLocation(const std::string& location) const;
+  
+  /**
+   * returns true, if the the given location does have metadata attached to it.
+   *
+   * @param location the location
+   *
+   * @return true, if metadata is present for the location, false otherwise.
+   */
+  bool hasMetadataForLocation(const std::string& location) const;
 
   /**
    * Sets the manifest to the given value

@@ -211,20 +211,25 @@ bool CombineArchive::writeToFile(const std::string &fileName)
   if (mpManifest == NULL)
     return false;
 
+  // if the file already exists remove it
+  if (zipper::checkFileExists(fileName))
+  {
+    std::remove(fileName.c_str());
+  }
+
   Zipper zipper(fileName);
   zipper.open();
 
-  bool foundIdentity = false;
+  unsigned int numContents = mpManifest->getNumContents();
 
   // add all files
-  for(unsigned int i = 0; i < mpManifest->getNumContents(); ++i)
+  for(unsigned int i = 0; i < numContents; ++i)
   {
     const CaContent* entry = mpManifest->getContent(i);
     std::string targetName = entry->getLocation();
     if (targetName == ".")
     {
       // skip manifest for now (will be generated below)
-      foundIdentity = true;
       continue;
     }
 
@@ -241,35 +246,26 @@ bool CombineArchive::writeToFile(const std::string &fileName)
     in.close();
   }
 
-  // add an entry for the manifest
-  if (!foundIdentity)
-  {
-    CaContent* manifest = mpManifest->createContent();
-    manifest->setLocation(".");
-    manifest->setFormat("http://identifiers.org/combine.specifications/omex");
-  }
-
   // add metadata elements
 
   // add the main metadata information first if existing.
-  std::map<std::string, OmexDescription>::iterator it = mMetadataMap.find(".");
-  if (it != mMetadataMap.end())
-  {
-    addMetadataToArchive(it->second, &zipper);
-  }
-
-  it = mMetadataMap.begin();
+  std::map<std::string, OmexDescription>::iterator it = mMetadataMap.begin();
   for (; it != mMetadataMap.end(); ++it)
   {
-    if (it->first == ".")
+    if (!hasMetadataForLocation(it->first))
       continue;
 
+    // temporary add metadata entries
     addMetadataToArchive(it->second, &zipper);
   }
 
   // add manifest
   std::stringstream str; str << writeOMEXToStdString(mpManifest);
   zipper.add(str, "manifest.xml");
+
+  // remove additional entries added 
+  while (numContents != mpManifest->getNumContents())
+    mpManifest->removeContent(numContents);
 
   zipper.close();
   return true;
@@ -429,6 +425,13 @@ CombineArchive::getMetadataForLocation(const std::string &location) const
     return it->second;
 
   return OmexDescription();
+}
+
+bool 
+CombineArchive::hasMetadataForLocation(const std::string& location) const
+{
+  std::map<std::string, OmexDescription>::const_iterator it = mMetadataMap.find(location);
+  return it != mMetadataMap.end();
 }
 
 void

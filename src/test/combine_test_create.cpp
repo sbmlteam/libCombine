@@ -104,8 +104,8 @@ SCENARIO("creating a new combine archive", "[combine]")
           desc.addModification(current);
           desc.addCreator(creator);
 
+          REQUIRE(!archive.hasMetadataForLocation("."));
           archive.addMetadata(".", desc);
-
 
           THEN("the metadata is accessible")
           {
@@ -125,7 +125,9 @@ SCENARIO("creating a new combine archive", "[combine]")
               if (checkFileExists("out.omex"))
                 std::remove("out.omex");
 
+              int numContent = archive.getManifest()->getNumContents();
               archive.writeToFile("out.omex");
+              REQUIRE(numContent == archive.getManifest()->getNumContents());
 
               CombineArchive second;
               second.initializeFromArchive("out.omex");
@@ -151,6 +153,24 @@ SCENARIO("creating a new combine archive", "[combine]")
                 std::string modelContent = second.extractEntryToString("./model/BorisEJB.xml");
                 REQUIRE(!modelContent.empty());
 
+              }
+
+              AND_WHEN("the archive is saved again")
+              {
+                if (checkFileExists("out2.omex"))
+                  std::remove("out2.omex");
+                REQUIRE(archive.writeToFile("out2.omex"));
+                REQUIRE(checkFileExists("out2.omex"));
+                REQUIRE(second.cleanUp());
+                REQUIRE(archive.writeToFile("out2.omex"));
+
+                REQUIRE(second.initializeFromArchive("out2.omex"));
+
+                THEN("the numbers of entries are the same")
+                {
+                  REQUIRE(second.getManifest() != NULL);
+                  REQUIRE(second.getManifest()->getNumContents() == 1);
+                }
               }
             }
           }
