@@ -1,7 +1,7 @@
 # LibCombine
 LibCombine implements a C++ API library providing support for the [Combine Archive](http://co.mbine.org/documents/archive). The library is written after the likeness of libSBML (and in fact some classes have been generated using DEVISER). Thus even thought he core is written in C++, the classes can be accessed via SWIG from .NET, Java and Python. 
 
-[![License](http://img.shields.io/:license-BSD-blue.svg)](http://opensource.org/licenses/BSD-2-Clause)  [![Latest version](https://img.shields.io/badge/Latest_version-0.1.0-brightgreen.svg)](http://shields.io) [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.154158.svg)](https://doi.org/10.5281/zenodo.154158)
+[![License](http://img.shields.io/:license-BSD-blue.svg)](http://opensource.org/licenses/BSD-2-Clause)  [![Latest version](https://img.shields.io/badge/Latest_version-0.2.7-brightgreen.svg)](http://shields.io) [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.154158.svg)](https://doi.org/10.5281/zenodo.154158) [![Latest Build](https://travis-ci.org/sbmlteam/libCombine.svg?branch=master)](https://travis-ci.org/sbmlteam/libCombine)
 
 ----
 *Authors*:      [Sarah M. Keating](http://www.ebi.ac.uk/about/people/sarah-keating), and [Frank T. Bergmann](http://www.cos.uni-heidelberg.de/index.php/f.bergmann?l=_e).
@@ -53,7 +53,7 @@ We have some examples using the library in the [examples folder](./examples) tha
 This project is open source and freely available under the [Simplified BSD](http://opensource.org/licenses/BSD-2-Clause) license. Should that license not meet your needs, please contact me. 
 
 
-  Copyright (c) 2016-2019, Sarah M. Keating & Frank T. Bergmann 
+  Copyright (c) 2016-2020, Sarah M. Keating & Frank T. Bergmann 
   All rights reserved.
   
   Redistribution and use in source and binary forms, with or without
