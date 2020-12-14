@@ -35,7 +35,8 @@
 %module(directors="1") libcombine
 
 
-%include exception.i       
+%include exception.i
+%include "std_vector.i"
 
 %exception {
 	try {
@@ -100,6 +101,7 @@ LIBCOMBINE_CPP_NAMESPACE_USE
 %template(CaBaseList)          ListWrapper<CaBase>;
 %template(SBaseList)          ListWrapper<SBase>;
 
+
 /**
  *
  * Includes a language specific interface file.
@@ -107,6 +109,26 @@ LIBCOMBINE_CPP_NAMESPACE_USE
  */
 
 %include local.i
+
+
+%template(DoubleStdVector) std::vector<double>;
+typedef std::vector<double> DoubleStdVector;
+%template(XmlErrorStdVector) std::vector<XMLError*>;
+typedef std::vector<XMLError*> XmlErrorStdVector;
+%template(CaErrorStdVector) std::vector<CaError>;
+typedef std::vector<CaError> CaErrorStdVector;
+
+
+namespace std {
+  %template(StringVector) vector<string>;
+}
+typedef std::vector<std::string> StringVector;
+%template(VCardVector) std::vector<VCard>;
+typedef std::vector<VCard> VCardVector;
+%template(MetadataVector) std::vector<OmexDescription>;
+typedef std::vector<OmexDescription> MetadataVector;
+typedef std::vector<Date> DateVector;
+
 
 /**
  * Unfortunately, SWIG makes no distinction between const and non-const
@@ -321,15 +343,6 @@ LIBCOMBINE_CPP_NAMESPACE_USE
  * Wrap these files.
  */
 
-%include "std_string.i"
-%include "std_vector.i"
-%template(DoubleStdVector) std::vector<double>;
-typedef std::vector<double> DoubleStdVector;
-%template(XmlErrorStdVector) std::vector<XMLError*>;
-typedef std::vector<XMLError*> XmlErrorStdVector;
-%template(CaErrorStdVector) std::vector<CaError>;
-typedef std::vector<CaError> CaErrorStdVector;
-
 %include omex/common/libcombine-version.h
 %include omex/common/CaOperationReturnValues.h
 %include sbml/common/libsbml-version.h
@@ -352,8 +365,6 @@ typedef std::vector<CaError> CaErrorStdVector;
 
 %include ASTNodes.i
 
-
-
 %include <omex/CaReader.h>
 %include <omex/CaWriter.h>
 %include <omex/CaTypeCodes.h>
@@ -372,11 +383,6 @@ typedef std::vector<CaError> CaErrorStdVector;
 %include <omex/CaListOfContents.h>
 %include <omex/CaListOfCrossRefs.h>
 %include <omex/CaOmexManifest.h>
-
-%template(StringVector) std::vector<std::string>;
-%template(VCardVector) std::vector<VCard>;
-%template(MetadataVector) std::vector<OmexDescription>;
-%template(DateVector) std::vector<Date>;
 
 %include  combine/combinearchive.h
 %include  combine/knownformats.h
