@@ -127,6 +127,7 @@ typedef std::vector<std::string> StringVector;
 typedef std::vector<VCard> VCardVector;
 %template(MetadataVector) std::vector<OmexDescription>;
 typedef std::vector<OmexDescription> MetadataVector;
+%template(DateVector) std::vector<Date>;
 typedef std::vector<Date> DateVector;
 
 
