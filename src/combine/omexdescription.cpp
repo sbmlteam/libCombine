@@ -178,11 +178,6 @@ OmexDescription::OmexDescription(XMLInputStream &stream)
 std::string
 OmexDescription::toXML(bool omitDeclaration)
 {
-  if (mModified.empty())
-  {
-    mModified.push_back(getCurrentDateAndTime());
-  }
-
   std::stringstream modifications;
   for (std::vector<Date>::iterator it = mModified.begin(); 
        it != mModified.end(); ++it)
