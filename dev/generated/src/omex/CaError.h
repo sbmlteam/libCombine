@@ -74,7 +74,7 @@ typedef enum
 , CombineIdSyntaxRule      = 10302
 , CaInvalidMetaidSyntax      = 10303
 , InvalidNamespaceOnCa      = 20101
-, AllowedAttributes      = 20102
+, CaAllowedAttributes      = 20102
 , CaEmptyListElement      = 20103
 , CombineContentAllowedCoreAttributes      = 20201
 , CombineContentAllowedCoreElements      = 20202

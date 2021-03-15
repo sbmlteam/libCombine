@@ -309,7 +309,7 @@ static const omexErrorTableEntry omexErrorTable[] =
   },
 
   // 20102
-  { AllowedAttributes,
+  { CaAllowedAttributes,
     "Allowed attributes",
     LIBCOMBINE_CAT_GENERAL_CONSISTENCY,
     LIBCOMBINE_SEV_ERROR,
