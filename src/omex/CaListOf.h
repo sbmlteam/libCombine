@@ -64,7 +64,7 @@ class CaVisitor;
  */
 #ifndef SWIG
 template<class CNAME>
-struct CaIdEq : public std::unary_function<CaBase*, bool>
+struct CaIdEq
 {
   const std::string& id;
 

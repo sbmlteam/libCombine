@@ -77,7 +77,7 @@ CaListOf::CaListOf (CaNamespaces* omexns)
 /**
  * Used by the Destructor to delete each item in mItems.
  */
-struct Delete : public unary_function<CaBase*, void>
+struct Delete
 {
   void operator() (CaBase* sb) { delete sb; }
 };
@@ -95,7 +95,7 @@ CaListOf::~CaListOf ()
 /**
  * Used by the Copy Constructor to clone each item in mItems.
  */
-struct Clone : public unary_function<CaBase*, CaBase*>
+struct Clone
 {
   CaBase* operator() (CaBase* sb) { return sb->clone(); }
 };
@@ -393,7 +393,7 @@ CaListOf::size () const
 /**
  * Used by CaListOf::setCaOmexManifest().
  */
-struct SetCaOmexManifest : public unary_function<CaBase*, void>
+struct SetCaOmexManifest
 {
   CaOmexManifest* d;
 
@@ -405,7 +405,7 @@ struct SetCaOmexManifest : public unary_function<CaBase*, void>
 /**
  * Used by CaListOf::setParentCaObject().
  */
-struct SetParentCaObject : public unary_function<CaBase*, void>
+struct SetParentCaObject
 {
   CaBase* sb;
 
@@ -477,7 +477,7 @@ CaListOf::getElementName () const
 /**
  * Used by CaListOf::writeElements().
  */
-struct Write : public unary_function<CaBase*, void>
+struct Write
 {
   XMLOutputStream& stream;
 
