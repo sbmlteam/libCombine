@@ -20,6 +20,7 @@ include (CheckCCompilerFlag)
 include (CheckCSourceRuns)
 include (CheckSymbolExists)
 include (CheckTypeSize)
+include(GNUInstallDirs)
 
 ###############################################################################
 #
@@ -52,7 +53,7 @@ endif()
 MATH(EXPR LIBCOMBINE_VERSION_NUMERIC "${LIBCOMBINE_VERSION_MAJOR} * 10000 + ${LIBCOMBINE_VERSION_MINOR} * 100 + ${LIBCOMBINE_VERSION_PATCH}" )
 set(LIBCOMBINE_VERSION "${LIBCOMBINE_VERSION_MAJOR}.${LIBCOMBINE_VERSION_MINOR}.${LIBCOMBINE_VERSION_PATCH}${LIBCOMBINE_VERSION_RELEASE}")
 set(PACKAGE_NAME "libCombine")
-set(PACKAGE_CONFIG_DIR lib/cmake CACHE PATH
+set(PACKAGE_CONFIG_DIR ${CMAKE_INSTALL_FULL_LIBDIR}/cmake CACHE PATH
     "Path into which the cmake config files should be installed")
 
 
@@ -283,7 +284,7 @@ endif(WITH_SWIG)
 
 # Update cmake path variables
 if (COMBINE_DEPENDENCY_DIR AND EXISTS ${COMBINE_DEPENDENCY_DIR})
-  set(CMAKE_PREFIX_PATH "${COMBINE_DEPENDENCY_DIR}/lib/cmake;${CMAKE_PREFIX_PATH}")
+  set(CMAKE_PREFIX_PATH "${COMBINE_DEPENDENCY_DIR}/${CMAKE_INSTALL_LIBDIR}/cmake;${CMAKE_PREFIX_PATH}")
 endif()
 
 set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/CMakeModules;${CMAKE_MODULE_PATH}")
@@ -661,7 +662,6 @@ endif()
 
 set(LIBCOMBINE_SOURCES ${COMBINE_SOURCES} ${COMBINE_HEADERS})
 set(LIBCOMBINE_LIBRARY ${COMBINE_LIBRARY})
-set (CMAKE_INSTALL_LIBDIR lib)
 
 add_subdirectory(src)
 
@@ -745,5 +745,4 @@ libCombine version ${LIBCOMBINE_VERSION}
    Other configuration settings:
      Installation $prefix            = ${CMAKE_INSTALL_PREFIX}
      ")
-
 
