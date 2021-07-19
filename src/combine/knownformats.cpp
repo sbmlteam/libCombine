@@ -239,7 +239,7 @@ KnownFormats::initializeMap()
     { "lsx",{ "video/x-la-asf" } },
     { "lzh",{ "application/octet-stream" } },
     { "m",{ "application/x-matlab" } },
-    { "mat",{ "application/x-matlab" } },
+    { "mat",{ "application/x-matlab-data" } },
     { "m13",{ "application/x-msmediaview" } },
     { "m14",{ "application/x-msmediaview" } },
     { "m3u",{ "audio/x-mpegurl" } },
