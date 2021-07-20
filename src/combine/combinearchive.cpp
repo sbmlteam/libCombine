@@ -190,10 +190,11 @@ std::string CombineArchive::getNextFilename(const std::string& prefix,
   return fileName;
 }
 
-void CombineArchive::addMetadataToArchive(OmexDescription& desc, Zipper *zipper)
+int
+CombineArchive::addMetadataToArchive(OmexDescription& desc, Zipper *zipper)
 {
   if (desc.isEmpty() || zipper == NULL || mpManifest == NULL)
-    return;
+    return LIBCOMBINE_OPERATION_FAILED;
 
   std::string fileName = getNextFilename("metadata", ".rdf");
   std::stringstream content; content << desc.toXML();
@@ -203,7 +204,8 @@ void CombineArchive::addMetadataToArchive(OmexDescription& desc, Zipper *zipper)
   entry->setLocation(fileName);
   entry->setFormat(KnownFormats::lookupFormat("omex"));
   entry->setMaster(false);
-
+  
+  return LIBCOMBINE_OPERATION_SUCCESS;
 }
 
 bool CombineArchive::writeToFile(const std::string &fileName)
@@ -488,11 +490,16 @@ CombineArchive::addFile(std::istream &stream,
   return addFile(tempFilename, targetName, format, isMaster);
 }
 
-void
+int
 CombineArchive::addMetadata(const std::string &targetName,
                             const OmexDescription &description)
 {
+  if (description.isEmpty())
+    return LIBCOMBINE_OPERATION_FAILED;
+
   mMetadataMap[targetName] = description;
+  
+  return LIBCOMBINE_OPERATION_SUCCESS;
 }
 
 bool

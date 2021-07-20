@@ -123,8 +123,12 @@ public:
    *
    * @param targetName the name of the entry that the metadata is about
    * @param description the metadata description
+   * 
+   * @return status code indicating success or failure. 
+   *   @li @omexconstant{LIBCOMBINE_OPERATION_SUCCESS, OperationReturnValues_t}
+   *   @li @omexconstant{LIBCOMBINE_OPERATION_FAILED, OperationReturnValues_t}
    */
-  void addMetadata(const std::string& targetName,
+  int addMetadata(const std::string& targetName,
                    const OmexDescription& description);
 
   /**
@@ -361,8 +365,13 @@ protected:
    *
    * @param desc the description to be added
    * @param zipper the zipper to be used
+   * 
+   * @return status code indicating success or failure. 
+   *   @li @omexconstant{LIBCOMBINE_OPERATION_SUCCESS, OperationReturnValues_t}
+   *   @li @omexconstant{LIBCOMBINE_OPERATION_FAILED, OperationReturnValues_t}
+   *
    */
-  void addMetadataToArchive(OmexDescription& desc, zipper::Zipper* zipper);
+  int addMetadataToArchive(OmexDescription& desc, zipper::Zipper* zipper);
 };
 
 LIBCOMBINE_CPP_NAMESPACE_END
