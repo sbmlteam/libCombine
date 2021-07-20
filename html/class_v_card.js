@@ -2,7 +2,7 @@ var class_v_card =
 [
     [ "VCard", "class_v_card.html#a0cfd1b28397013b2b5536b1138c152c7", null ],
     [ "VCard", "class_v_card.html#a2292a660410212da54ea85793adb2a29", null ],
-    [ "VCard", "class_v_card.html#a95879325517bd25f8f2947cf52e2b9c8", null ],
+    [ "VCard", "class_v_card.html#a85a349db49806efb1018c0c5d44b6c1c", null ],
     [ "getEmail", "class_v_card.html#a13e95fdd4eb55ea187df4fada845d50b", null ],
     [ "getFamilyName", "class_v_card.html#ae8e1bde541f7a3618d0a094ba54f35cc", null ],
     [ "getGivenName", "class_v_card.html#aa03f7452e8a1e22a8bfd158f45cfdf22", null ],

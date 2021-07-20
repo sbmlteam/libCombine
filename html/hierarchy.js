@@ -2,13 +2,16 @@ var hierarchy =
 [
     [ "CaBase", "class_ca_base.html", [
       [ "CaContent", "class_ca_content.html", null ],
+      [ "CaCrossRef", "class_ca_cross_ref.html", null ],
       [ "CaListOf", "class_ca_list_of.html", [
-        [ "CaListOfContents", "class_ca_list_of_contents.html", null ]
+        [ "CaListOfContents", "class_ca_list_of_contents.html", null ],
+        [ "CaListOfCrossRefs", "class_ca_list_of_cross_refs.html", null ]
       ] ],
       [ "CaOmexManifest", "class_ca_omex_manifest.html", null ]
     ] ],
     [ "CaNamespaces", "class_ca_namespaces.html", null ],
     [ "CaReader", "class_ca_reader.html", null ],
+    [ "CaTypeCodes", "class_ca_type_codes.html", null ],
     [ "CaVisitor", "class_ca_visitor.html", null ],
     [ "CaWriter", "class_ca_writer.html", null ],
     [ "CombineArchive", "class_combine_archive.html", null ],
