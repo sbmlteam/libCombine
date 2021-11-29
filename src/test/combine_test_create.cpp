@@ -221,3 +221,11 @@ SCENARIO("creating a combine archive", "[combine]")
        
   }
 }
+
+TEST_CASE("known format starts with purl", "[combine]")
+{
+  std::string copasiFormat = KnownFormats::lookupFormat("copasi");
+  REQUIRE(copasiFormat.find("http://purl.org/NET/mediatypes/") != std::string::npos);
+  REQUIRE(KnownFormats::isFormat("copasi", "application/x-copasi"));
+  REQUIRE(KnownFormats::isFormat("copasi", KnownFormats::PURL_MEDIATYPES_URL + "application/x-copasi"));
+}

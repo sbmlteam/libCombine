@@ -103,10 +103,12 @@ public:
    */
   static std::map<std::string, std::vector<std::string> >& getKnownFormats();
 
+  static const std::string PURL_MEDIATYPES_URL;
 
 protected:
   static std::map<std::string, std::vector<std::string> > initializeMap();
   static std::map<std::string, std::vector<std::string> > mKnownFormats;
+
 };
 
 LIBCOMBINE_CPP_NAMESPACE_END
