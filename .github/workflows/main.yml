@@ -57,6 +57,15 @@ jobs:
 
     - name: Test
       working-directory: ${{runner.workspace}}/libCombine/
+      if: matrix.platform == 'windows-latest'
+      shell: bash
+      # Execute tests defined by the CMake configuration.  
+      # See https://cmake.org/cmake/help/latest/manual/ctest.1.html for more detail
+      run: cd build/temp*/$BUILD_TYPE/ && cmake --build . -t Combine-test && ctest -C $BUILD_TYPE
+      
+    - name: Test
+      working-directory: ${{runner.workspace}}/libCombine/
+      if: matrix.platform != 'windows-latest'
       shell: bash
       # Execute tests defined by the CMake configuration.  
       # See https://cmake.org/cmake/help/latest/manual/ctest.1.html for more detail
