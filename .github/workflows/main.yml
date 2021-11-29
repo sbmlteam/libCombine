@@ -44,6 +44,11 @@ jobs:
       run: |
             brew install swig
 
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install wheel
+
     - name: Build
       working-directory: ${{runner.workspace}}/libCombine/
       shell: bash
@@ -55,5 +60,5 @@ jobs:
       shell: bash
       # Execute tests defined by the CMake configuration.  
       # See https://cmake.org/cmake/help/latest/manual/ctest.1.html for more detail
-      run: cd build/temp*/ && ctest -C $BUILD_TYPE
+      run: cd build/temp*/ && cmake --build . -t Combine-test && ctest -C $BUILD_TYPE
       
