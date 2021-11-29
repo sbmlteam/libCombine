@@ -348,8 +348,7 @@ set(ZLIB_INITIAL_VALUE)
 if (NOT LIBZ_LIBRARY)
 find_library(LIBZ_LIBRARY
     NAMES zdll.lib z zlib.lib zlib libzlib.a
-    PATHS /usr/lib /usr/local/lib
-          ${CMAKE_OSX_SYSROOT}/usr/lib
+    PATHS ${COMBINE_DEPENDENCY_DIR}/${CMAKE_INSTALL_LIBDIR}
           ${COMBINE_DEPENDENCY_DIR}/lib
           NO_DEFAULT_PATH
           NO_CMAKE_ENVIRONMENT_PATH
@@ -373,9 +372,9 @@ endif()
 if (NOT LIBZ_INCLUDE_DIR)
   find_path(LIBZ_INCLUDE_DIR
       NAMES zlib.h zlib/zlib.h
-      PATHS ${CMAKE_OSX_SYSROOT}/usr/include
+      PATHS ${COMBINE_DEPENDENCY_DIR}/include
+            ${CMAKE_OSX_SYSROOT}/usr/include
             /usr/include /usr/local/include
-            ${COMBINE_DEPENDENCY_DIR}/include
             $ENV{ZLIBROOT}/include
             NO_DEFAULT_PATH
       DOC "The directory containing the zlib include files."
