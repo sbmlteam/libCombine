@@ -32,13 +32,10 @@ jobs:
         # Working directory
         working-directory: "." # default is .
     
-    - name: Setup tmate session
-      uses: mxschmitt/action-tmate@v3
-    
     - name: Deploy
       uses: peaceiris/actions-gh-pages@v3
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_dir: ./out
+        publish_dir: ./doc
         keep_files: true
         disable_nojekyll: true
