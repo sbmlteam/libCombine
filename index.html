@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="description" content="Libcombine : a C++ library for working with the COMBINE Archive format">
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>Libcombine</title>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/sbmlteam/libCombine">View on GitHub</a>
+
+          <h1 id="project_title">Libcombine</h1>
+          <h2 id="project_tagline">a C++ library for working with the COMBINE Archive format</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/sbmlteam/libCombine/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/sbmlteam/libCombine/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <h1>
+<a id="libcombine" class="anchor" href="#libcombine" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>LibCombine</h1>
+
+<p>LibCombine implements a C++ API library providing support for the <a href="http://co.mbine.org/documents/archive">Combine Archive</a>. The library is written after the likeness of libSBML (and in fact some classes have been generated using DEVISER). Thus even thought he core is written in C++, the classes can be accessed via SWIG from .NET, Java and Python. </p>
+
+<p><a href="http://opensource.org/licenses/BSD-2-Clause"><img src="http://img.shields.io/:license-BSD-blue.svg" alt="License"></a>  <a href="http://shields.io"><img src="https://img.shields.io/badge/Latest_version-0.1.0-brightgreen.svg" alt="Latest version"></a></p>
+
+<hr>
+
+<p><em>Authors</em>:      <a href="http://www.ebi.ac.uk/about/people/sarah-keating">Sarah M. Keating</a>, and <a href="http://www.cos.uni-heidelberg.de/index.php/f.bergmann?l=_e">Frank T. Bergmann</a>.</p>
+
+<p><em>License</em>:      This code is licensed under the 2 Clause BSD.  Please see the file <a href="https://raw.githubusercontent.com/sbmlteam/libCombine/master/LICENSE.md">../LICENSE.md</a> for details.</p>
+
+<p><em>Repository</em>:   <a href="https://github.com/sbmlteam/libCombine">https://github.com/sbmlteam/libCombine</a></p>
+
+<p><em>Documentation</em>:   <a href="html/class_combine_archive.html">API Documentation</a></p>
+
+<h2>
+<a id="dependencies" class="anchor" href="#dependencies" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Dependencies</h2>
+
+<p>This library requires libSBML to be present, as its XML parsing layer will be used. for that either expat, xerces-c or libXML2 needs to be available. Additionally you will need zlib as well as the zipper library that can be obtained from: </p>
+
+<ul>
+<li><a href="https://github.com/fbergmann/zipper">https://github.com/fbergmann/zipper</a></li>
+</ul>
+
+<p>The zipper library supports three backends for the filesystem API: </p>
+
+<ul>
+<li>the C++17 filesystem STL (afaik only supported by MSVC right now)</li>
+<li>boost filesystem api (requiring both boost system and boost filesystem)</li>
+<li>QtCore</li>
+</ul>
+
+<p>Whatever has been chosen for the compilation of the zipper library has to be chosen for libCOMBINE as well. Thus the same three options are available: </p>
+
+<ul>
+<li>C++17 API: (default, nothing to specify)</li>
+<li>BOOST API: <code>-DWITH_BOOST_FILESYSTEM=ON</code>, the actual libraries can be specified with the variables: <code>BOOST_SYSTEM_LIBRARY</code>, <code>BOOST_FILESYSTEM_LIBRARY</code> and <code>BOOST_INCLUDE_DIR</code>. </li>
+<li>Qt API: <code>-DWITH_QT_FILESYSTEM=ON</code> the actual library is found using the CMake FindQt package. So just specify your QTDIR environment variable. </li>
+</ul>
+
+<h2>
+<a id="building" class="anchor" href="#building" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Building</h2>
+
+<p>This library uses <a href="http://cmake.org">CMake</a> to build the library, so from an initial checkout all you would need todo is to run: </p>
+
+<pre><code>mkdir build  
+cd build
+cmake -DLIBSBML_LIBRARY=&lt; path to libsbml lib&gt; -DLIBSBML_INCLUDE_DIR=&lt; path to includes &gt; ... -DEXTRA_LIBS= &lt; comma separated list of xml libraries&gt; 
+make  
+make install
+</code></pre>
+
+<p>Should libSBML be installed in a default location it will be found automatically. Note that you do need to list the xml libraries that libSBML was linked against. In most cases libSBML is compiled against libXML and have compression enabled, so your <code>EXTRA_LIBS</code> would be:</p>
+
+<pre><code>EXTRA_LIBS=xml2;bz2;z;iconv
+</code></pre>
+
+<p>note the semicolon denoting the listing of several libraries. Of course you could also enter the full path to each individual file, just to give an example, on windows I use: </p>
+
+<pre><code>EXTRA_LIBS=D:/dependencies/lib/expat.lib
+</code></pre>
+
+<p>for linking against <code>expat</code> and indicating, that libSBML was compiled without compression.</p>
+
+<p>To make it easier all dependencies can be installed into a directory with a <code>bin</code>, <code>include</code> and <code>lib</code> folder. If that is passed to cmake using the variable <code>-DCOMBINE_DEPENDENCY_DIR=&lt;directory&gt;</code> all dependencies are easily found. </p>
+
+<h2>
+<a id="how-to-use" class="anchor" href="#how-to-use" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>How to use</h2>
+
+<p>The library is centered around the class <code>CombineArchive</code>.  Once you created an instance of the class, you can add files and content to it using either <code>addFile</code> with a filename, or with an input stream in case it is an in memory element. To add metadata you would use <code>addMetadata</code>. The actual combine archive will only be created upon a call to <code>writeToFile</code>. </p>
+
+<p>To read a combine archive, you would use the function <code>initializeFromArchive</code>. At that point you can retrieve all the locations inside the archive using <code>getAllLocations()</code>. For each of the location you could then request metadata using: <code>getMetadataForLocation</code>, the entry in form of a string using <code>extractEntryToString</code>, have it stored to a file / folder using <code>extractEntry</code>. You can also have the whole archive written to a directory using <code>extractTo</code>.  </p>
+
+<p>We have some examples using the library in the <a href="./examples">examples folder</a> that demonstrate the use of the library for reading / writing.</p>
+
+<h2>
+<a id="license" class="anchor" href="#license" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>License</h2>
+
+<p>This project is open source and freely available under the <a href="http://opensource.org/licenses/BSD-2-Clause">Simplified BSD</a> license. Should that license not meet your needs, please contact me. </p>
+
+<p>Copyright (c) 2016, Sarah M. Keating &amp; Frank T. Bergmann 
+  All rights reserved.</p>
+
+<p>Redistribution and use in source and binary forms, with or without
+  modification, are permitted provided that the following conditions are met: </p>
+
+<ol>
+<li>Redistributions of source code must retain the above copyright notice, this
+ list of conditions and the following disclaimer. </li>
+<li>
+<p>Redistributions in binary form must reproduce the above copyright notice,
+ this list of conditions and the following disclaimer in the documentation
+ and/or other materials provided with the distribution. </p>
+
+<p>THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR
+ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</p>
+</li>
+</ol>
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">Libcombine maintained by <a href="https://github.com/sbmlteam">sbmlteam</a></p>
+        <p>Published with <a href="https://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+    
+
+  </body>
+</html>
