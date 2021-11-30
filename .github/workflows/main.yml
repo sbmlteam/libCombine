@@ -59,7 +59,7 @@ jobs:
       working-directory: ${{runner.workspace}}/libCombine/
       if: matrix.os == 'windows-latest'
       shell: bash
-      run: cd build/temp*/$BUILD_TYPE && echo $PWD && dir && cat CMakeCache.txt && cmake --build . --config $BUILD_TYPE -t Combine-test && ctest -C $BUILD_TYPE
+      run: cd build/temp*/$BUILD_TYPE && cmake --build . --config $BUILD_TYPE -t libCombine-test && ctest -C $BUILD_TYPE
       
     - name: Test
       working-directory: ${{runner.workspace}}/libCombine/
