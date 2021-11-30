@@ -8,5 +8,5 @@ var class_ca_writer =
     [ "writeOMEX", "class_ca_writer.html#aca68d1ed4b68f8ab1809ac56990d163a", null ],
     [ "writeOMEXToFile", "class_ca_writer.html#ab3265c78f06851db99628593e944551c", null ],
     [ "writeOMEXToStdString", "class_ca_writer.html#a41f84b60f8c546d7d47474b259e22e8c", null ],
-    [ "writeOMEXToString", "class_ca_writer.html#a5dbf713d3bce5d3bc011bf99d76aaad8", null ]
+    [ "writeOMEXToString", "class_ca_writer.html#a68a990686cebbe1366800a192dd396c5", null ]
 ];
