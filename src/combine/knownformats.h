@@ -60,7 +60,7 @@ public:
    *         key or not.
    */
   static bool isFormat(const std::string& formatKey,
-                       const std::string& format);
+                       std::string format);
 
 
   /**

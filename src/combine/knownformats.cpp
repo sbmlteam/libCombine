@@ -10,8 +10,11 @@ const std::string KnownFormats::PURL_MEDIATYPES_URL = "http://purl.org/NET/media
 
 bool
 KnownFormats::isFormat(const std::string &formatKey,
-                       const std::string &format)
+                       std::string format)
 {
+  if (format.find("https") == 0)
+    format = "http" + format.substr(5);
+  
   std::map<std::string,std::vector<std::string> >::iterator it = 
     mKnownFormats.find(formatKey);
 
@@ -156,6 +159,7 @@ KnownFormats::initializeMap()
       "http://identifiers.org/combine.specifications/sed-ml.level-1.version-1",
       "http://identifiers.org/combine.specifications/sed-ml.level-1.version-2",
       "http://identifiers.org/combine.specifications/sed-ml.level-1.version-3"
+      "http://identifiers.org/combine.specifications/sed-ml.level-1.version-4"
     } },
     { "cellml",{ "http://identifiers.org/combine.specifications/cellml" } },
     { "sed-ml",
@@ -165,6 +169,7 @@ KnownFormats::initializeMap()
       "http://identifiers.org/combine.specifications/sed-ml.level-1.version-1",
       "http://identifiers.org/combine.specifications/sed-ml.level-1.version-2",
       "http://identifiers.org/combine.specifications/sed-ml.level-1.version-3"
+      "http://identifiers.org/combine.specifications/sed-ml.level-1.version-4"
     } },
     { "sbgn",{ "http://identifiers.org/combine.specifications/sbgn" } },
     { "omex",{ "http://identifiers.org/combine.specifications/omex-metadata" } },

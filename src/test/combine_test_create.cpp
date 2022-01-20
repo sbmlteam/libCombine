@@ -229,3 +229,9 @@ TEST_CASE("known format starts with purl", "[combine]")
   REQUIRE(KnownFormats::isFormat("copasi", "application/x-copasi"));
   REQUIRE(KnownFormats::isFormat("copasi", KnownFormats::PURL_MEDIATYPES_URL + "application/x-copasi"));
 }
+
+TEST_CASE("don't trip over https", "[combine]")
+{
+  REQUIRE(KnownFormats::isFormat("copasi", "https://purl.org/NET/mediatypes/application/x-copasi"));
+  REQUIRE(KnownFormats::isFormat("sbml", "https://identifiers.org/combine.specifications/sbml.level-2.version-1"));
+}
