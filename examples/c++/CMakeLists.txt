@@ -21,6 +21,6 @@ foreach(filename
 	get_filename_component(example ${filename} NAME_WE)
 	add_executable(example_cpp_${example} ${filename})
 	set_target_properties(example_cpp_${example} PROPERTIES  OUTPUT_NAME ${example})
-	target_link_libraries(example_cpp_${example} ${LIBCOMBINE_LIBRARY}-static ${ZIPPER_LIBRARY} ${LIBZ_LIBRARY} ${LIBSBML_LIBRARY} ${EXTRA_LIBS})
+	target_link_libraries(example_cpp_${example} ${LIBCOMBINE_LIBRARY}-static ${EXTRA_LIBS})
 
 endforeach()

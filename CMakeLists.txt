@@ -7,7 +7,7 @@
 ###############################################################################
 
 set(CMAKE_LEGACY_CYGWIN_WIN32 0)
-cmake_minimum_required(VERSION 2.6)
+cmake_minimum_required(VERSION 2.6...3.19)
 project(libCombine)
 
 include (CMakeTestCCompiler)
@@ -343,54 +343,7 @@ if (NOT ZIPPER_INCLUDE_DIR)
 ")
 endif()
 
-
-set(ZLIB_INITIAL_VALUE)
-if (NOT LIBZ_LIBRARY)
-find_library(LIBZ_LIBRARY
-    NAMES zdll.lib z zlib.lib zlib libzlib.a
-    PATHS ${COMBINE_DEPENDENCY_DIR}/${CMAKE_INSTALL_LIBDIR}
-          ${COMBINE_DEPENDENCY_DIR}/lib
-          NO_DEFAULT_PATH
-          NO_CMAKE_ENVIRONMENT_PATH
-          NO_CMAKE_PATH
-          NO_SYSTEM_ENVIRONMENT_PATH
-          NO_CMAKE_SYSTEM_PATH    
-          DOC "The file name of the zip compression library."
-    )
-endif()
-if (NOT LIBZ_LIBRARY)
-find_library(LIBZ_LIBRARY
-    NAMES zdll.lib z zlib.lib libzlib zlib libzlib.a
-    PATHS /usr/lib /usr/local/lib
-          ${CMAKE_OSX_SYSROOT}/usr/lib
-          ${COMBINE_DEPENDENCY_DIR}/lib
-    DOC "The file name of the zip compression library."
-    )
-endif()
-
-
-if (NOT LIBZ_INCLUDE_DIR)
-  find_path(LIBZ_INCLUDE_DIR
-      NAMES zlib.h zlib/zlib.h
-      PATHS ${COMBINE_DEPENDENCY_DIR}/include
-            ${CMAKE_OSX_SYSROOT}/usr/include
-            /usr/include /usr/local/include
-            $ENV{ZLIBROOT}/include
-            NO_DEFAULT_PATH
-      DOC "The directory containing the zlib include files."
-            )
-endif()
-    
-if (NOT LIBZ_INCLUDE_DIR)
-    find_path(LIBZ_INCLUDE_DIR
-    NAMES zlib.h zlib/zlib.h
-    PATHS ${CMAKE_OSX_SYSROOT}/usr/include
-          /usr/include /usr/local/include
-          ${COMBINE_DEPENDENCY_DIR}/include
-    DOC "The directory containing the zlib include files."
-          )
-
-endif()
+find_package(ZLIB REQUIRED)
 
 if(WITH_CSHARP)
     find_program(CSHARP_COMPILER
@@ -422,8 +375,7 @@ set(USE_ZLIB ON)
 add_definitions( -DUSE_ZLIB )
 
 if (LIBZ_LIBRARY)
-  file(TO_CMAKE_PATH ${LIBZ_LIBRARY} LIBZ_LIBRARY)
-  set(LIBCOMBINE_LIBS ${LIBCOMBINE_LIBS} ${LIBZ_LIBRARY})
+  set(LIBCOMBINE_LIBS ${LIBCOMBINE_LIBS} ZLIB::ZLIB)
 endif()
 
 if (LIBSBML_LIBRARY_NAME)
@@ -629,7 +581,7 @@ endif()
 # without compression
 
 set (LIBSBML_HAS_MINIZIP)
-if (EXISTS ${LIBSBML_LIBRARY})
+if (LIBSBML_LIBRARY)
   SET(CMAKE_REQUIRED_LIBRARIES ${LIBSBML_LIBRARY} ${LIBZ_LIBRARY} ${EXTRA_LIBS})
   CHECK_FUNCTION_EXISTS(zipOpen3 LIBSBML_HAS_MINIZIP)
 endif()
