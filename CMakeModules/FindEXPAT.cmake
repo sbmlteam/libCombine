@@ -1,4 +1,4 @@
-# Copyright (C) 2019 - 2020 by Pedro Mendes, Rector and Visitors of the 
+# Copyright (C) 2019 - 2022 by Pedro Mendes, Rector and Visitors of the 
 # University of Virginia, University of Heidelberg, and University 
 # of Connecticut School of Medicine. 
 # All rights reserved. 
@@ -18,7 +18,7 @@
 # Once done this will define
 #
 #  EXPAT_FOUND       - system has Expat
-#  EXPAT_LIBRARIES   - Link these to use Expat
+#  EXPAT_LIBRARY   - Link these to use Expat
 #  EXPAT_INCLUDE_DIR - Include directory for using Expat
 #  EXPAT_DEFINITIONS - Compiler switches required for using Expat
 #
@@ -30,16 +30,19 @@ MACRO (FIND_EXPAT)
 
 ENDMACRO ()
 
+string(TOUPPER ${PROJECT_NAME} _UPPER_PROJECT_NAME)
+set(_PROJECT_DEPENDENCY_DIR ${_UPPER_PROJECT_NAME}_DEPENDENCY_DIR)
 
 
 # Check if we have cached results in case the last round was successful.
-if (NOT (EXPAT_INCLUDE_DIR AND EXPAT_LIBRARIES) OR NOT EXPAT_FOUND)
+if (NOT (EXPAT_INCLUDE_DIR AND EXPAT_LIBRARY) OR NOT EXPAT_FOUND)
 
     set(EXPAT_LDFLAGS)
 	
     find_path(EXPAT_INCLUDE_DIR expat.h
 	    PATHS $ENV{EXPAT_DIR}/include
 	          $ENV{EXPAT_DIR}
+              ${${_PROJECT_DEPENDENCY_DIR}}/include
 	          ~/Library/Frameworks
 	          /Library/Frameworks
 	          /sw/include        # Fink
@@ -55,11 +58,11 @@ if (NOT (EXPAT_INCLUDE_DIR AND EXPAT_LIBRARIES) OR NOT EXPAT_FOUND)
 
     find_library(EXPAT_LIBRARY 
 	    NAMES expat
-	    PATHS $ENV{EXPAT_DIR}/lib
+	    PATHS $ENV{EXPAT_DIR}/${CMAKE_INSTALL_LIBDIR}
 	          $ENV{EXPAT_DIR}/lib-dbg
 	          $ENV{EXPAT_DIR}
-              ${COPASI_DEPENDENCY_DIR}/${CMAKE_INSTALL_LIBDIR}
-              ${COPASI_DEPENDENCY_DIR}
+              ${${_PROJECT_DEPENDENCY_DIR}}/${CMAKE_INSTALL_LIBDIR}
+              ${${_PROJECT_DEPENDENCY_DIR}}
 	          ~/Library/Frameworks
 	          /Library/Frameworks
 	          /sw/lib        # Fink
@@ -77,7 +80,7 @@ if (NOT (EXPAT_INCLUDE_DIR AND EXPAT_LIBRARIES) OR NOT EXPAT_FOUND)
         find_package(PkgConfig)
         pkg_check_modules(PC_EXPAT QUIET expat)
 
-        message(STATUS "${PC_EXPAT_STATIC_LDFLAGS}")
+        message(VERBOSE "${PC_EXPAT_STATIC_LDFLAGS}")
 
         if (PC_EXPAT_FOUND)
             set(EXPAT_DEFINITIONS ${PC_EXPAT_CFLAGS_OTHER})
@@ -89,6 +92,27 @@ if (NOT (EXPAT_INCLUDE_DIR AND EXPAT_LIBRARIES) OR NOT EXPAT_FOUND)
 
 endif () # Check for cached values
 
+
+if (EXPAT_INCLUDE_DIR AND EXISTS "${EXPAT_INCLUDE_DIR}/expat.h")
+file(STRINGS "${EXPAT_INCLUDE_DIR}/expat.h" expat_version_str
+     REGEX "^#[\t ]*define[\t ]+XML_(MAJOR|MINOR|MICRO)_VERSION[\t ]+[0-9]+$")
+
+unset(EXPAT_VERSION)
+foreach(VPART MAJOR MINOR MICRO)
+    foreach(VLINE ${expat_version_str})
+        if(VLINE MATCHES "^#[\t ]*define[\t ]+XML_${VPART}_VERSION[\t ]+([0-9]+)$")
+            set(EXPAT_VERSION_PART "${CMAKE_MATCH_1}")
+            if(EXPAT_VERSION)
+                string(APPEND EXPAT_VERSION ".${EXPAT_VERSION_PART}")
+            else()
+                set(EXPAT_VERSION "${EXPAT_VERSION_PART}")
+            endif()
+        endif()
+    endforeach()
+endforeach()
+endif ()
+
+
 # create an expat target to link against
 if(NOT TARGET EXPAT::EXPAT)
   add_library(EXPAT::EXPAT UNKNOWN IMPORTED)
@@ -97,7 +121,6 @@ if(NOT TARGET EXPAT::EXPAT)
     IMPORTED_LOCATION "${EXPAT_LIBRARY}"
     INTERFACE_INCLUDE_DIRECTORIES "${EXPAT_INCLUDE_DIR}")
 endif()
-
 
 include(FindPackageHandleStandardArgs)
 

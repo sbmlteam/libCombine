@@ -8,19 +8,8 @@
 
 set(CMAKE_LEGACY_CYGWIN_WIN32 0)
 cmake_minimum_required(VERSION 2.6...3.19)
-project(libCombine)
 
-include (CMakeTestCCompiler)
-include (CheckCSourceCompiles)
-include (CheckCXXSourceCompiles)
-include (CheckStructHasMember)
-include (CheckLibraryExists)
-include (CheckFunctionExists)
-include (CheckCCompilerFlag)
-include (CheckCSourceRuns)
-include (CheckSymbolExists)
-include (CheckTypeSize)
-include(GNUInstallDirs)
+
 
 ###############################################################################
 #
@@ -53,6 +42,22 @@ endif()
 MATH(EXPR LIBCOMBINE_VERSION_NUMERIC "${LIBCOMBINE_VERSION_MAJOR} * 10000 + ${LIBCOMBINE_VERSION_MINOR} * 100 + ${LIBCOMBINE_VERSION_PATCH}" )
 set(LIBCOMBINE_VERSION "${LIBCOMBINE_VERSION_MAJOR}.${LIBCOMBINE_VERSION_MINOR}.${LIBCOMBINE_VERSION_PATCH}${LIBCOMBINE_VERSION_RELEASE}")
 set(PACKAGE_NAME "libCombine")
+
+project(libCombine VERSION "${LIBCOMBINE_VERSION_MAJOR}.${LIBCOMBINE_VERSION_MINOR}.${LIBCOMBINE_VERSION_PATCH}"
+                   LANGUAGES CXX)
+
+include (CMakeTestCXXCompiler)
+include (CheckCSourceCompiles)
+include (CheckCXXSourceCompiles)
+include (CheckStructHasMember)
+include (CheckLibraryExists)
+include (CheckFunctionExists)
+include (CheckCCompilerFlag)
+include (CheckCSourceRuns)
+include (CheckSymbolExists)
+include (CheckTypeSize)
+include(GNUInstallDirs)
+
 set(PACKAGE_CONFIG_DIR ${CMAKE_INSTALL_FULL_LIBDIR}/cmake CACHE PATH
     "Path into which the cmake config files should be installed")
 
@@ -288,7 +293,9 @@ if (COMBINE_DEPENDENCY_DIR AND EXISTS ${COMBINE_DEPENDENCY_DIR})
 endif()
 
 set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/CMakeModules;${CMAKE_MODULE_PATH}")
-
+# install find modules, so they can readily be used by others
+file(GLOB find_modules "${CMAKE_CURRENT_SOURCE_DIR}/CMakeModules/Find*.cmake")
+install(FILES ${find_modules} DESTINATION share/cmake/Modules)
 
 
 ###############################################################################
@@ -301,46 +308,8 @@ find_package(LIBSBML REQUIRED)
 # detect zipper library if sources are not included
 if (NOT EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/src/zipper)
 
-find_library(ZIPPER_LIBRARY
-    NAMES Zipper-static Zipper libZipper-static libZipper
-    PATHS /usr/lib /usr/local/lib
-          ${CMAKE_OSX_SYSROOT}/usr/lib
-          ${COMBINE_DEPENDENCY_DIR}/lib
-          ${ADDITIONAL_LIB_DIRS}
-          $ENV{ZLIBROOT}/lib
-          ${CONAN_LIB_DIRS_ZIPPER}
-    DOC "The file name of the ZIPPER library."
-)
+find_package(ZIPPER REQUIRED)
 
-
-find_path(ZIPPER_INCLUDE_DIR
-      NAMES zipper/zipper.h
-      PATHS ${CMAKE_OSX_SYSROOT}/usr/include
-            /usr/include /usr/local/include
-            ${COMBINE_DEPENDENCY_DIR}/include
-            $ENV{ZLIBROOT}/include
-            ${CONAN_INCLUDE_DIRS_ZIPPER}
-            NO_DEFAULT_PATH
-      DOC "The directory containing the ZIPPER include files."
-            )
-else()
-  unset(ZIPPER_LIBRARY)
-  unset(ZIPPER_INCLUDE_DIR)
-  find_path(ZIPPER_INCLUDE_DIR
-      NAMES zipper/zipper.h
-      PATHS ${CMAKE_CURRENT_SOURCE_DIR}/src
-            ${CONAN_INCLUDE_DIRS_ZIPPER}
-            NO_DEFAULT_PATH
-      DOC "The directory containing the ZIPPER include files."
-            )
-endif()
-
-if (NOT ZIPPER_INCLUDE_DIR)
- message(FATAL_ERROR "
-     Could not found zipper/zipper.h on system or in src/zipper. Please specify
-     the ZIPPER_INCLUDE_DIR variable or copy the zipper directory into the src
-     dir.
-")
 endif()
 
 find_package(ZLIB REQUIRED)
@@ -374,7 +343,7 @@ endif()
 set(USE_ZLIB ON)
 add_definitions( -DUSE_ZLIB )
 
-if (LIBZ_LIBRARY)
+if (ZLIB_LIBRARY)
   set(LIBCOMBINE_LIBS ${LIBCOMBINE_LIBS} ZLIB::ZLIB)
 endif()
 
@@ -385,47 +354,17 @@ elseif (LIBSBML_LIBRARY)
 endif()
 
 if (ZIPPER_LIBRARY)
-  set(LIBCOMBINE_LIBS ${LIBCOMBINE_LIBS} ${ZIPPER_LIBRARY})
-endif()
-
-# make sure that we have a valid zip library
-check_library_exists("${LIBZ_LIBRARY}" "gzopen" "" LIBZ_FOUND_SYMBOL)
-if(NOT LIBZ_FOUND_SYMBOL)
-    # this is odd, but on windows this check always fails! must be a
-    # bug in the current cmake version so for now only issue this
-    # warning on linux
-    if(UNIX)
-        message(WARNING
-"The chosen zlib library does not appear to be valid because it is
-missing certain required symbols. Please check that ${LIBZ_LIBRARY} is
-the correct zlib library. For details about the error, please see
-${CMAKE_CURRENT_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/CMakeError.log")
-    endif()
-endif()
-
-if(NOT EXISTS "${LIBZ_INCLUDE_DIR}/zlib.h")
-    message(FATAL_ERROR
-"The include directory specified for zlib does not appear to be
-valid. It should contain the file zlib.h, but it does not. Please
-verify the LIBZ_INCLUDE_DIR variable.")
+  set(LIBCOMBINE_LIBS ${LIBCOMBINE_LIBS} ZIPPER::ZIPPER)
 endif()
 
 set(USING_INTEL FALSE)
-if (WIN32 AND CMAKE_C_COMPILER AND ${CMAKE_C_COMPILER} MATCHES ".*icl.*$")
+if (WIN32 AND CMAKE_C_COMPILER AND CMAKE_C_COMPILER MATCHES ".*icl.*$")
   message(STATUS "Detected Intel Compiler")
   set(USING_INTEL TRUE)
 endif ()
 
     
 if(MSVC OR USING_INTEL)
-
-  if (LIBSBML_STATIC)
-      add_definitions(-DLIBSBML_STATIC -DLIBLAX_STATIC)
-      set(BUILD_DEFINITIONS "${BUILD_DEFINITIONS} -DLIBSBML_STATIC -DLIBLAX_STATIC")
-  else()
-      add_definitions(-DLIBSBML_EXPORTS -DLIBLAX_EXPORTS)
-      set(BUILD_DEFINITIONS "${BUILD_DEFINITIONS} -DLIBSBML_EXPORTS -DLIBLAX_EXPORTS")
-  endif()
 
     add_definitions(-DWIN32 -DLIBCOMBINE_EXPORTS -DLIBLAX_EXPORTS)
     add_definitions(-D_CRT_SECURE_NO_WARNINGS -D_CRT_NONSTDC_NO_DEPRECATE)
@@ -444,6 +383,7 @@ if(MSVC OR USING_INTEL)
             
         endforeach(flag_var)
     add_definitions( -D_MT)
+    set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
     endif(WITH_STATIC_RUNTIME)
 
 
@@ -529,15 +469,6 @@ endif()
 # unfortunately that won't work for qt 
 if (CYGWIN AND NOT WITH_QT_FILESYSTEM)
 add_definitions(-D__APPLE__)
-endif()
-
-
-if (LIBZ_INCLUDE_DIR AND EXISTS ${LIBZ_INCLUDE_DIR})
-include_directories(BEFORE ${LIBZ_INCLUDE_DIR})
-endif()
-
-if (ZIPPER_INCLUDE_DIR AND EXISTS ${ZIPPER_INCLUDE_DIR})
-include_directories(BEFORE ${ZIPPER_INCLUDE_DIR})
 endif()
 
 # allow definition of extra include dirs
@@ -686,8 +617,8 @@ libCombine version ${LIBCOMBINE_VERSION}
      libSBML compression support     = ${LIBSBML_HAS_MINIZIP}
 
    Zlib library configuration:
-     Zlib library                    = ${LIBZ_LIBRARY}
-     Zlib include dir                = ${LIBZ_INCLUDE_DIR}
+     Zlib library                    = ${ZLIB_LIBRARY}
+     Zlib include dir                = ${ZLIB_INCLUDE_DIR}
 
    Zipper library configuration:
      Zipper library                  = ${ZIPPER_LIBRARY}

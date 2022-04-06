@@ -12,12 +12,16 @@ MACRO (FIND_ZIPPER)
 
 ENDMACRO ()
 
+
+string(TOUPPER ${PROJECT_NAME} _UPPER_PROJECT_NAME)
+set(_PROJECT_DEPENDENCY_DIR ${_UPPER_PROJECT_NAME}_DEPENDENCY_DIR)
+
 find_library(ZIPPER_LIBRARY
     NAMES Zipper-static Zipper libZipper-static libZipper
     PATHS ${CMAKE_OSX_SYSROOT}/usr/lib
-          ${COMBINE_DEPENDENCY_DIR}/lib
+          ${${_PROJECT_DEPENDENCY_DIR}}/lib
           ${ADDITIONAL_LIB_DIRS}
-          $ENV{ZLIBROOT}/lib
+          $ENV{ZIPPER_DIR}/lib
           /usr/lib
           /usr/local/lib
     DOC "The file name of the ZIPPER library."
@@ -25,14 +29,21 @@ find_library(ZIPPER_LIBRARY
 
 find_path(ZIPPER_INCLUDE_DIR
       NAMES zipper/zipper.h
-      PATHS ${COMBINE_DEPENDENCY_DIR}/include
-            $ENV{ZLIBROOT}/include
+      PATHS ${${_PROJECT_DEPENDENCY_DIR}}/include
+            $ENV{ZIPPER_DIR}/include
             ${CMAKE_OSX_SYSROOT}/usr/include
             /usr/include
             /usr/local/include
             NO_DEFAULT_PATH
       DOC "The directory containing the ZIPPER include files."
             )
+
+if(NOT TARGET ZIPPER::ZIPPER)
+  add_library(ZIPPER::ZIPPER UNKNOWN IMPORTED)
+  set_target_properties(ZIPPER::ZIPPER PROPERTIES
+    IMPORTED_LOCATION "${ZIPPER_LIBRARY}"
+    INTERFACE_INCLUDE_DIRECTORIES "${ZIPPER_INCLUDE_DIR}")
+endif()
 
 include(FindPackageHandleStandardArgs)
 

@@ -126,14 +126,6 @@ install(FILES ${additional_common} DESTINATION include/omex/common)
 # specify include directories
 #
 
-if (LIBZ_INCLUDE_DIR AND EXISTS ${LIBZ_INCLUDE_DIR})
-include_directories(BEFORE ${LIBZ_INCLUDE_DIR})
-endif()
-
-if (ZIPPER_INCLUDE_DIR AND EXISTS ${ZIPPER_INCLUDE_DIR})
-include_directories(BEFORE ${ZIPPER_INCLUDE_DIR})
-endif()
-
 if (EXTRA_INCLUDE_DIRS) 
  include_directories(${EXTRA_INCLUDE_DIRS})
 endif(EXTRA_INCLUDE_DIRS)

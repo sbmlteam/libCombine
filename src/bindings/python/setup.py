@@ -234,8 +234,6 @@ class CMakeBuild(build_ext):
                            '-DLIBSBML_DEPENDENCY_DIR=' + dep_inst_dir,
                            '-DLIBEXPAT_INCLUDE_DIR=' + os.path.join(dep_inst_dir, 'include'),
                            '-DLIBEXPAT_LIBRARY=' + get_lib_full_path(os.path.join(dep_inst_dir, 'lib'), 'expat'),
-                           '-DLIBZ_INCLUDE_DIR=' + os.path.join(dep_inst_dir, 'include'),
-                           '-DLIBZ_LIBRARY=' + zlib,
                            '-DWITH_ZLIB=ON',
                            '-DWITH_BZIP2=OFF',
                            '-DWITH_EXPAT=ON',
@@ -288,20 +286,14 @@ class CMakeBuild(build_ext):
         cmake_args = cmake_args + libcombine_args
         
         if DEP_DIR:
-          cmake_args.append('-DCOMBINE_DEPENDENCY_DIR=' + DEP_DIR)
-          cmake_args.append('-DLIBZ_INCLUDE_DIR=' + os.path.join(DEP_DIR, 'include'))
-          zlib = get_lib_full_path(os.path.join(DEP_DIR, 'lib'), 'zlib')
-          if not zlib: 
-            zlib = get_lib_full_path(os.path.join(DEP_DIR, 'lib'), 'zdll')
-
-          cmake_args.append('-DLIBZ_LIBRARY=' + zlib)
+          cmake_args.append('-DLIBCOMBINE_DEPENDENCY_DIR=' + DEP_DIR)
 
         if is_win_32:
           if DEP_DIR32:
-            cmake_args.append('-DCOMBINE_DEPENDENCY_DIR=' + DEP_DIR32)
+            cmake_args.append('-DLIBCOMBINE_DEPENDENCY_DIR=' + DEP_DIR32)
         elif is_win:
           if DEP_DIR64:
-            cmake_args.append('-DCOMBINE_DEPENDENCY_DIR=' + DEP_DIR64)
+            cmake_args.append('-DLIBCOMBINE_DEPENDENCY_DIR=' + DEP_DIR64)
 
         os.chdir(build_temp)
         self.spawn(['cmake', SRC_DIR] + cmake_args)
