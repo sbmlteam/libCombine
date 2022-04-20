@@ -225,15 +225,10 @@ class CMakeBuild(build_ext):
             dep_build_dir = os.path.join(cwd, 'build_libSBML_' + dep_suffix)
             makedirs(dep_build_dir)
             os.chdir(dep_build_dir)
-            zlib = get_lib_full_path(os.path.join(dep_inst_dir, 'lib'), 'zlib')
-            if not zlib: 
-              zlib = get_lib_full_path(os.path.join(dep_inst_dir, 'lib'), 'zdll')
             self.spawn(['cmake', DEP_SBML_SRC_DIR] + cmake_args
                        + [
                            '-DCMAKE_INSTALL_PREFIX=' + dep_inst_dir,
                            '-DLIBSBML_DEPENDENCY_DIR=' + dep_inst_dir,
-                           '-DLIBEXPAT_INCLUDE_DIR=' + os.path.join(dep_inst_dir, 'include'),
-                           '-DLIBEXPAT_LIBRARY=' + get_lib_full_path(os.path.join(dep_inst_dir, 'lib'), 'expat'),
                            '-DWITH_ZLIB=ON',
                            '-DWITH_BZIP2=OFF',
                            '-DWITH_EXPAT=ON',
@@ -248,15 +243,10 @@ class CMakeBuild(build_ext):
             dep_build_dir = os.path.join(cwd, 'build_zipper_' + dep_suffix)
             makedirs(dep_build_dir)
             os.chdir(dep_build_dir)
-            zlib = get_lib_full_path(os.path.join(dep_inst_dir, 'lib'), 'zlib')
-            if not zlib: 
-              zlib = get_lib_full_path(os.path.join(dep_inst_dir, 'lib'), 'zdll')
             self.spawn(['cmake', DEP_ZIP_SRC_DIR] + cmake_args
                        + [
                            '-DCMAKE_INSTALL_PREFIX=' + dep_inst_dir,
                            '-DZIPPER_DEPENDENCY_DIR=' + dep_inst_dir,
-                           '-DLIBZ_INCLUDE_DIR=' + os.path.join(dep_inst_dir, 'include'),
-                           '-DLIBZ_LIBRARY=' + zlib,
                            '-DBUILD_SHARED_VERSION=OFF',
                            '-DBUILD_STATIC_VERSION=ON',
                            '-DBUILD_TEST=OFF',
