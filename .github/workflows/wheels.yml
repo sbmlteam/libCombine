@@ -38,7 +38,8 @@ jobs:
     steps:
     - uses: actions/checkout@v1
       with:
-        submodules: recursive
+        fetch-depth: 0  # Optional, use if you use setuptools_scm
+        submodules: recursive  # Optional, use if you have submodules
 
     - name: Copy setup.py
       run: |
