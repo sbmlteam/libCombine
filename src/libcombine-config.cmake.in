@@ -1,0 +1,23 @@
+get_filename_component(LIBCOMBINE_CMAKE_DIR "${CMAKE_CURRENT_LIST_FILE}" PATH)
+include(CMakeFindDependencyMacro)
+
+list(APPEND CMAKE_MODULE_PATH "@CMAKE_INSTALL_PREFIX@/share/cmake/Modules")
+
+foreach (library @LIBCOMBINE_LIBS@ @EXTRA_LIBS@)
+
+    string(FIND "${library}" "::" index)
+
+    if (${index} GREATER 0)
+      # found dependent library
+      string(SUBSTRING "${library}" 0 ${index} DEPENDENT_NAME)
+      message(VERBOSE "Looking for dependent library: ${DEPENDENT_NAME}")
+      find_dependency(${DEPENDENT_NAME})
+    endif()
+
+endforeach()
+
+if(NOT TARGET @LIBCOMBINE_LIBRARY@)
+    include("${LIBCOMBINE_CMAKE_DIR}/@LIBCOMBINE_LIBRARY@-targets.cmake")
+endif()
+
+set(LIBCOMBINE_LIBRARIES @LIBCOMBINE_LIBRARY@)

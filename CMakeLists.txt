@@ -228,10 +228,10 @@ if("${CMAKE_BUILD_TYPE}" STREQUAL "")
 endif()
 
 # Set the default dependency directory.
-set(COMBINE_DEPENDENCY_DIR ${CMAKE_SOURCE_DIR}/dependencies/ CACHE PATH
+set(LIBCOMBINE_DEPENDENCY_DIR ${CMAKE_SOURCE_DIR}/dependencies/ CACHE PATH
     "Directory containing libraries that libCombine depends upon. (Particularly important on Windows.)")
-if("${COMBINE_DEPENDENCY_DIR}" STREQUAL "")
-  set(COMBINE_DEPENDENCY_DIR ${CMAKE_SOURCE_DIR}/dependencies/ CACHE PATH
+if("${LIBCOMBINE_DEPENDENCY_DIR}" STREQUAL "")
+  set(LIBCOMBINE_DEPENDENCY_DIR ${CMAKE_SOURCE_DIR}/dependencies/ CACHE PATH
   "Directory containing libraries that libCombine depends upon. (Particularly important on Windows.)" FORCE)
 endif()
 
@@ -288,8 +288,8 @@ endif(WITH_SWIG)
 
 
 # Update cmake path variables
-if (COMBINE_DEPENDENCY_DIR AND EXISTS ${COMBINE_DEPENDENCY_DIR})
-  set(CMAKE_PREFIX_PATH "${COMBINE_DEPENDENCY_DIR}/${CMAKE_INSTALL_LIBDIR}/cmake;${CMAKE_PREFIX_PATH}")
+if (LIBCOMBINE_DEPENDENCY_DIR AND EXISTS ${LIBCOMBINE_DEPENDENCY_DIR})
+  set(CMAKE_PREFIX_PATH "${LIBCOMBINE_DEPENDENCY_DIR}/${CMAKE_INSTALL_LIBDIR}/cmake;${CMAKE_PREFIX_PATH}")
 endif()
 
 set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/CMakeModules;${CMAKE_MODULE_PATH}")
