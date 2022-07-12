@@ -102,7 +102,7 @@ CombineArchive::initializeFromArchive(
     if (current->getLocation() != ".")
       continue;
 
-    mpManifest->removeContent(i);
+    delete mpManifest->removeContent(i);
     break;
   }
   mMap.erase("manifest.xml");
@@ -267,7 +267,7 @@ bool CombineArchive::writeToFile(const std::string &fileName)
 
   // remove additional entries added 
   while (numContents != mpManifest->getNumContents())
-    mpManifest->removeContent(numContents);
+    delete mpManifest->removeContent(numContents);
 
   zipper.close();
   return true;

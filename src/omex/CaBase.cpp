@@ -3138,7 +3138,7 @@ CaBase::setCaBaseFields (const LIBSBML_CPP_NAMESPACE_QUALIFIER XMLToken& element
   mLine   = element.getLine  ();
   mColumn = element.getColumn();
 
-  if (element.getNamespaces().getLength() > 0)
+  if (element.getNamespaces().getLength() > 0 && this == mCa)
   {
     LIBSBML_CPP_NAMESPACE_QUALIFIER XMLNamespaces tmpxmlns(element.getNamespaces());
     setNamespaces(&tmpxmlns);
