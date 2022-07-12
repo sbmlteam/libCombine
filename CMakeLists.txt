@@ -46,6 +46,9 @@ set(PACKAGE_NAME "libCombine")
 project(libCombine VERSION "${LIBCOMBINE_VERSION_MAJOR}.${LIBCOMBINE_VERSION_MINOR}.${LIBCOMBINE_VERSION_PATCH}"
                    LANGUAGES CXX)
 
+set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
 include (CMakeTestCXXCompiler)
 include (CheckCSourceCompiles)
 include (CheckCXXSourceCompiles)
