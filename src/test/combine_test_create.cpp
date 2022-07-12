@@ -82,7 +82,7 @@ SCENARIO("creating a new combine archive", "[combine]")
         REQUIRE(entry->getCrossRef(0) != NULL);
         REQUIRE(entry->getCrossRef(0)->getLocation() == "foo.xml");
 
-        entry->removeCrossRef(0);
+        delete entry->removeCrossRef(0);
 
         std::string modelContent = archive.extractEntryToString("./model/BorisEJB.xml");
         REQUIRE(!modelContent.empty());
