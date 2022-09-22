@@ -117,6 +117,12 @@ Static Public Member Functions</h2></td></tr>
 <tr class="memitem:a17a44bb16674b1de555210a21b49bb63"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_util.html#a17a44bb16674b1de555210a21b49bb63">removeFileOrFolder</a> (const std::string &amp;path)</td></tr>
 <tr class="memdesc:a17a44bb16674b1de555210a21b49bb63"><td class="mdescLeft">&#160;</td><td class="mdescRight">Removes the specified file or folder.  <a href="class_util.html#a17a44bb16674b1de555210a21b49bb63">More...</a><br /></td></tr>
 <tr class="separator:a17a44bb16674b1de555210a21b49bb63"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afb0fe280e83e7e65ec63b493552acf5d"><td class="memItemLeft" align="right" valign="top">static std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_util.html#afb0fe280e83e7e65ec63b493552acf5d">getDefaultTempDir</a> ()</td></tr>
+<tr class="memdesc:afb0fe280e83e7e65ec63b493552acf5d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the Default Temp Dir object.  <a href="class_util.html#afb0fe280e83e7e65ec63b493552acf5d">More...</a><br /></td></tr>
+<tr class="separator:afb0fe280e83e7e65ec63b493552acf5d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac658f4dfb5636ebc02731974962e8bf4"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_util.html#ac658f4dfb5636ebc02731974962e8bf4">setDefaultTempDir</a> (const std::string &amp;defaultDir)</td></tr>
+<tr class="memdesc:ac658f4dfb5636ebc02731974962e8bf4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the Default Temp Dir object.  <a href="class_util.html#ac658f4dfb5636ebc02731974962e8bf4">More...</a><br /></td></tr>
+<tr class="separator:ac658f4dfb5636ebc02731974962e8bf4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Member Function Documentation</h2>
 <a id="af4452cbbe98092faa6cd95bc007c5332" name="af4452cbbe98092faa6cd95bc007c5332"></a>
@@ -232,6 +238,34 @@ Static Public Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 <dl class="section return"><dt>Returns</dt><dd>current milliseconds since 1970 on this system </dd></dl>
+
+</div>
+</div>
+<a id="afb0fe280e83e7e65ec63b493552acf5d" name="afb0fe280e83e7e65ec63b493552acf5d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afb0fe280e83e7e65ec63b493552acf5d">&#9670;&#160;</a></span>getDefaultTempDir()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static std::string Util::getDefaultTempDir </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Get the Default Temp Dir object. </p>
+<dl class="section return"><dt>Returns</dt><dd>std::string of the default directory </dd></dl>
 
 </div>
 </div>
@@ -370,6 +404,40 @@ Static Public Member Functions</h2></td></tr>
 
 <p>Removes the specified file or folder. </p>
 <p >If it is a folder its contents will be removed recursively. </p>
+
+</div>
+</div>
+<a id="ac658f4dfb5636ebc02731974962e8bf4" name="ac658f4dfb5636ebc02731974962e8bf4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac658f4dfb5636ebc02731974962e8bf4">&#9670;&#160;</a></span>setDefaultTempDir()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static void Util::setDefaultTempDir </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>defaultDir</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Set the Default Temp Dir object. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">defaultDir</td><td>the default directory </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
