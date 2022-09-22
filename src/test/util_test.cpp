@@ -29,4 +29,13 @@ SCENARIO("utility methods", "[combine][util]")
     REQUIRE(KnownFormats::isFormat("sbml",
             KnownFormats::guessFormat(getTestFile("test-data/BorisEJB.xml"))));
   }
+
+  GIVEN("The default dir is changed")
+  {
+    std::string defaultDir = Util::getDefaultTempDir();
+    REQUIRE(defaultDir.empty() == false);
+    Util::setDefaultTempDir("/tmp/");
+    REQUIRE(Util::getDefaultTempDir() == "/tmp/");
+    Util::setDefaultTempDir(defaultDir);
+  }
 }

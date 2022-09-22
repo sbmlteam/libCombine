@@ -13,6 +13,21 @@
 
 LIBCOMBINE_CPP_NAMESPACE_USE
 
+std::string Util::mDefaultTempDir = ".";
+
+std::string 
+Util::getDefaultTempDir()
+{
+  return mDefaultTempDir;
+}
+
+void 
+Util::setDefaultTempDir(const std::string& defaultDir)
+{
+  mDefaultTempDir = defaultDir;
+}
+
+
 std::string
 Util::getTempPath()
 {
@@ -20,7 +35,7 @@ Util::getTempPath()
   if (tmpDir != NULL) return tmpDir;
   tmpDir = getenv("TEMP");
   if (tmpDir != NULL) return tmpDir;
-  return ".";
+  return mDefaultTempDir;
 }
 
 std::string

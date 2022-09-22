@@ -105,6 +105,19 @@ public:
    */
   static bool removeFileOrFolder(const std::string& path);
 
+  /**
+   * @brief Get the Default Temp Dir object 
+   * 
+   * @return std::string of the default directory
+   */
+  static std::string getDefaultTempDir();
+
+  /**
+   * @brief Set the Default Temp Dir object
+   * 
+   * @param defaultDir the default directory
+   */
+  static void setDefaultTempDir(const std::string& defaultDir);
 
 private:
 
@@ -118,7 +131,10 @@ private:
    */
   static size_t getExtensionIndex(const char *fileName);
 
-
+  /** 
+   * the default temp dir (defaults to ".")
+   */ 
+  static std::string mDefaultTempDir;
 };
 
 LIBCOMBINE_CPP_NAMESPACE_END
