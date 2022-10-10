@@ -309,7 +309,7 @@ find_package(LIBSBML REQUIRED)
 
 
 # detect zipper library if sources are not included
-if (NOT EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/src/zipper)
+if (NOT EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/submodules/zipper)
 
 find_package(ZIPPER REQUIRED)
 
@@ -495,14 +495,14 @@ file(GLOB COMBINE_SOURCES
 source_group(combine FILES ${COMBINE_SOURCES} ${COMBINE_HEADERS})
 
 # if we have the zipper sources, include them directly
-if (EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/src/zipper)
-  include_directories(BEFORE ${CMAKE_CURRENT_SOURCE_DIR}/src/zipper)
-  include_directories(BEFORE ${CMAKE_CURRENT_SOURCE_DIR}/src)
+if (EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/submodules/zipper)
+  include_directories(BEFORE ${CMAKE_CURRENT_SOURCE_DIR}/submodules/zipper/zipper)
+  include_directories(BEFORE ${CMAKE_CURRENT_SOURCE_DIR}/submodules/zipper)
 
-  file(GLOB ZIPPER_SOURCES
+  file(GLOB_RECURSE ZIPPER_SOURCES
     RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}/src
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/zipper/*.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/zipper/*.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/submodules/zipper/*.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/submodules/zipper/*.h
   )
 
   set(COMBINE_SOURCES ${COMBINE_SOURCES} ${ZIPPER_SOURCES})
