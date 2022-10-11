@@ -499,10 +499,12 @@ if (EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/submodules/zipper)
   include_directories(BEFORE ${CMAKE_CURRENT_SOURCE_DIR}/submodules/zipper/zipper)
   include_directories(BEFORE ${CMAKE_CURRENT_SOURCE_DIR}/submodules/zipper)
 
-  file(GLOB_RECURSE ZIPPER_SOURCES
+  file(GLOB ZIPPER_SOURCES
     RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}/src
-    ${CMAKE_CURRENT_SOURCE_DIR}/submodules/zipper/*.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/submodules/zipper/*.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/submodules/zipper/zipper/*.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/submodules/zipper/zipper/*.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/submodules/zipper/zipper/tps/*.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/submodules/zipper/zipper/tps/*.h
   )
 
   set(COMBINE_SOURCES ${COMBINE_SOURCES} ${ZIPPER_SOURCES})
@@ -520,17 +522,17 @@ if (LIBSBML_LIBRARY)
   CHECK_FUNCTION_EXISTS(zipOpen3 LIBSBML_HAS_MINIZIP)
 endif()
 
-if (EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/src/minizip AND NOT LIBSBML_HAS_MINIZIP)
-  include_directories(BEFORE ${CMAKE_CURRENT_SOURCE_DIR}/src/minizip)
+if (EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/submodules/zipper/minizip AND NOT LIBSBML_HAS_MINIZIP)
+  include_directories(BEFORE ${CMAKE_CURRENT_SOURCE_DIR}/submodules/zipper/minizip)
 
   file(GLOB MINIZIP_SOURCES
     RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}/src
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/minizip/*.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/submodules/zipper/minizip/*.c
   )
 
   if (UNIX AND NOT CYGWIN)
    list(REMOVE_ITEM MINIZIP_SOURCES
-    minizip/iowin32.c
+    ../submodules/zipper/minizip/iowin32.c
   )
   endif()
 
