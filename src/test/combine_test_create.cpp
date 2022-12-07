@@ -195,6 +195,31 @@ SCENARIO("reading an existing archive", "[combine]")
   }
 }
 
+
+SCENARIO("reading an archive with zero sized entries", "[combine]")
+{
+  GIVEN("a user loads a file with zero sized entries")
+  {
+    CombineArchive archive;
+    REQUIRE(archive.getManifest() == NULL);
+    REQUIRE(archive.initializeFromArchive(getTestFile("test-data/issue_59.omex")) == true);
+
+    // remove file if existing 
+    if (checkFileExists("sim.sedml"))
+      std::remove("sim.sedml");
+    
+    THEN("the file is extracted as zero sized file")
+    {
+      // extract zero sized file
+      archive.extractEntry("sim.sedml", ".");
+      REQUIRE (checkFileExists("sim.sedml") == true);
+      
+      // remove it again
+      std::remove("sim.sedml");
+    }
+  }
+}
+
 SCENARIO("creating a combine archive", "[combine]")
 {
   CombineArchive archive;
