@@ -19,7 +19,7 @@ jobs:
     - name: Build SDist
       run: |
         cp src/bindings/python/setup.py .
-        cp src/bindings/python/Manifest.in .
+        cp src/bindings/python/MANIFEST.in .
         pipx run build --sdist
 
     - uses: actions/upload-artifact@v2
@@ -72,7 +72,7 @@ jobs:
         path: dist
     - uses: actions/download-artifact@v2
       with:
-        name: libCombine-macos-10.15
+        name: libCombine-macos-11
         path: dist
     - uses: actions/download-artifact@v2
       with:
