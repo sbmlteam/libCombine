@@ -199,6 +199,23 @@ public:
                              bool skipOmex=false);
 
   /**
+   * initializes this instance from an unzipper instance of a 
+   * combine archive
+   *
+   * @param unzipper the unzipper instance
+   * @param skipOmex optional flag indicating whether meta data processing 
+   *        should be skipped or not (default). The metadata processing, removes 
+   *        annotations in the restricted 2014 subset of the OMEX Metadata and 
+   *        adds them to the convenience classes.
+   *
+   * @return boolean indicating success or failure
+   */
+  bool initializeFromArchive(zipper::Unzipper* pUnzipper,
+                             bool skipOmex=false);
+
+  
+
+  /**
    * @return the manifest
    */
   const CaOmexManifest *getManifest() const;
