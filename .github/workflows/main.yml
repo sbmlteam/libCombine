@@ -56,7 +56,7 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install wheel seetuptools
+        pip install wheel setuptools
 
     - name: Build
       working-directory: ${{runner.workspace}}/libCombine/
