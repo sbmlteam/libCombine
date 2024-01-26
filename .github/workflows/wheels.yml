@@ -46,7 +46,7 @@ jobs:
       run: |
         cp src/bindings/python/setup.py .
 
-    - uses: pypa/cibuildwheel@v2.11.2
+    - uses: pypa/cibuildwheel@v2.16.2
       env:
           CIBW_BUILD: ${{ matrix.python_version }}
           CIBW_ARCHS_MACOS: x86_64 arm64
