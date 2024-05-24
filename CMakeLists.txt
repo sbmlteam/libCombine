@@ -364,6 +364,12 @@ elseif (ZIPPER_LIBRARY)
   set(LIBCOMBINE_LIBS ${LIBCOMBINE_LIBS} ${ZIPPER_LIBRARY})
 endif()
 
+if (XML_LIBRARY_NAME)
+  set(LIBCOMBINE_LIBS ${LIBCOMBINE_LIBS} ${XML_LIBRARY_NAME})
+elseif (XML_LIBRARY)
+  set(LIBCOMBINE_LIBS ${LIBCOMBINE_LIBS} ${XML_LIBRARY})
+endif()
+
 set(USING_INTEL FALSE)
 if (WIN32 AND CMAKE_C_COMPILER AND CMAKE_C_COMPILER MATCHES ".*icl.*$")
   message(STATUS "Detected Intel Compiler")
@@ -484,6 +490,7 @@ include_directories(${EXTRA_INCLUDE_DIRS})
 endif()
 
 include_directories(${LIBSBML_INCLUDE_DIR})
+include_directories(${XML_INCLUDE_DIR})
 include_directories(${ZLIB_INCLUDE_DIR})
 include_directories(${ZIPPER_INCLUDE_DIR})
 include_directories(BEFORE ${CMAKE_CURRENT_SOURCE_DIR}/src/)
@@ -626,6 +633,10 @@ libCombine version ${LIBCOMBINE_VERSION}
      SBML library                    = ${LIBSBML_LIBRARY}
      SBML include dir                = ${LIBSBML_INCLUDE_DIR}
      libSBML compression support     = ${LIBSBML_HAS_MINIZIP}
+
+   XML library configuration:
+     XML library                     = ${XML_LIBRARY}
+     XML include dir                 = ${XML_INCLUDE_DIR}
 
    Zlib library configuration:
      Zlib library                    = ${ZLIB_LIBRARY}
