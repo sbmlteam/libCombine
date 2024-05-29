@@ -153,7 +153,28 @@ CombineArchive::initializeFromArchive(
   }
   catch (const std::exception&)
   {
-    // invalid COMBINE archive, it should always have a manifest
+    // something went wrong
+    cleanUp();
+    return false;
+  }
+
+  return initializeFromArchive(mpUnzipper, skipOmex);
+}
+
+bool
+CombineArchive::initializeFromArchive(
+    std::vector<unsigned char>& pBuffer,
+    bool skipOmex /*= false*/)
+{
+  cleanUp();
+
+  try
+  {
+    mpUnzipper = new Unzipper(pBuffer);
+  }
+  catch (const std::exception&)
+  {
+    // something went wrong
     cleanUp();
     return false;
   }

@@ -214,6 +214,19 @@ public:
                              bool skipOmex=false);
 
   
+  /**
+   * initializes this instance from a buffer
+   *
+   * @param buffer the buffer
+   * @param skipOmex optional flag indicating whether meta data processing
+   *        should be skipped or not (default). The metadata processing, removes
+   *        annotations in the restricted 2014 subset of the OMEX Metadata and
+   *        adds them to the convenience classes.
+   *
+   * @return boolean indicating success or failure
+   */
+  bool initializeFromArchive(std::vector<unsigned char>& pBuffer,
+                             bool skipOmex=false);
 
   /**
    * @return the manifest
