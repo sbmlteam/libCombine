@@ -162,15 +162,17 @@ CombineArchive::initializeFromArchive(
 }
 
 bool
-CombineArchive::initializeFromArchive(
-    std::vector<unsigned char>& pBuffer,
+CombineArchive::initializeFromBuffer(
+    const std::vector<unsigned char>& pBuffer,
     bool skipOmex /*= false*/)
 {
   cleanUp();
 
   try
   {
-    mpUnzipper = new Unzipper(pBuffer);
+    auto buffer = const_cast<std::vector<unsigned char> &>(pBuffer);
+
+    mpUnzipper = new Unzipper(buffer);
   }
   catch (const std::exception&)
   {

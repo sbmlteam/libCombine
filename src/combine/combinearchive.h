@@ -225,8 +225,8 @@ public:
    *
    * @return boolean indicating success or failure
    */
-  bool initializeFromArchive(std::vector<unsigned char>& pBuffer,
-                             bool skipOmex=false);
+  bool initializeFromBuffer(const std::vector<unsigned char>& pBuffer,
+                            bool skipOmex=false);
 
   /**
    * @return the manifest
