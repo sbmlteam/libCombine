@@ -51,7 +51,7 @@ CombineArchive::initializeFromDirectory(const std::string &directory)
 }
 
 bool 
-CombineArchive::initializeFromArchive(
+CombineArchive::initializeFromUnzipper(
   zipper::Unzipper* pUnzipper,
   bool skipOmex/*=false*/)
 {
@@ -158,7 +158,7 @@ CombineArchive::initializeFromArchive(
     return false;
   }
 
-  return initializeFromArchive(mpUnzipper, skipOmex);
+  return initializeFromUnzipper(mpUnzipper, skipOmex);
 }
 
 bool
@@ -179,7 +179,7 @@ CombineArchive::initializeFromArchive(
     return false;
   }
 
-  return initializeFromArchive(mpUnzipper, skipOmex);
+  return initializeFromUnzipper(mpUnzipper, skipOmex);
 }
 
 bool CombineArchive::cleanUp()

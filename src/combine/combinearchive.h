@@ -210,8 +210,8 @@ public:
    *
    * @return boolean indicating success or failure
    */
-  bool initializeFromArchive(zipper::Unzipper* pUnzipper,
-                             bool skipOmex=false);
+  bool initializeFromUnzipper(zipper::Unzipper* pUnzipper,
+                              bool skipOmex=false);
 
   
   /**
