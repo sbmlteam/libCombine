@@ -118,6 +118,23 @@ public:
                const std::string& targetName,
                const std::string& format,
                bool isMaster = false);
+
+  /**
+   * Adds the given buffer to the archive.
+   *
+   * @param buffer the buffer of the file to be added to the archive.
+   * @param targetName the target name of the file in the archive
+   * @param format the format that this file has
+   * @param isMaster boolean indicating whether the file should be
+   *        opened first if there are multiple ones.
+   *
+   * @return boolean indicating success or failure
+   */
+  bool addFileFromBuffer(const std::vector<unsigned char>& buffer,
+               const std::string& targetName,
+               const std::string& format,
+               bool isMaster = false);
+
   /**
    * Adds the given metadata to the list.
    *
@@ -166,6 +183,15 @@ public:
   std::string extractEntryToString(const std::string& name);
 
   /**
+   * extracts the given entry and returns the contents as a buffer.
+   *
+   * @param name the entry to be extracted
+   *
+   * @return the content of the entry, or empty if not found.
+   */
+  std::vector<unsigned char> extractEntryToBuffer(const std::string& name);
+
+  /**
    * extracts all entries in this archive into the given directory.
    *
    * @param directory the directory into which to extract the archive.
@@ -210,10 +236,23 @@ public:
    *
    * @return boolean indicating success or failure
    */
-  bool initializeFromArchive(zipper::Unzipper* pUnzipper,
-                             bool skipOmex=false);
+  bool initializeFromUnzipper(zipper::Unzipper* pUnzipper,
+                              bool skipOmex=false);
 
   
+  /**
+   * initializes this instance from a buffer
+   *
+   * @param buffer the buffer
+   * @param skipOmex optional flag indicating whether meta data processing
+   *        should be skipped or not (default). The metadata processing, removes
+   *        annotations in the restricted 2014 subset of the OMEX Metadata and
+   *        adds them to the convenience classes.
+   *
+   * @return boolean indicating success or failure
+   */
+  bool initializeFromBuffer(const std::vector<unsigned char>& pBuffer,
+                            bool skipOmex=false);
 
   /**
    * @return the manifest
@@ -389,6 +428,15 @@ protected:
    *
    */
   int addMetadataToArchive(OmexDescription& desc, zipper::Zipper* zipper);
+
+  /**
+   * returns the map iterator for the given file.
+   *
+   * @param name the name that should be in the current map of files
+   *
+   * @return the map iterator
+  */
+  std::map<std::string, std::string>::iterator mapIterator(const std::string &name);
 };
 
 LIBCOMBINE_CPP_NAMESPACE_END

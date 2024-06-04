@@ -346,8 +346,10 @@ endif()
 set(USE_ZLIB ON)
 add_definitions( -DUSE_ZLIB )
 
-if (ZLIB_LIBRARY)
-  set(LIBCOMBINE_LIBS ${LIBCOMBINE_LIBS} ZLIB::ZLIB)
+if (ZLIB_LIBRARY_NAME)
+  set(LIBCOMBINE_LIBS ${LIBCOMBINE_LIBS} ${ZLIB_LIBRARY_NAME})
+elseif (ZLIB_LIBRARY)
+  set(LIBCOMBINE_LIBS ${LIBCOMBINE_LIBS} ${ZLIB_LIBRARY})
 endif()
 
 if (LIBSBML_LIBRARY_NAME)
@@ -356,8 +358,16 @@ elseif (LIBSBML_LIBRARY)
   set(LIBCOMBINE_LIBS ${LIBCOMBINE_LIBS} ${LIBSBML_LIBRARY})
 endif()
 
-if (ZIPPER_LIBRARY)
-  set(LIBCOMBINE_LIBS ${LIBCOMBINE_LIBS} ZIPPER::ZIPPER)
+if (ZIPPER_LIBRARY_NAME)
+  set(LIBCOMBINE_LIBS ${LIBCOMBINE_LIBS} ${ZIPPER_LIBRARY_NAME})
+elseif (ZIPPER_LIBRARY)
+  set(LIBCOMBINE_LIBS ${LIBCOMBINE_LIBS} ${ZIPPER_LIBRARY})
+endif()
+
+if (XML_LIBRARY_NAME)
+  set(LIBCOMBINE_LIBS ${LIBCOMBINE_LIBS} ${XML_LIBRARY_NAME})
+elseif (XML_LIBRARY)
+  set(LIBCOMBINE_LIBS ${LIBCOMBINE_LIBS} ${XML_LIBRARY})
 endif()
 
 set(USING_INTEL FALSE)
@@ -480,6 +490,9 @@ include_directories(${EXTRA_INCLUDE_DIRS})
 endif()
 
 include_directories(${LIBSBML_INCLUDE_DIR})
+include_directories(${XML_INCLUDE_DIR})
+include_directories(${ZLIB_INCLUDE_DIR})
+include_directories(${ZIPPER_INCLUDE_DIR})
 include_directories(BEFORE ${CMAKE_CURRENT_SOURCE_DIR}/src/)
 include_directories(BEFORE ${CMAKE_CURRENT_BINARY_DIR}/src/)
 
@@ -620,6 +633,10 @@ libCombine version ${LIBCOMBINE_VERSION}
      SBML library                    = ${LIBSBML_LIBRARY}
      SBML include dir                = ${LIBSBML_INCLUDE_DIR}
      libSBML compression support     = ${LIBSBML_HAS_MINIZIP}
+
+   XML library configuration:
+     XML library                     = ${XML_LIBRARY}
+     XML include dir                 = ${XML_INCLUDE_DIR}
 
    Zlib library configuration:
      Zlib library                    = ${ZLIB_LIBRARY}
