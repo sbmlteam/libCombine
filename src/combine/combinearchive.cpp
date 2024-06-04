@@ -12,6 +12,7 @@
 #include <zipper/unzipper.h>
 
 #include <fstream>
+#include <iterator>
 #include <sstream>
 #include <cstdio>
 
@@ -532,6 +533,23 @@ CombineArchive::addFile(std::istream &stream,
 
   std::ofstream out(tempFilename.c_str(), std::ios::out | std::ios::binary);
   Util::copyStream(stream, out);
+
+  return addFile(tempFilename, targetName, format, isMaster);
+}
+
+bool
+CombineArchive::addFileFromBuffer(const std::vector<unsigned char> &buffer,
+                                  const std::string &targetName,
+                                  const std::string &format,
+                                  bool isMaster)
+{
+  std::string tempFilename = Util::getTempFilename();
+  mTempFiles.push_back(tempFilename);
+
+  std::ofstream out(tempFilename.c_str(), std::ios::out | std::ios::binary);
+
+  std::copy(buffer.begin(), buffer.end(),
+            std::ostream_iterator<unsigned char>(out));
 
   return addFile(tempFilename, targetName, format, isMaster);
 }

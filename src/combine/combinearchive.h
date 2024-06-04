@@ -118,6 +118,23 @@ public:
                const std::string& targetName,
                const std::string& format,
                bool isMaster = false);
+
+  /**
+   * Adds the given buffer to the archive.
+   *
+   * @param buffer the buffer of the file to be added to the archive.
+   * @param targetName the target name of the file in the archive
+   * @param format the format that this file has
+   * @param isMaster boolean indicating whether the file should be
+   *        opened first if there are multiple ones.
+   *
+   * @return boolean indicating success or failure
+   */
+  bool addFileFromBuffer(const std::vector<unsigned char>& buffer,
+               const std::string& targetName,
+               const std::string& format,
+               bool isMaster = false);
+
   /**
    * Adds the given metadata to the list.
    *
