@@ -310,9 +310,8 @@ bool CombineArchive::writeToFile(const std::string &fileName)
   return true;
 }
 
-bool
-CombineArchive::getStream(const std::string &name,
-                          std::ifstream &stream)
+std::map<std::string, std::string>::iterator
+CombineArchive::mapIterator(const std::string &name)
 {
   std::map<std::string, std::string>::iterator it = mMap.find(name);
   if (it == mMap.end()) 
@@ -324,9 +323,19 @@ CombineArchive::getStream(const std::string &name,
       if (name.find("/") == 0)
         it = mMap.find(name.substr(1));
       if (it == mMap.end())
-        return false;
+        return mMap.end();
     }
   }
+  return it;
+}
+
+bool
+CombineArchive::getStream(const std::string &name,
+                          std::ifstream &stream)
+{
+  auto it = mapIterator(name);
+  if (it == mMap.end())
+    return false;
 
   std::string filename = (*it).second;
   if (filename.find("unzipper://") == 0)
@@ -575,4 +584,24 @@ CombineArchive::extractEntryToString(const std::string& name)
   std::ostringstream stream;
   extractEntryToStream(name, stream);
   return stream.str();
+}
+
+std::vector<unsigned char>
+CombineArchive::extractEntryToBuffer(const std::string& name)
+{
+  auto it = mapIterator(name);
+  if (it == mMap.end())
+    return {};
+
+  std::string filename = (*it).second;
+  if (filename.find("unzipper://") == 0)
+    filename = filename.substr(std::string("unzipper://").length());
+
+  if (mpUnzipper == NULL)
+    return {};
+
+  std::vector<unsigned char> res;
+  mpUnzipper->extractEntryToMemory(filename, res);
+
+  return res;
 }

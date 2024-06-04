@@ -166,6 +166,15 @@ public:
   std::string extractEntryToString(const std::string& name);
 
   /**
+   * extracts the given entry and returns the contents as a buffer.
+   *
+   * @param name the entry to be extracted
+   *
+   * @return the content of the entry, or empty if not found.
+   */
+  std::vector<unsigned char> extractEntryToBuffer(const std::string& name);
+
+  /**
    * extracts all entries in this archive into the given directory.
    *
    * @param directory the directory into which to extract the archive.
@@ -402,6 +411,15 @@ protected:
    *
    */
   int addMetadataToArchive(OmexDescription& desc, zipper::Zipper* zipper);
+
+  /**
+   * returns the map iterator for the given file.
+   *
+   * @param name the name that should be in the current map of files
+   *
+   * @return the map iterator
+  */
+  std::map<std::string, std::string>::iterator mapIterator(const std::string &name);
 };
 
 LIBCOMBINE_CPP_NAMESPACE_END
