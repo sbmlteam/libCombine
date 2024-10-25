@@ -28,10 +28,12 @@ jobs:
     runs-on: ${{ matrix.os }}
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
 
     - name: Checkout submodules
-      run: git submodule update --init --recursive
+      shell: bash
+      run: |
+        ./.github/workflows/checkout-submodules.sh
 
     - name: add SWIG to windows
       # this is separate from the SWIG download itself, because it needs to be added to the path also when SWIG is cached
