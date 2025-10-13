@@ -37,59 +37,83 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
+        # macos-15-intel is an Intel runner, macos-14 is Apple silicon
+        os: [ubuntu-latest, ubuntu-24.04-arm, windows-latest, windows-11-arm, macos-15-intel, macos-14]
         python_version: ['cp39-*', 'cp310-*', 'cp311-*', 'cp312-*', 'cp313-*', 'cp314-*']
 
     steps:
-    - uses: actions/checkout@v4
-      with:
-        fetch-depth: 0  # Optional, use if you use setuptools_scm
+      - uses: seanmiddleditch/gha-setup-ninja@master
 
-    - name: Checkout submodules
-      shell: bash
-      run: |
-        ./.github/workflows/checkout-submodules.sh
+      - name: Add msbuild to PATH (Windows)
+        if: matrix.os == 'windows-latest'
+        uses: ilammy/msvc-dev-cmd@v1
+  
+      - name: Install cibuildwheel
+        run: |
+          python -m pip install cibuildwheel==3.2.1 swig==4.2.1 cmake==3.31.6
+  
+          # print versions
+          python --version
+          cmake --version
+          swig -version
+  
+      - name: Download sdist
+        uses: actions/download-artifact@v4
+        with:
+          name: libCombine-sdist
+          path: .
+  
+      - name: Unpack sdist
+        shell: bash
+        run: |
+          ls -la
+          tar zxf python_libcombine-*.tar.gz
+          mv python_libcombine-*/* .
+          rm -rf python_libcombine-*
+          ls -la
 
-    - name: install swig on macos
-      if: matrix.os == 'macos-latest'
-      run: |
-        brew install swig
-
-    - name: Copy setup.py
-      run: |
-        cp src/bindings/python/setup.py .
-
-    - uses: pypa/cibuildwheel@v2.21.3
-      env:
+      - name: Build wheels
+        env:
           CIBW_BUILD: ${{ matrix.python_version }}
-          CIBW_ARCHS_MACOS: x86_64 arm64
+          CIBW_SKIP: "*-musllinux* cp36-* cp37-* cp38-* *-win32"
+          #CIBW_ARCHS_MACOS: x86_64 arm64
+          run: |
+          python -m cibuildwheel --output-dir wheelhouse
 
-    - name: Upload wheels
-      uses: actions/upload-artifact@v3
+      - name: Upload wheels
+        uses: actions/upload-artifact@v4
+        with:
+          path: wheelhouse/*.whl
+          name: libCombine-${{ matrix.os }}-${{ strategy.job-index }}
+
+          
+  merge_wheels:
+    needs: [build_wheels]
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/download-artifact@v4
       with:
-        path: wheelhouse/*.whl
-        name: libCombine-${{ matrix.os }}
-        
+        pattern: libCombine-*
+        path: dist
+    
+    - name: Move wheels from dist subfolder to dist folder
+      run: |
+        find dist -name "*.whl" -exec mv {} dist/ \;
+        find dist -name "*.tar.gz" -exec mv {} dist/ \;
+        find dist -type d -empty -delete
+
+    - uses: actions/upload-artifact@v4
+      with:
+        name: libCombine-combined
+        path: dist
   upload_all:
-    needs: [build_wheels, make_sdist]
+    needs: [merge_wheels]
     runs-on: ubuntu-latest
     if: github.event_name == 'release' && github.event.action == 'published'
     steps:
     - uses: actions/download-artifact@v4
       with:
-        name: libCombine-sdist
-        path: dist
-    - uses: actions/download-artifact@v4
-      with:
-        name: libCombine-ubuntu-latest
-        path: dist
-    - uses: actions/download-artifact@v4
-      with:
-        name: libCombine-macos-latest
-        path: dist
-    - uses: actions/download-artifact@v4
-      with:
-        name: libCombine-windows-latest
+        name: libCombine-combined
         path: dist
 
     - uses: pypa/gh-action-pypi-publish@release/v1
